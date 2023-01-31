@@ -6,4 +6,6 @@
     <string name="entrar">Entrar</string>
     <string name="registro">Registro</string>
     <string name="registrarse">Registrarse</string>
+    <string name="loginNow">Toca para iniciar sesión</string>
+    <string name="registerNow">Toca para crear una cuenta</string>
 </resources>

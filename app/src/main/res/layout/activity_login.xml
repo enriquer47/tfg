@@ -43,7 +43,17 @@
             android:layout_marginTop="10dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:inputType="textPassword"
             />
+        <ProgressBar
+            android:id="@+id/progreso_login"
+            android:layout_gravity="center"
+            android:layout_margin="10dp"
+            android:visibility="gone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+        </ProgressBar>
     </com.google.android.material.textfield.TextInputLayout>
     <Button
         android:id="@+id/loginButton"
@@ -52,4 +62,18 @@
         android:layout_height="wrap_content"
 
         ></Button>
+    <TextView
+        android:textStyle="bold"
+        android:textSize="20sp"
+        android:layout_gravity="center"
+        android:layout_margin="10dp"
+        android:textAlignment="center"
+        android:textColor="#2162CB"
+        android:id="@+id/registerNow"
+        android:text="@string/registerNow"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        ></TextView>
+
+
 </LinearLayout>
