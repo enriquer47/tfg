@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">TFG</string>
+    <string name="login">Inicio de sesión</string>
+    <string name="email">Email</string>
+    <string name="password">Contraseña</string>
+    <string name="entrar">Entrar</string>
+    <string name="registro">Registro</string>
+    <string name="registrarse">Registrarse</string>
 </resources>
