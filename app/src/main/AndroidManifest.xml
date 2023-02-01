@@ -34,7 +34,7 @@
                 android:value="" />
         </activity>
         <activity
-            android:name=".MainActivity"
+            android:name=".PrincipalAlumno"
             android:exported="true">
 
 
