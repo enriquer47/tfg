@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
@@ -18,8 +19,11 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class Login extends AppCompatActivity {
 
@@ -29,6 +33,7 @@ public class Login extends AppCompatActivity {
     ProgressBar barraLogin;
     TextView registerNow;
     DatabaseReference myRef;
+    int esProfesor; //0 no he recibido la info, 1 es alumno, 2 es profesor
 
     @Override
     public void onStart() {
@@ -36,18 +41,36 @@ public class Login extends AppCompatActivity {
         // Check if user is signed in (non-null) and update UI accordingly.
         FirebaseUser currentUser = mAuth.getCurrentUser();
         myRef= FirebaseDatabase.getInstance("https://registro-tfg-92125-default-rtdb.europe-west1.firebasedatabase.app").getReference();
+        esProfesor=0;
+
+
         if(currentUser != null){
+            myRef.child("usuarios").child(currentUser.getUid()).child("esProfesor").addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    if(snapshot.exists()){
+                        if((Boolean) snapshot.getValue())
+                            esProfesor=2;
+                        else
+                            esProfesor=1;
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+            });
             Intent intent;
-            if(Boolean.valueOf(myRef.child("usuarios").child(currentUser.getUid()).child("esProfesor").toString())) {
+            //while(esProfesor==0);
+            if(esProfesor==2) {
                 intent = new Intent(getApplicationContext(), PrincipalProfesor.class);
-
-
             }
             else {
                 intent = new Intent(getApplicationContext(), PrincipalAlumno.class);
 
             }
-            Toast.makeText(Login.this, "Eres profe:" + myRef.child("usuarios").child(currentUser.getUid()).child("esProfesor").toString(), Toast.LENGTH_LONG).show();
+            Toast.makeText(Login.this, "Eres profe:" + esProfesor, Toast.LENGTH_LONG).show();
             startActivity(intent);
             finish();
         }
@@ -95,15 +118,29 @@ public class Login extends AppCompatActivity {
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 barraLogin.setVisibility(View.GONE);
                                 if (task.isSuccessful()) {
-                                    //Toast.makeText(getApplicationContext(), "Inicio de sesión completado", Toast.LENGTH_LONG).show();
+                                    myRef.child("usuarios").child(task.getResult().getUser().getUid()).child("esProfesor").addListenerForSingleValueEvent(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                            if((Boolean) snapshot.getValue())
+                                                esProfesor=2;
+                                            else
+                                                esProfesor=1;
+                                        }
+                                        @Override
+                                        public void onCancelled(@NonNull DatabaseError error) {
+
+                                        }
+                                    });
                                     Intent intent;
-                                    if(Boolean.valueOf(myRef.child("usuarios").child(task.getResult().getUser().getUid()).child("esProfesor").toString())) {
+                                    //while(esProfesor==0);
+                                    if(esProfesor==2) {
                                         intent = new Intent(getApplicationContext(), PrincipalProfesor.class);
                                     }
                                     else {
                                         intent = new Intent(getApplicationContext(), PrincipalAlumno.class);
+
                                     }
-                                    Toast.makeText(Login.this, "Eres profe:" + myRef.child("usuarios").child(task.getResult().getUser().getUid()).child("esProfesor").toString(), Toast.LENGTH_LONG).show();
+                                    Toast.makeText(Login.this, "Eres profe:" + esProfesor, Toast.LENGTH_LONG).show();
                                     startActivity(intent);
                                     finish();
                                 } else {
