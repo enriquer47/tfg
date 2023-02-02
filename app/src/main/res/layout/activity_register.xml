@@ -46,6 +46,13 @@
             android:layout_height="wrap_content"
             android:inputType="textPassword"
             />
+        <Switch
+            android:id="@+id/profesor"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/profesor"
+            android:layout_margin="20dp"
+            android:textSize="20dp"/>
         <ProgressBar
             android:id="@+id/progreso_registro"
             android:layout_gravity="center"
@@ -56,6 +63,9 @@
 
         </ProgressBar>
     </com.google.android.material.textfield.TextInputLayout>
+
+
+
     <Button
         android:id="@+id/registerButton"
         android:text="@string/registrarse"

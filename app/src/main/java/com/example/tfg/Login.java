@@ -18,6 +18,8 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class Login extends AppCompatActivity {
 
@@ -26,14 +28,26 @@ public class Login extends AppCompatActivity {
     FirebaseAuth mAuth;
     ProgressBar barraLogin;
     TextView registerNow;
+    DatabaseReference myRef;
 
     @Override
     public void onStart() {
         super.onStart();
         // Check if user is signed in (non-null) and update UI accordingly.
         FirebaseUser currentUser = mAuth.getCurrentUser();
+        myRef= FirebaseDatabase.getInstance("https://registro-tfg-92125-default-rtdb.europe-west1.firebasedatabase.app").getReference();
         if(currentUser != null){
-            Intent intent= new Intent(getApplicationContext(), PrincipalAlumno.class);
+            Intent intent;
+            if(Boolean.valueOf(myRef.child("usuarios").child(currentUser.getUid()).child("esProfesor").toString())) {
+                intent = new Intent(getApplicationContext(), PrincipalProfesor.class);
+
+
+            }
+            else {
+                intent = new Intent(getApplicationContext(), PrincipalAlumno.class);
+
+            }
+            Toast.makeText(Login.this, "Eres profe:" + myRef.child("usuarios").child(currentUser.getUid()).child("esProfesor").toString(), Toast.LENGTH_LONG).show();
             startActivity(intent);
             finish();
         }
@@ -81,8 +95,15 @@ public class Login extends AppCompatActivity {
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 barraLogin.setVisibility(View.GONE);
                                 if (task.isSuccessful()) {
-                                    Toast.makeText(getApplicationContext(), "Inicio de sesión completado", Toast.LENGTH_LONG).show();
-                                    Intent intent = new Intent(getApplicationContext(), PrincipalAlumno.class);
+                                    //Toast.makeText(getApplicationContext(), "Inicio de sesión completado", Toast.LENGTH_LONG).show();
+                                    Intent intent;
+                                    if(Boolean.valueOf(myRef.child("usuarios").child(task.getResult().getUser().getUid()).child("esProfesor").toString())) {
+                                        intent = new Intent(getApplicationContext(), PrincipalProfesor.class);
+                                    }
+                                    else {
+                                        intent = new Intent(getApplicationContext(), PrincipalAlumno.class);
+                                    }
+                                    Toast.makeText(Login.this, "Eres profe:" + myRef.child("usuarios").child(task.getResult().getUser().getUid()).child("esProfesor").toString(), Toast.LENGTH_LONG).show();
                                     startActivity(intent);
                                     finish();
                                 } else {
