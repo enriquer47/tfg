@@ -49,10 +49,13 @@ public class Login extends AppCompatActivity {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     if(snapshot.exists()){
+                        Intent intent;
                         if((Boolean) snapshot.getValue())
-                            esProfesor=2;
+                            intent = new Intent(getApplicationContext(), PrincipalProfesor.class);
                         else
-                            esProfesor=1;
+                            intent = new Intent(getApplicationContext(), PrincipalAlumno.class);
+                        startActivity(intent);
+                        finish();
                     }
                 }
 
@@ -61,18 +64,7 @@ public class Login extends AppCompatActivity {
 
                 }
             });
-            Intent intent;
-            //while(esProfesor==0);
-            if(esProfesor==2) {
-                intent = new Intent(getApplicationContext(), PrincipalProfesor.class);
-            }
-            else {
-                intent = new Intent(getApplicationContext(), PrincipalAlumno.class);
 
-            }
-            Toast.makeText(Login.this, "Eres profe:" + esProfesor, Toast.LENGTH_LONG).show();
-            startActivity(intent);
-            finish();
         }
     }
     @Override
@@ -121,28 +113,20 @@ public class Login extends AppCompatActivity {
                                     myRef.child("usuarios").child(task.getResult().getUser().getUid()).child("esProfesor").addListenerForSingleValueEvent(new ValueEventListener() {
                                         @Override
                                         public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                            Intent intent;
                                             if((Boolean) snapshot.getValue())
-                                                esProfesor=2;
+                                                intent = new Intent(getApplicationContext(), PrincipalProfesor.class);
                                             else
-                                                esProfesor=1;
+                                                intent = new Intent(getApplicationContext(), PrincipalAlumno.class);
+                                            startActivity(intent);
+                                            finish();
                                         }
                                         @Override
                                         public void onCancelled(@NonNull DatabaseError error) {
 
                                         }
                                     });
-                                    Intent intent;
-                                    //while(esProfesor==0);
-                                    if(esProfesor==2) {
-                                        intent = new Intent(getApplicationContext(), PrincipalProfesor.class);
-                                    }
-                                    else {
-                                        intent = new Intent(getApplicationContext(), PrincipalAlumno.class);
 
-                                    }
-                                    Toast.makeText(Login.this, "Eres profe:" + esProfesor, Toast.LENGTH_LONG).show();
-                                    startActivity(intent);
-                                    finish();
                                 } else {
 
                                     Toast.makeText(Login.this, "Error al iniciar sesion", Toast.LENGTH_SHORT).show();

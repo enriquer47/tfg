@@ -20,8 +20,11 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class Register extends AppCompatActivity {
 
@@ -35,13 +38,30 @@ public class Register extends AppCompatActivity {
 
     @Override
     public void onStart() {
+        myRef= FirebaseDatabase.getInstance("https://registro-tfg-92125-default-rtdb.europe-west1.firebasedatabase.app").getReference();
         super.onStart();
         // Check if user is signed in (non-null) and update UI accordingly.
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if(currentUser != null){
-            Intent intent= new Intent(getApplicationContext(), PrincipalAlumno.class);
-            startActivity(intent);
-            finish();
+            myRef.child("usuarios").child(currentUser.getUid()).child("esProfesor").addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    if(snapshot.exists()){
+                        Intent intent;
+                        if((Boolean) snapshot.getValue())
+                            intent = new Intent(getApplicationContext(), PrincipalProfesor.class);
+                        else
+                            intent = new Intent(getApplicationContext(), PrincipalAlumno.class);
+                        startActivity(intent);
+                        finish();
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+            });
         }
     }
     @Override
@@ -51,7 +71,6 @@ public class Register extends AppCompatActivity {
 
 
         mAuth= FirebaseAuth.getInstance();
-        myRef= FirebaseDatabase.getInstance("https://registro-tfg-92125-default-rtdb.europe-west1.firebasedatabase.app").getReference();
         editTextEmail= findViewById(R.id.email);
         editTextPassword= findViewById(R.id.password);
         buttonReg=findViewById(R.id.registerButton);
@@ -97,9 +116,25 @@ public class Register extends AppCompatActivity {
                                     Toast.makeText(Register.this, "Registro Completado",
                                             Toast.LENGTH_SHORT).show();
 
-                                    Intent intent= new Intent(getApplicationContext(), Login.class);
-                                    startActivity(intent);
-                                    finish();
+                                    myRef.child("usuarios").child(mAuth.getCurrentUser().getUid()).child("esProfesor").addListenerForSingleValueEvent(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                            if(snapshot.exists()){
+                                                Intent intent;
+                                                if((Boolean) snapshot.getValue())
+                                                    intent = new Intent(getApplicationContext(), PrincipalProfesor.class);
+                                                else
+                                                    intent = new Intent(getApplicationContext(), PrincipalAlumno.class);
+                                                startActivity(intent);
+                                                finish();
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onCancelled(@NonNull DatabaseError error) {
+
+                                        }
+                                    });
 
                                 } else {
                                     // If sign in fails, display a message to the user.
