@@ -6,6 +6,7 @@ public class Usuario {
 
     public Usuario() {
         // Default constructor required for calls to DataSnapshot.getValue(User.class)
+
     }
 
     public Usuario(String email, boolean esProfesor) {
