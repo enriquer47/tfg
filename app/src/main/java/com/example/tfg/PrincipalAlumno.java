@@ -37,6 +37,8 @@ public class PrincipalAlumno extends AppCompatActivity {
     ArrayList<String> eventosMostrados;
     AlertDialog nuevoEventoDialogo;
     LinearLayout eventosLayout;
+    String centro;
+
 
 
 
@@ -69,15 +71,16 @@ public class PrincipalAlumno extends AppCompatActivity {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     eventos=new ArrayList<>();
-                        for (DataSnapshot eventosSnapshot : snapshot.getChildren()) {
-                            Evento e = eventosSnapshot.getValue(Evento.class);
-                            eventos.add(e);
-                            if(!eventosMostrados.contains(eventosSnapshot.getKey())) {
-                                mostrarEvento(e);
-                                eventosMostrados.add(eventosSnapshot.getKey());
-                            }
+                    eventosLayout.removeAllViews();
+                    eventosMostrados=new ArrayList<>();
+                    for (DataSnapshot eventosSnapshot : snapshot.getChildren()) {
+                        Evento e = eventosSnapshot.getValue(Evento.class);
+                        eventos.add(e);
+                        mostrarEvento(e);
+                        eventosMostrados.add(eventosSnapshot.getKey());
 
-                        }
+
+                    }
                 }
 
                 @Override
@@ -99,6 +102,7 @@ public class PrincipalAlumno extends AppCompatActivity {
         nuevoEvento.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 nuevoEventoDialogo.show();
             }
         });
@@ -117,12 +121,14 @@ public class PrincipalAlumno extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 aniadirEvento(nombre.getText().toString(), nivelEstres.getValue());
-
+                nombre.setText("");
+                nivelEstres.setValue(0);
             }
         }).setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-
+                nombre.setText("");
+                nivelEstres.setValue(0);
             }
         });
 
@@ -166,8 +172,8 @@ public class PrincipalAlumno extends AppCompatActivity {
             TextView nombreMostrar = view.findViewById(R.id.nombreEventoTexto);
             Button borrarEvento = view.findViewById(R.id.borrarEvento);
             TextView estresMostrar = view.findViewById(R.id.nivelEstresTexto);
-            nombreMostrar.setText(e.nombre);
-            estresMostrar.setText("" + e.estres);
+            nombreMostrar.setText("Evento: " + e.nombre);
+            estresMostrar.setText("Estrés: " + e.estres);
 
 
             borrarEvento.setOnClickListener(new View.OnClickListener() {
