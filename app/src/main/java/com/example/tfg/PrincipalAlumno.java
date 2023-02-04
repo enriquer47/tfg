@@ -57,6 +57,8 @@ public class PrincipalAlumno extends AppCompatActivity {
         eventosLayout=findViewById(R.id.eventos);
         buildDialog();
 
+        String centro="1";
+
 
         eventos=new ArrayList<>();
         eventosMostrados=new ArrayList<>();

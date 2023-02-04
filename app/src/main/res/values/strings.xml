@@ -22,4 +22,5 @@
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
     <string name="crear_clase">Crear clase</string>
+    <string name="aniadir_alumno">+ Alumnos</string>
 </resources>

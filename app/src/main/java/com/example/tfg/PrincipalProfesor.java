@@ -30,6 +30,7 @@ public class PrincipalProfesor extends AppCompatActivity {
 
     Button logout;
     Button crearClase;
+    Button aniadirAlumno;
     FirebaseAuth auth;
     FirebaseUser user;
     DatabaseReference myRef;
@@ -44,8 +45,8 @@ public class PrincipalProfesor extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_principal_profesor);
 
-        //CENTRO DE PRUEBA
-        centro="1";
+
+
 
         myRef= FirebaseDatabase.getInstance("https://registro-tfg-92125-default-rtdb.europe-west1.firebasedatabase.app").getReference();
 
@@ -59,12 +60,27 @@ public class PrincipalProfesor extends AppCompatActivity {
 
         clases=new ArrayList<>();
         clasesMostradas=new ArrayList<>();
+        centro="-1";
 
         if(user==null){
             Intent intent= new Intent(getApplicationContext(), Login.class);
             startActivity(intent);
             finish();
         } else {
+            myRef.child("usuarios").child(user.getUid()).child("centro").addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                    centro=snapshot.getValue(String.class);
+
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+            });
+            centro="1"; //ERROR AL CONSEGUIR EL VALOR DE centro, CUANDO EJECUTA LA SIGUIENTE LINEA, SIGUE SIENDO -1
             myRef.child("clases").orderByChild("centro").equalTo(centro).addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -128,7 +144,7 @@ public class PrincipalProfesor extends AppCompatActivity {
 
     }
     private void aniadirClase(String nombre) {
-        System.out.println("BOTON AÑADIR PULSADO");
+
         myRef.child("clases").orderByChild("centro").equalTo(centro).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
