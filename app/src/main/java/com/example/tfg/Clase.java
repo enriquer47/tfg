@@ -1,9 +1,10 @@
 package com.example.tfg;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Clase {
-    private ArrayList<String> alumnos;
+    private HashMap<String, String> alumnos;
     private String nombre;
     private String centro;
     private ArrayList<String> profesores;
@@ -11,12 +12,12 @@ public class Clase {
     //DatabaseReference myRef;
 
     public Clase() {
-        alumnos=new ArrayList<>();
+        alumnos=new HashMap<>();
         // Default constructor required for calls to DataSnapshot.getValue(User.class)
 
     }
     public Clase(String nombre, String centro) {
-        alumnos=new ArrayList<>();
+        alumnos=new HashMap<>();
         profesores=new ArrayList<>();
         this.nombre=nombre;
         this.centro=centro;
@@ -24,13 +25,11 @@ public class Clase {
 
     }
 
-    public void addAlumno(String idAlumno){
-        alumnos.add(idAlumno);
-    }
+
     public void removeAlumno(String idAlumno){
         alumnos.remove(idAlumno);
     }
-    public ArrayList<String> getAlumnos(){
+    public HashMap<String,String> getAlumnos(){
         return alumnos;
     }
     public void addProfesor(String idProfe){

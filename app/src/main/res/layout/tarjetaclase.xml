@@ -22,41 +22,44 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="110dp"
                 android:padding="10dp">
 
                 <TextView
                     android:id="@+id/nombreClaseTexto"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="40dp"
                     android:text="Nombre"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.01" />
 
                 <TextView
                     android:id="@+id/centroTexto"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="0"
+                    android:layout_marginStart="144dp"
+                    android:text="Centro: 0"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    android:layout_marginLeft="10dp"
                     app:layout_constraintStart_toEndOf="@+id/nombreClaseTexto"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.032" />
 
                 <Button
                     android:id="@+id/aniadirAlumno"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginEnd="44dp"
                     android:padding="5dp"
                     android:text="@string/aniadir_alumno"
                     android:textSize="10dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
 
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@+id/borrarClase"
-                    app:layout_constraintHorizontal_bias="0.927"
-                    app:layout_constraintStart_toEndOf="@+id/centroTexto"
-                    app:layout_constraintTop_toTopOf="parent">
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="1.0">
 
                 </Button>
 
@@ -64,28 +67,30 @@
                     android:id="@+id/verClase"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginEnd="36dp"
                     android:minWidth="50dp"
                     android:padding="2dp"
                     android:text="VER"
                     android:textSize="10dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
 
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@+id/aniadirAlumno"
-                    app:layout_constraintHorizontal_bias="0.804"
-                    app:layout_constraintStart_toEndOf="@+id/centroTexto"
-                    app:layout_constraintTop_toTopOf="parent">
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="1.0">
 
                 </Button>
 
                 <Button
+                    android:id="@+id/borrarClase"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/borrarClase"
+                    android:layout_marginEnd="16dp"
+                    android:text="@string/borrar"
                     app:layout_constraintBottom_toBottomOf="parent"
+
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-
-                    android:text="@string/borrar">
+                    app:layout_constraintVertical_bias="1.0">
 
                 </Button>
             </androidx.constraintlayout.widget.ConstraintLayout>

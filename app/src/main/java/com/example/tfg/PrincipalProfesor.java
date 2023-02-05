@@ -28,12 +28,12 @@ import java.util.ArrayList;
 public class PrincipalProfesor extends AppCompatActivity {
 
 
-    Button logout;
-    Button crearClase;
-    Button aniadirAlumno;
     FirebaseAuth auth;
     FirebaseUser user;
     DatabaseReference myRef;
+
+    Button logout;
+    Button crearClase;
     ArrayList<Clase> clases;
     ArrayList<String> clasesMostradas;
     AlertDialog nuevaClaseDialogo;
@@ -80,7 +80,7 @@ public class PrincipalProfesor extends AppCompatActivity {
 
                 }
             });
-            centro="1"; //ERROR AL CONSEGUIR EL VALOR DE centro, CUANDO EJECUTA LA SIGUIENTE LINEA, SIGUE SIENDO -1
+            centro="1"; //ERROR AL CONSEGUIR EL VALOR DE centro, CUANDO EJECUTA LA SIGUIENTE LINEA, SIGUE SIENDO -1 (creo que basta con meter el event listener siguiente dentro del anterior)
             myRef.child("clases").orderByChild("centro").equalTo(centro).addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -188,6 +188,9 @@ public class PrincipalProfesor extends AppCompatActivity {
 
         TextView nombreMostrar = view.findViewById(R.id.nombreClaseTexto);
         Button borrarClase = view.findViewById(R.id.borrarClase);
+        Button aniadirAlumno = view.findViewById(R.id.aniadirAlumno);
+        //TODO Ver clase con el estado de los alumnos
+        Button verClase = view.findViewById(R.id.verClase);
         TextView centroMostrar = view.findViewById(R.id.centroTexto);
         nombreMostrar.setText("Clase: " + c.getNombre());
         centroMostrar.setText("Centro: " + centro);
@@ -204,6 +207,29 @@ public class PrincipalProfesor extends AppCompatActivity {
                             clasesMostradas.remove(hijos.getKey());
                             myRef.child("clases").child(hijos.getKey()).removeValue();
                         }
+                    }
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+
+            }
+        });
+        aniadirAlumno.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                myRef.child("clases").orderByChild("centro_nombre").equalTo(c.getCentro_nombre()).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        Intent intent= new Intent(getApplicationContext(), AgregarAlumnos.class);
+                        String claseID="";
+                        for(DataSnapshot hijos: snapshot.getChildren()){
+                            claseID=hijos.getKey();
+                        }
+                        intent.putExtra("claseID",claseID);
+                        startActivity(intent);
+                        finish();
                     }
                     @Override
                     public void onCancelled(@NonNull DatabaseError error) {
