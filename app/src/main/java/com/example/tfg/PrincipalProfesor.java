@@ -195,7 +195,29 @@ public class PrincipalProfesor extends AppCompatActivity {
         nombreMostrar.setText("Clase: " + c.getNombre());
         centroMostrar.setText("Centro: " + centro);
 
+        verClase.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                myRef.child("clases").orderByChild("centro_nombre").equalTo(c.getCentro_nombre()).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        Intent intent= new Intent(getApplicationContext(), VerClase.class);
+                        String claseID="";
+                        for(DataSnapshot hijos: snapshot.getChildren()){
+                            claseID=hijos.getKey();
+                        }
+                        intent.putExtra("claseID",claseID);
+                        startActivity(intent);
+                        finish();
+                    }
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
 
+                    }
+                });
+
+            }
+        });
         borrarClase.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

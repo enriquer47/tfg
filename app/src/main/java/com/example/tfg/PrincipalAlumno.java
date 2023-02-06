@@ -164,8 +164,6 @@ public class PrincipalAlumno extends AppCompatActivity {
             Toast.makeText(PrincipalAlumno.this, "Ya hay un evento con ese nombre", Toast.LENGTH_LONG).show();
 
         }
-
-
     }
     private void mostrarEvento(Evento e) {
 

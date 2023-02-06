@@ -25,4 +25,5 @@
     <string name="aniadir_alumno">+ Alumnos</string>
     <string name="aniadir">Añadir</string>
     <string name="atras">Atrás</string>
+    <string name="aniadirEventoAlumnoClase">+ Evento</string>
 </resources>
