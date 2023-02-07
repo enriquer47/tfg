@@ -42,7 +42,7 @@
                     android:layout_height="wrap_content"
                     android:text="Estrés: 0"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/aniadirEventoAlumnoClase"
+                    app:layout_constraintEnd_toStartOf="@+id/verAlumnoClase"
                     app:layout_constraintStart_toEndOf="@+id/nombreAlumnoClaseTexto"
                     app:layout_constraintTop_toTopOf="parent"></TextView>
 
@@ -58,14 +58,14 @@
                 </Button>
 
                 <Button
-                    android:id="@+id/aniadirEventoAlumnoClase"
+                    android:id="@+id/verAlumnoClase"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@+id/borrarAlumnoClase"
                     app:layout_constraintTop_toTopOf="parent"
                     android:layout_marginRight="10dp"
-                    android:text="@string/aniadirEventoAlumnoClase"></Button>
+                    android:text="@string/verAlumnoClase"></Button>
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>

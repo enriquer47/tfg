@@ -57,13 +57,13 @@ public class VerClase extends AppCompatActivity {
         atras=findViewById(R.id.atrasClaseAlumnos);
         listaAlumnosClase=findViewById(R.id.listaAlumnosClaseLayout);
 
-        myRef.child("clases").child(claseID).addListenerForSingleValueEvent(new ValueEventListener() {
+        myRef.child("clases").child(claseID).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if(snapshot.exists()){
                     alumnosEnLaClase=new ArrayList<>();
+                    listaAlumnosClase.removeAllViews();
                     for (DataSnapshot snap: snapshot.child("alumnos").getChildren()){
-                        alumnosEnLaClase.add(snap.getValue(String.class));
                         Usuario u= new Usuario();
                         myRef.child("usuarios").child(snap.getValue(String.class)).addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
@@ -71,6 +71,7 @@ public class VerClase extends AppCompatActivity {
                                 u.email=snapshot.child("email").getValue(String.class);
                                //aqui podría calcular el estrés total para mostrarlo
                                 mostrarAlumnoClase(u,snap.getValue(String.class));
+                                alumnosEnLaClase.add(snap.getValue(String.class));
                                 //System.out.println(snap.getValue(String.class));
                             }
                             @Override
@@ -100,7 +101,7 @@ public class VerClase extends AppCompatActivity {
 
         //buildDialog();
     }
-    private void buildDialog(String alumnoID) {
+    /*private void buildDialog(String alumnoID) {
         //System.out.println(alumnoID);
         AlertDialog.Builder builder= new AlertDialog.Builder(this);
         View view= getLayoutInflater().inflate(R.layout.nuevoevento, null);
@@ -109,6 +110,8 @@ public class VerClase extends AppCompatActivity {
 
         builder.setView(view);
         iniciarNumberPicker(nivelEstres);
+        System.out.println(alumnoID);
+
         builder.setTitle("Nuevo evento").setPositiveButton("Añadir", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
@@ -128,7 +131,7 @@ public class VerClase extends AppCompatActivity {
 
         nuevoEventoDialogo= builder.create();
 
-    }
+    }*/
 
     private void iniciarNumberPicker(NumberPicker np) {
         String[] nums = new String[11];
@@ -167,25 +170,37 @@ public class VerClase extends AppCompatActivity {
         });
 
     }
-    private Button mostrarAlumnoClase(Usuario u, String alumnoID) {
-        buildDialog(alumnoID);
+    private void mostrarAlumnoClase(Usuario u, String alumnoID) {
+        //buildDialog(alumnoID);
         View view = getLayoutInflater().inflate(R.layout.tarjetaalumnoclase, null);
         TextView nombreAlumno= view.findViewById(R.id.nombreAlumnoClaseTexto);
 
         TextView estresAlumno= view.findViewById(R.id.nivelEstresAlumnoClaseTexto);
         Button borrarAlumnoClase=view.findViewById(R.id.borrarAlumnoClase);
-        Button aniadirEventoAlumnoClase=view.findViewById(R.id.aniadirEventoAlumnoClase);
-        aniadirEventoAlumnoClase.setOnClickListener(new View.OnClickListener() {
+        Button verAlumnoClase=view.findViewById(R.id.verAlumnoClase);
+        verAlumnoClase.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                nuevoEventoDialogo.show();
+                Intent intent= new Intent(getApplicationContext(), ProfesorVeAlumnoClase.class);
+                intent.putExtra("alumnoID",alumnoID);
+                intent.putExtra("claseID",claseID);
+                startActivity(intent);
+                finish();
+
+            }
+        });
+
+        //ELIMINAR EL ALUMNO DE LA CLASE
+        borrarAlumnoClase.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
 
             }
         });
         nombreAlumno.setText("Email: " + u.email);
         listaAlumnosClase.addView(view);
-        return aniadirEventoAlumnoClase;
+
     }
 
 

@@ -88,6 +88,7 @@ public class AgregarAlumnos extends AppCompatActivity {
                     listaCheckBoxes=new ArrayList<>();
                     alumnos=new ArrayList<>();
                     alumnosEnLaClase=new ArrayList<>();
+                    listaAlumnos.removeAllViews();
                     myRef.child("clases").child(claseID).child("alumnos").addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot2) {
