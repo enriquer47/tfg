@@ -178,11 +178,24 @@ public class PrincipalPadre extends AppCompatActivity {
             }
         });
 
-        //ELIMINAR EL ALUMNO DE LA CLASE
+
         borrarAlumnoClase.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                myRef.child("usuarios").child(user.getUid()).child("hijos").orderByValue().equalTo(alumnoID).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        for(DataSnapshot snap: snapshot.getChildren()) {
+                            myRef.child("usuarios").child(user.getUid()).child("hijos").child(snap.getKey()).removeValue();
+                        };
 
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
             }
         });
         nombreAlumno.setText("Email: " + u.email);

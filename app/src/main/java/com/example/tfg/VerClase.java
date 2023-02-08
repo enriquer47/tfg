@@ -27,6 +27,7 @@ import com.google.firebase.database.ValueEventListener;
 import org.w3c.dom.Text;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class VerClase extends AppCompatActivity {
 
@@ -165,6 +166,20 @@ public class VerClase extends AppCompatActivity {
         borrarAlumnoClase.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                myRef.child("clases").child(claseID).child("alumnos").orderByValue().equalTo(alumnoID).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        for(DataSnapshot snap: snapshot.getChildren()) {
+                            myRef.child("clases").child(claseID).child("alumnos").child(snap.getKey()).removeValue();
+                        };
+
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
 
             }
         });
