@@ -26,7 +26,6 @@ public class AgregarAlumnos extends AppCompatActivity {
 
 
     ArrayList<String> alumnos;
-    //TODO Meter en el siguiente array los alumnos que ya están en la clase para evitar poder meterlos 2 veces en la misma clase
     ArrayList<String> alumnosEnLaClase;
     ArrayList<CheckBox> listaCheckBoxes;
     FirebaseAuth auth;
@@ -57,28 +56,6 @@ public class AgregarAlumnos extends AppCompatActivity {
         aniadir=findViewById(R.id.aniadirAlumnosMarcados);
         listaAlumnos=findViewById(R.id.listaAlumnos);
 
-        /*   myRef.child("usuarios").orderByChild("centro").equalTo(centro).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if(snapshot.exists()){
-
-                    listaCheckBoxes=new ArrayList<>();
-                    alumnos=new ArrayList<>();
-                    for (DataSnapshot usuarioSnap: snapshot.getChildren()) {
-                        if(usuarioSnap.child("centro").getValue().equals(centro)&&usuarioSnap.child("esProfesor").getValue().equals(false)){//FALTA COMPROBAR SI ESTÁ YA EN LA CLASE
-                            Usuario u =  usuarioSnap.getValue(Usuario.class);
-                            listaCheckBoxes.add(mostrarAlumno(u));
-                            alumnos.add(u);
-                        }
-                    }
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });*/
 
         myRef.child("usuarios").orderByChild("centro").equalTo(centro).addValueEventListener(new ValueEventListener() {
             @Override
@@ -96,7 +73,7 @@ public class AgregarAlumnos extends AppCompatActivity {
                                 alumnosEnLaClase.add(snap.getValue(String.class));
                             }
                             for (DataSnapshot usuarioSnap: snapshot.getChildren()) {
-                                if(usuarioSnap.child("centro").getValue().equals(centro)&&usuarioSnap.child("esProfesor").getValue().equals(false)&&!alumnosEnLaClase.contains(usuarioSnap.getKey())){
+                                if(usuarioSnap.child("centro").getValue().equals(centro)&&usuarioSnap.child("tipoCuenta").getValue(String.class).equals("Alumno")&&!alumnosEnLaClase.contains(usuarioSnap.getKey())){
                                     Usuario u = usuarioSnap.getValue(Usuario.class);
                                     listaCheckBoxes.add(mostrarAlumno(u));
                                     alumnos.add(usuarioSnap.getKey());

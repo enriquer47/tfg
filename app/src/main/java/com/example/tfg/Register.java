@@ -8,8 +8,10 @@ import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ProgressBar;
+import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -33,8 +35,10 @@ public class Register extends AppCompatActivity {
     FirebaseAuth mAuth;
     ProgressBar barraRegistro;
     TextView loginNow;
-    Switch profesorSwitch;
+    //Switch profesorSwitch;
+    Spinner tipoCuenta;
     DatabaseReference myRef;
+    final String[] tipoCuentaArray={"Alumno", "Profesor", "Padre"};
 
     @Override
     public void onStart() {
@@ -43,15 +47,18 @@ public class Register extends AppCompatActivity {
         // Check if user is signed in (non-null) and update UI accordingly.
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if(currentUser != null){
-            myRef.child("usuarios").child(currentUser.getUid()).child("esProfesor").addListenerForSingleValueEvent(new ValueEventListener() {
+            myRef.child("usuarios").child(currentUser.getUid()).child("tipoCuenta").addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     if(snapshot.exists()){
                         Intent intent;
-                        if((Boolean) snapshot.getValue())
+                        if(snapshot.getValue(String.class).equals(tipoCuentaArray[1]))
                             intent = new Intent(getApplicationContext(), PrincipalProfesor.class);
                         else
+                        if(snapshot.getValue(String.class).equals(tipoCuentaArray[0]))
                             intent = new Intent(getApplicationContext(), PrincipalAlumno.class);
+                        else
+                            intent =new Intent(getApplicationContext(), PrincipalPadre.class);
                         startActivity(intent);
                         finish();
                     }
@@ -76,8 +83,11 @@ public class Register extends AppCompatActivity {
         buttonReg=findViewById(R.id.registerButton);
         barraRegistro=findViewById(R.id.progreso_registro);
         loginNow=findViewById(R.id.loginNow);
-        profesorSwitch=findViewById(R.id.profesor);
+        //profesorSwitch=findViewById(R.id.profesor);
+        tipoCuenta=findViewById(R.id.tipoCuenta);
 
+        ArrayAdapter<String> adapter= new ArrayAdapter<String>(this, R.layout.spinner_text, tipoCuentaArray);
+        tipoCuenta.setAdapter(adapter);
 
         loginNow.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -112,19 +122,22 @@ public class Register extends AppCompatActivity {
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 barraRegistro.setVisibility(View.GONE);
                                 if (task.isSuccessful()) {
-                                    escribirNuevoUsuario(mAuth.getCurrentUser().getUid(),email,profesorSwitch.isChecked());
+                                    escribirNuevoUsuario(mAuth.getCurrentUser().getUid(),email);
                                     Toast.makeText(Register.this, "Registro Completado",
                                             Toast.LENGTH_SHORT).show();
 
-                                    myRef.child("usuarios").child(mAuth.getCurrentUser().getUid()).child("esProfesor").addListenerForSingleValueEvent(new ValueEventListener() {
+                                    myRef.child("usuarios").child(mAuth.getCurrentUser().getUid()).child("tipoCuenta").addListenerForSingleValueEvent(new ValueEventListener() {
                                         @Override
                                         public void onDataChange(@NonNull DataSnapshot snapshot) {
                                             if(snapshot.exists()){
                                                 Intent intent;
-                                                if((Boolean) snapshot.getValue())
+                                                if(snapshot.getValue(String.class).equals(tipoCuentaArray[1]))
                                                     intent = new Intent(getApplicationContext(), PrincipalProfesor.class);
                                                 else
-                                                    intent = new Intent(getApplicationContext(), PrincipalAlumno.class);
+                                                    if(snapshot.getValue(String.class).equals(tipoCuentaArray[0]))
+                                                        intent = new Intent(getApplicationContext(), PrincipalAlumno.class);
+                                                    else
+                                                        intent =new Intent(getApplicationContext(), PrincipalPadre.class);
                                                 startActivity(intent);
                                                 finish();
                                             }
@@ -148,9 +161,11 @@ public class Register extends AppCompatActivity {
 
             }
         });
+
     }
-    public void escribirNuevoUsuario(String userid, String email, boolean esProfesor) {
-        Usuario usuario = new Usuario(email,esProfesor);
+    public void escribirNuevoUsuario(String userid, String email) {
+        String tipo=this.tipoCuenta.getSelectedItem().toString();
+        Usuario usuario = new Usuario(email,tipo);
         myRef.child("usuarios").child(userid).setValue(usuario);
     }
 

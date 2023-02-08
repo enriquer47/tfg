@@ -2,22 +2,22 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
-    android:gravity="center"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical"
     tools:context=".Register">
 
 
     <TextView
-        android:text="@string/registro"
-        android:textSize="35sp"
-        android:textStyle="bold"
-        android:gravity="center"
-        android:layout_marginBottom="35dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        />
+        android:layout_marginBottom="35dp"
+        android:gravity="center"
+        android:text="@string/registro"
+        android:textSize="35sp"
+        android:textStyle="bold" />
+
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -25,13 +25,13 @@
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/email"
-            android:hint="@string/email"
-
-            android:layout_marginHorizontal="20dp"
             android:layout_width="match_parent"
+
             android:layout_height="wrap_content"
-            />
+            android:layout_marginHorizontal="20dp"
+            android:hint="@string/email" />
     </com.google.android.material.textfield.TextInputLayout>
+
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -39,50 +39,54 @@
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/password"
-            android:hint="@string/password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginHorizontal="20dp"
             android:layout_marginTop="10dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="textPassword"
-            />
-        <Switch
-            android:id="@+id/profesor"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/profesor"
-            android:layout_margin="20dp"
-            android:textSize="20dp"/>
+            android:hint="@string/password"
+            android:inputType="textPassword" />
+
         <ProgressBar
             android:id="@+id/progreso_registro"
+            android:layout_width="wrap_content"
+
+            android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_margin="10dp"
-            android:visibility="gone"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:visibility="gone">
 
         </ProgressBar>
-    </com.google.android.material.textfield.TextInputLayout>
 
+        <Spinner
+            android:id="@+id/tipoCuenta"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginVertical="20dp"
+
+
+            android:spinnerMode="dropdown" />
+    </com.google.android.material.textfield.TextInputLayout>
 
 
     <Button
         android:id="@+id/registerButton"
-        android:text="@string/registrarse"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text="@string/registrarse"
 
         ></Button>
+
     <TextView
-        android:textStyle="bold"
-        android:textSize="20sp"
-        android:textColor="#2162CB"
-        android:layout_gravity="center"
-        android:layout_margin="10dp"
-        android:textAlignment="center"
         android:id="@+id/loginNow"
-        android:text="@string/loginNow"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        ></TextView>
+        android:layout_gravity="center"
+        android:layout_margin="10dp"
+        android:text="@string/loginNow"
+        android:textAlignment="center"
+        android:textColor="#2162CB"
+        android:textSize="20sp"
+        android:textStyle="bold"></TextView>
 </LinearLayout>

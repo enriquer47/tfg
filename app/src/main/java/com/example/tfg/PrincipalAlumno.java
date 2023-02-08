@@ -29,8 +29,8 @@ import java.util.ArrayList;
 public class PrincipalAlumno extends AppCompatActivity {
 
     FirebaseAuth auth;
-    TextView detallesUsuario;
-    Button logout, nuevoEvento;
+    TextView detallesUsuario,codigoAlumnoTextView;
+    Button logout, nuevoEvento, mostrarCodigo;
     FirebaseUser user;
     DatabaseReference myRef;
     public ArrayList<Evento> eventos;
@@ -38,6 +38,7 @@ public class PrincipalAlumno extends AppCompatActivity {
     AlertDialog nuevoEventoDialogo;
     LinearLayout eventosLayout;
     String centro;
+    String codigoAlumno;
 
 
 
@@ -55,6 +56,9 @@ public class PrincipalAlumno extends AppCompatActivity {
         nuevoEvento=findViewById(R.id.nuevoEvento);
         user=auth.getCurrentUser();
         eventosLayout=findViewById(R.id.eventos);
+        mostrarCodigo=findViewById(R.id.mostrarCodigo);
+        codigoAlumnoTextView=findViewById(R.id.codigoAlumno);
+        codigoAlumno="";
         buildDialog();
 
         String centro="1";
@@ -68,6 +72,7 @@ public class PrincipalAlumno extends AppCompatActivity {
             startActivity(intent);
             finish();
         } else {
+            codigoAlumno=user.getEmail().toString() + user.getUid().toString().substring(0,5);
             detallesUsuario.setText(user.getEmail());
             myRef.child("usuarios").child(user.getUid()).child("eventos").addValueEventListener(new ValueEventListener() {
                 @Override
@@ -99,6 +104,19 @@ public class PrincipalAlumno extends AppCompatActivity {
                 Intent intent= new Intent(getApplicationContext(), Login.class);
                 startActivity(intent);
                 finish();
+            }
+        });
+        mostrarCodigo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(codigoAlumnoTextView.getText().equals("")){
+                    codigoAlumnoTextView.setText(codigoAlumno);
+                    mostrarCodigo.setText("Ocultar código");
+                }else{
+                    codigoAlumnoTextView.setText("");
+                    mostrarCodigo.setText("Mostrar código");
+                }
+
             }
         });
         nuevoEvento.setOnClickListener(new View.OnClickListener() {

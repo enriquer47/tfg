@@ -27,4 +27,6 @@
     <string name="atras">Atrás</string>
     <string name="aniadirEventoAlumnoClase">+ Evento</string>
     <string name="verAlumnoClase">VER</string>
+    <string name="aniadir_hijo">Añadir Hijo</string>
+    <string name="codigo_alumno">Mostrar Código</string>
 </resources>

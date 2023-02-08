@@ -2,7 +2,7 @@ package com.example.tfg;
 
 public class Usuario {
     public String email;
-    public boolean esProfesor;
+    public String tipoCuenta;
     private String centro;
 
     public Usuario() {
@@ -10,9 +10,9 @@ public class Usuario {
 
     }
 
-    public Usuario(String email, boolean esProfesor) {
+    public Usuario(String email, String tipoCuenta) {
         this.email = email;
-        this.esProfesor=esProfesor;
+        this.tipoCuenta=tipoCuenta;
         //CENTRO DE PRUEBA
         this.centro="1";
     }

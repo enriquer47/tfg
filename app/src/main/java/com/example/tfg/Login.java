@@ -33,7 +33,8 @@ public class Login extends AppCompatActivity {
     ProgressBar barraLogin;
     TextView registerNow;
     DatabaseReference myRef;
-    int esProfesor; //0 no he recibido la info, 1 es alumno, 2 es profesor
+    final String[] tipoCuentaArray={"Alumno", "Profesor", "Padre"};
+
 
     @Override
     public void onStart() {
@@ -41,19 +42,21 @@ public class Login extends AppCompatActivity {
         // Check if user is signed in (non-null) and update UI accordingly.
         FirebaseUser currentUser = mAuth.getCurrentUser();
         myRef= FirebaseDatabase.getInstance("https://registro-tfg-92125-default-rtdb.europe-west1.firebasedatabase.app").getReference();
-        esProfesor=0;
 
 
         if(currentUser != null){
-            myRef.child("usuarios").child(currentUser.getUid()).child("esProfesor").addListenerForSingleValueEvent(new ValueEventListener() {
+            myRef.child("usuarios").child(currentUser.getUid()).child("tipoCuenta").addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     if(snapshot.exists()){
                         Intent intent;
-                        if((Boolean) snapshot.getValue())
+                        if(snapshot.getValue(String.class).equals(tipoCuentaArray[1]))
                             intent = new Intent(getApplicationContext(), PrincipalProfesor.class);
                         else
+                        if(snapshot.getValue(String.class).equals(tipoCuentaArray[0]))
                             intent = new Intent(getApplicationContext(), PrincipalAlumno.class);
+                        else
+                            intent =new Intent(getApplicationContext(), PrincipalPadre.class);
                         startActivity(intent);
                         finish();
                     }
@@ -110,16 +113,21 @@ public class Login extends AppCompatActivity {
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 barraLogin.setVisibility(View.GONE);
                                 if (task.isSuccessful()) {
-                                    myRef.child("usuarios").child(task.getResult().getUser().getUid()).child("esProfesor").addListenerForSingleValueEvent(new ValueEventListener() {
+                                    myRef.child("usuarios").child(task.getResult().getUser().getUid()).child("tipoCuenta").addListenerForSingleValueEvent(new ValueEventListener() {
                                         @Override
                                         public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                            Intent intent;
-                                            if((Boolean) snapshot.getValue())
-                                                intent = new Intent(getApplicationContext(), PrincipalProfesor.class);
-                                            else
-                                                intent = new Intent(getApplicationContext(), PrincipalAlumno.class);
-                                            startActivity(intent);
-                                            finish();
+                                            if(snapshot.exists()){
+                                                Intent intent;
+                                                if(snapshot.getValue(String.class).equals(tipoCuentaArray[1]))
+                                                    intent = new Intent(getApplicationContext(), PrincipalProfesor.class);
+                                                else
+                                                if(snapshot.getValue(String.class).equals(tipoCuentaArray[0]))
+                                                    intent = new Intent(getApplicationContext(), PrincipalAlumno.class);
+                                                else
+                                                    intent =new Intent(getApplicationContext(), PrincipalPadre.class);
+                                                startActivity(intent);
+                                                finish();
+                                            }
                                         }
                                         @Override
                                         public void onCancelled(@NonNull DatabaseError error) {
