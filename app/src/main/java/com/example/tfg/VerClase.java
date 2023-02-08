@@ -99,39 +99,9 @@ public class VerClase extends AppCompatActivity {
             }
         });
 
-        //buildDialog();
+
     }
-    /*private void buildDialog(String alumnoID) {
-        //System.out.println(alumnoID);
-        AlertDialog.Builder builder= new AlertDialog.Builder(this);
-        View view= getLayoutInflater().inflate(R.layout.nuevoevento, null);
-        EditText nombre= view.findViewById(R.id.nombreEvento);
-        NumberPicker nivelEstres= view.findViewById(R.id.nivelEstres);
 
-        builder.setView(view);
-        iniciarNumberPicker(nivelEstres);
-        System.out.println(alumnoID);
-
-        builder.setTitle("Nuevo evento").setPositiveButton("Añadir", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                System.out.println(alumnoID);
-                //BUG: EL ID QUE SE INTRODUCE AQUÍ SIEMPRE ES EL MISMO
-                aniadirEventoAlumnoClase(nombre.getText().toString(), nivelEstres.getValue(),alumnoID);
-                nombre.setText("");
-                nivelEstres.setValue(0);
-            }
-        }).setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                nombre.setText("");
-                nivelEstres.setValue(0);
-            }
-        });
-
-        nuevoEventoDialogo= builder.create();
-
-    }*/
 
     private void iniciarNumberPicker(NumberPicker np) {
         String[] nums = new String[11];

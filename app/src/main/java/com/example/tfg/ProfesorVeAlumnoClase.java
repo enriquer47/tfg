@@ -113,9 +113,13 @@ public class ProfesorVeAlumnoClase extends AppCompatActivity {
         atras.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent= new Intent(getApplicationContext(), VerClase.class);
-                System.out.println("Clase id " + claseID);
-                intent.putExtra("claseID",claseID);
+                Intent intent;
+                if(claseID==null) {
+                    intent=new Intent(getApplicationContext(), PrincipalPadre.class);
+                }else {
+                    intent = new Intent(getApplicationContext(), VerClase.class);
+                    intent.putExtra("claseID", claseID);
+                }
                 startActivity(intent);
                 finish();
             }
