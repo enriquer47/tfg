@@ -22,14 +22,7 @@
                 android:value="" />
         </activity>
         <activity
-            android:name=".ProfesorVeAlumnoClase"
-            android:exported="false">
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
-        </activity>
-        <activity
-            android:name=".VerClase"
+            android:name=".VisualizarAlumno"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"

@@ -15,6 +15,7 @@ import android.widget.NumberPicker;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.tfg.Model.Evento;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -25,20 +26,19 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
-public class ProfesorVeAlumnoClase extends AppCompatActivity {
+public class VisualizarAlumno extends AppCompatActivity {
 
     FirebaseAuth auth;
-    TextView detallesUsuario;
-    Button atras, nuevoEvento;
     FirebaseUser user;
     DatabaseReference myRef;
-    public ArrayList<Evento> eventos;
-    ArrayList<String> eventosMostrados;
-    String alumnoID;
+
+    TextView detallesUsuario;
+    Button atras, nuevoEvento;
     AlertDialog nuevoEventoDialogo;
     LinearLayout eventosLayout;
-    String centro;
-    String claseID;
+
+    public ArrayList<Evento> eventos;
+    String alumnoID;
 
 
 
@@ -53,21 +53,17 @@ public class ProfesorVeAlumnoClase extends AppCompatActivity {
         Bundle extras=getIntent().getExtras();
         if(extras!=null){
             alumnoID=extras.getString("alumnoID");
-            claseID=extras.getString("claseID");
         }
         auth = FirebaseAuth.getInstance();
+        user=auth.getCurrentUser();
+
         detallesUsuario= findViewById(R.id.detallesAlumnoClase);
         atras=findViewById(R.id.atrasAlumnoClase);
         nuevoEvento=findViewById(R.id.nuevoEventoAlumnoClase);
-        user=auth.getCurrentUser();
         eventosLayout=findViewById(R.id.eventosAlumnosClase);
         buildDialog();
 
-        String centro="1";
-
-
         eventos=new ArrayList<>();
-        eventosMostrados=new ArrayList<>();
 
         if(user==null){
             Intent intent= new Intent(getApplicationContext(), Login.class);
@@ -89,17 +85,12 @@ public class ProfesorVeAlumnoClase extends AppCompatActivity {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
 
-
                     eventos=new ArrayList<>();
                     eventosLayout.removeAllViews();
-                    eventosMostrados=new ArrayList<>();
                     for (DataSnapshot eventosSnapshot : snapshot.getChildren()) {
                         Evento e = eventosSnapshot.getValue(Evento.class);
                         eventos.add(e);
                         mostrarEvento(e);
-                        eventosMostrados.add(eventosSnapshot.getKey());
-
-
                     }
                 }
 
@@ -114,12 +105,8 @@ public class ProfesorVeAlumnoClase extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent;
-                if(claseID==null) {
-                    intent=new Intent(getApplicationContext(), PrincipalPadre.class);
-                }else {
-                    intent = new Intent(getApplicationContext(), VerClase.class);
-                    intent.putExtra("claseID", claseID);
-                }
+                //TODO: Comprobar tipo de cuenta para volver atras
+                intent=new Intent(getApplicationContext(), PrincipalPadre.class);
                 startActivity(intent);
                 finish();
             }
@@ -177,14 +164,14 @@ public class ProfesorVeAlumnoClase extends AppCompatActivity {
     private void aniadirEvento(String nombre, int estres) {
         boolean yaexiste=false;
         for(int i = 0;  i<eventos.size()&&!yaexiste;i++){
-            if(eventos.get(i).nombre.equals(nombre))
+            if(eventos.get(i).getNombre().equals(nombre))
                 yaexiste=true;
         }
         if(!yaexiste) {
             Evento evento = new Evento(nombre, estres);
             myRef.child("usuarios").child(alumnoID).child("eventos").push().setValue(evento);
         }else{
-            Toast.makeText(ProfesorVeAlumnoClase.this, "Ya hay un evento con ese nombre", Toast.LENGTH_LONG).show();
+            Toast.makeText(VisualizarAlumno.this, "Ya hay un evento con ese nombre", Toast.LENGTH_LONG).show();
 
         }
     }
@@ -195,8 +182,8 @@ public class ProfesorVeAlumnoClase extends AppCompatActivity {
         TextView nombreMostrar = view.findViewById(R.id.nombreEventoTexto);
         Button borrarEvento = view.findViewById(R.id.borrarEvento);
         TextView estresMostrar = view.findViewById(R.id.nivelEstresTexto);
-        nombreMostrar.setText("Evento: " + e.nombre);
-        estresMostrar.setText("Estrés: " + e.estres);
+        nombreMostrar.setText("Evento: " + e.getNombre());
+        estresMostrar.setText("Estrés: " + e.getEstres());
 
 
         borrarEvento.setOnClickListener(new View.OnClickListener() {
@@ -204,11 +191,10 @@ public class ProfesorVeAlumnoClase extends AppCompatActivity {
             public void onClick(View v) {
                 eventosLayout.removeView(view);
                 System.out.println(alumnoID);
-                myRef.child("usuarios").child(alumnoID).child("eventos").orderByChild("nombre").equalTo(e.nombre).addListenerForSingleValueEvent(new ValueEventListener() {
+                myRef.child("usuarios").child(alumnoID).child("eventos").orderByChild("nombre").equalTo(e.getNombre()).addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         for(DataSnapshot hijos: snapshot.getChildren()){
-                            eventosMostrados.remove(hijos.getKey());
                             myRef.child("usuarios").child(alumnoID).child("eventos").child(hijos.getKey()).removeValue();
                         }
                     }

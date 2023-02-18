@@ -3,7 +3,6 @@ package com.example.tfg;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -15,7 +14,6 @@ import android.widget.LinearLayout;
 import android.widget.NumberPicker;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -23,7 +21,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-
+import com.example.tfg.Model.*;
 import java.util.ArrayList;
 
 public class PrincipalAlumno extends AppCompatActivity {
@@ -34,10 +32,9 @@ public class PrincipalAlumno extends AppCompatActivity {
     FirebaseUser user;
     DatabaseReference myRef;
     public ArrayList<Evento> eventos;
-    ArrayList<String> eventosMostrados;
     AlertDialog nuevoEventoDialogo;
     LinearLayout eventosLayout;
-    String centro;
+    //TODO: Cambiar el código del alumno a la clase Alumno
     String codigoAlumno;
 
 
@@ -47,25 +44,21 @@ public class PrincipalAlumno extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         myRef= FirebaseDatabase.getInstance("https://registro-tfg-92125-default-rtdb.europe-west1.firebasedatabase.app").getReference();
-
         auth = FirebaseAuth.getInstance();
+        user=auth.getCurrentUser();
+
         detallesUsuario= findViewById(R.id.detallesUsuario);
         logout=findViewById(R.id.logout);
         nuevoEvento=findViewById(R.id.nuevoEvento);
-        user=auth.getCurrentUser();
         eventosLayout=findViewById(R.id.eventos);
         mostrarCodigo=findViewById(R.id.mostrarCodigo);
         codigoAlumnoTextView=findViewById(R.id.codigoAlumno);
-        codigoAlumno="";
         buildDialog();
 
-        String centro="1";
-
-
+        codigoAlumno="";
         eventos=new ArrayList<>();
-        eventosMostrados=new ArrayList<>();
+
 
         if(user==null){
             Intent intent= new Intent(getApplicationContext(), Login.class);
@@ -74,17 +67,17 @@ public class PrincipalAlumno extends AppCompatActivity {
         } else {
             codigoAlumno=user.getEmail().toString() + user.getUid().toString().substring(0,5);
             detallesUsuario.setText(user.getEmail());
+
+            //Profesor añade evento y lo añade a los del alumno
             myRef.child("usuarios").child(user.getUid()).child("eventos").addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     eventos=new ArrayList<>();
                     eventosLayout.removeAllViews();
-                    eventosMostrados=new ArrayList<>();
                     for (DataSnapshot eventosSnapshot : snapshot.getChildren()) {
                         Evento e = eventosSnapshot.getValue(Evento.class);
                         eventos.add(e);
                         mostrarEvento(e);
-                        eventosMostrados.add(eventosSnapshot.getKey());
 
 
                     }
@@ -95,8 +88,8 @@ public class PrincipalAlumno extends AppCompatActivity {
 
                 }
             });
-
         }
+
         logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -106,6 +99,7 @@ public class PrincipalAlumno extends AppCompatActivity {
                 finish();
             }
         });
+
         mostrarCodigo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -119,6 +113,7 @@ public class PrincipalAlumno extends AppCompatActivity {
 
             }
         });
+
         nuevoEvento.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -128,6 +123,7 @@ public class PrincipalAlumno extends AppCompatActivity {
         });
     }
 
+    //TODO: Cambiar añadir evento del Alumnmo que añada o baje estres
     private void buildDialog() {
         AlertDialog.Builder builder= new AlertDialog.Builder(this);
         View view= getLayoutInflater().inflate(R.layout.nuevoevento, null);
@@ -156,6 +152,7 @@ public class PrincipalAlumno extends AppCompatActivity {
 
     }
 
+    //TODO: Probablemente se quite es para el PopUp
     private void iniciarNumberPicker(NumberPicker np) {
         String[] nums = new String[11];
         for(int i=0; i<nums.length; i++)
@@ -168,11 +165,11 @@ public class PrincipalAlumno extends AppCompatActivity {
         np.setValue(1);
 
     }
-
+    //TODO: Identificar eventos con un ID
     private void aniadirEvento(String nombre, int estres) {
         boolean yaexiste=false;
         for(int i = 0;  i<eventos.size()&&!yaexiste;i++){
-            if(eventos.get(i).nombre.equals(nombre))
+            if(eventos.get(i).getNombre().equals(nombre))
                 yaexiste=true;
         }
         if(!yaexiste) {
@@ -190,19 +187,18 @@ public class PrincipalAlumno extends AppCompatActivity {
             TextView nombreMostrar = view.findViewById(R.id.nombreEventoTexto);
             Button borrarEvento = view.findViewById(R.id.borrarEvento);
             TextView estresMostrar = view.findViewById(R.id.nivelEstresTexto);
-            nombreMostrar.setText("Evento: " + e.nombre);
-            estresMostrar.setText("Estrés: " + e.estres);
+            nombreMostrar.setText("Evento: " + e.getNombre());
+            estresMostrar.setText("Estrés: " + e.getEstres());
 
 
             borrarEvento.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     eventosLayout.removeView(view);
-                    myRef.child("usuarios").child(user.getUid()).child("eventos").orderByChild("nombre").equalTo(e.nombre).addListenerForSingleValueEvent(new ValueEventListener() {
+                    myRef.child("usuarios").child(user.getUid()).child("eventos").orderByChild("nombre").equalTo(e.getNombre()).addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
                             for(DataSnapshot hijos: snapshot.getChildren()){
-                                eventosMostrados.remove(hijos.getKey());
                                 myRef.child("usuarios").child(user.getUid()).child("eventos").child(hijos.getKey()).removeValue();
                             }
                         }
