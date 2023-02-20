@@ -26,7 +26,7 @@
                 android:padding="10dp">
 
                 <TextView
-                    android:id="@+id/nombreAlumnoClaseTexto"
+                    android:id="@+id/nombreMostarAlumnoTexto"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Nombre"
@@ -37,17 +37,17 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
-                    android:id="@+id/nivelEstresAlumnoClaseTexto"
+                    android:id="@+id/nivelEstresMostrarAlumnoTexto"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Estrés: 0"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/verAlumnoClase"
-                    app:layout_constraintStart_toEndOf="@+id/nombreAlumnoClaseTexto"
+                    app:layout_constraintEnd_toStartOf="@+id/verMostrarAlumno"
+                    app:layout_constraintStart_toEndOf="@+id/nombreMostarAlumnoTexto"
                     app:layout_constraintTop_toTopOf="parent"></TextView>
 
                 <Button
-                    android:id="@+id/borrarAlumnoClase"
+                    android:id="@+id/borrarMostrarAlumno"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -58,11 +58,11 @@
                 </Button>
 
                 <Button
-                    android:id="@+id/verAlumnoClase"
+                    android:id="@+id/verMostrarAlumno"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/borrarAlumnoClase"
+                    app:layout_constraintEnd_toStartOf="@+id/borrarMostrarAlumno"
                     app:layout_constraintTop_toTopOf="parent"
                     android:layout_marginRight="10dp"
                     android:text="@string/verAlumnoClase"></Button>

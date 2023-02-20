@@ -39,6 +39,7 @@ public class VisualizarAlumno extends AppCompatActivity {
 
     public ArrayList<Evento> eventos;
     String alumnoID;
+    final String[] tipoCuentaArray={"Alumno", "Profesor", "Padre"};
 
 
 
@@ -104,11 +105,28 @@ public class VisualizarAlumno extends AppCompatActivity {
         atras.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent;
-                //TODO: Comprobar tipo de cuenta para volver atras
-                intent=new Intent(getApplicationContext(), PrincipalPadre.class);
-                startActivity(intent);
-                finish();
+                myRef.child("usuarios").child(user.getUid()).child("tipoCuenta").addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        if(snapshot.exists()){
+                            Intent intent;
+                            if(snapshot.getValue(String.class).equals(tipoCuentaArray[1]))
+                                intent = new Intent(getApplicationContext(), PrincipalProfesor.class);
+                            else
+                            if(snapshot.getValue(String.class).equals(tipoCuentaArray[0]))
+                                intent = new Intent(getApplicationContext(), PrincipalAlumno.class);
+                            else
+                                intent =new Intent(getApplicationContext(), PrincipalPadre.class);
+                            startActivity(intent);
+                            finish();
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
             }
         });
         nuevoEvento.setOnClickListener(new View.OnClickListener() {

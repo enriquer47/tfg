@@ -143,12 +143,12 @@ public class PrincipalPadre extends AppCompatActivity {
         });
     }
     private void mostrarHijo(Usuario u, String alumnoID) {
-        View view = getLayoutInflater().inflate(R.layout.tarjetaalumnoclase, null);
-        TextView nombreAlumno= view.findViewById(R.id.nombreAlumnoClaseTexto);
+        View view = getLayoutInflater().inflate(R.layout.tarjetamostraralumno, null);
+        TextView nombreAlumno= view.findViewById(R.id.nombreMostarAlumnoTexto);
 
-        TextView estresAlumno= view.findViewById(R.id.nivelEstresAlumnoClaseTexto);
-        Button borrarAlumnoClase=view.findViewById(R.id.borrarAlumnoClase);
-        Button verAlumnoClase=view.findViewById(R.id.verAlumnoClase);
+        TextView estresAlumno= view.findViewById(R.id.nivelEstresMostrarAlumnoTexto);
+        Button borrarAlumnoClase=view.findViewById(R.id.borrarMostrarAlumno);
+        Button verAlumnoClase=view.findViewById(R.id.verMostrarAlumno);
         verAlumnoClase.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

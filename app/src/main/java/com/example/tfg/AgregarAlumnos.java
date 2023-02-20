@@ -27,7 +27,7 @@ public class AgregarAlumnos extends AppCompatActivity {
 
 
     ArrayList<String> alumnos;
-    ArrayList<String> alumnosEnLaClase;
+    ArrayList<String> alumnosDelProfesor;
     ArrayList<CheckBox> listaCheckBoxes;
     FirebaseAuth auth;
     FirebaseUser user;
@@ -35,46 +35,44 @@ public class AgregarAlumnos extends AppCompatActivity {
     String centro;
     Button atras, aniadir;
     LinearLayout listaAlumnos;
-    String claseID;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Bundle extras=getIntent().getExtras();
-        if(extras!=null){
-            claseID=extras.getString("claseID");
-        }
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_agregar_alumnos);
 
         myRef= FirebaseDatabase.getInstance("https://registro-tfg-92125-default-rtdb.europe-west1.firebasedatabase.app").getReference();
 
         auth = FirebaseAuth.getInstance();
+        user=auth.getCurrentUser();
         alumnos=new ArrayList<>();
-        centro="1";
         listaCheckBoxes=new ArrayList<>();
         atras=findViewById(R.id.atrasListaAlumnos);
         aniadir=findViewById(R.id.aniadirAlumnosMarcados);
         listaAlumnos=findViewById(R.id.listaAlumnos);
 
-
-        myRef.child("usuarios").orderByChild("centro").equalTo(centro).addValueEventListener(new ValueEventListener() {
+        //Cada vez que haya un cambio en los usuarios, se actualiza la lista de alumnos
+        myRef.child("usuarios").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if(snapshot.exists()){
-
                     listaCheckBoxes=new ArrayList<>();
                     alumnos=new ArrayList<>();
-                    alumnosEnLaClase=new ArrayList<>();
+                    alumnosDelProfesor =new ArrayList<>();
                     listaAlumnos.removeAllViews();
-                    myRef.child("clases").child(claseID).child("alumnos").addListenerForSingleValueEvent(new ValueEventListener() {
+
+                    //Se obtienen los alumnos del profesor
+                    myRef.child("usuarios").child(user.getUid()).child("alumnos").addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot2) {
                             for (DataSnapshot snap: snapshot2.getChildren()){
-                                alumnosEnLaClase.add(snap.getValue(String.class));
+                                alumnosDelProfesor.add(snap.getValue(String.class));
                             }
+                            //Se muestran los alumnos para añadir que no pertenecen ya al profesor
                             for (DataSnapshot usuarioSnap: snapshot.getChildren()) {
-                                if(usuarioSnap.child("centro").getValue().equals(centro)&&usuarioSnap.child("tipoCuenta").getValue(String.class).equals("Alumno")&&!alumnosEnLaClase.contains(usuarioSnap.getKey())){
+                                if(usuarioSnap.child("tipoCuenta").getValue(String.class).equals("Alumno")&&!alumnosDelProfesor.contains(usuarioSnap.getKey())){
                                     Usuario u = usuarioSnap.getValue(Usuario.class);
                                     listaCheckBoxes.add(mostrarAlumno(u));
                                     alumnos.add(usuarioSnap.getKey());
@@ -102,7 +100,7 @@ public class AgregarAlumnos extends AppCompatActivity {
                 int totalAniadidos=0;
                 for(int i =0; i<listaCheckBoxes.size();i++) {
                     if(listaCheckBoxes.get(i).isChecked()){
-                        myRef.child("clases").child(claseID).child("alumnos").push().setValue(alumnos.get(i));
+                        myRef.child("usuarios").child(user.getUid()).child("alumnos").push().setValue(alumnos.get(i));
                         totalAniadidos++;
                     }
 
@@ -130,7 +128,7 @@ public class AgregarAlumnos extends AppCompatActivity {
         View view = getLayoutInflater().inflate(R.layout.tarjetaalumno, null);
         TextView nombreAlumno= view.findViewById(R.id.nombreAlumnoTexto);
         CheckBox aniadirAlumnoCheck= view.findViewById(R.id.checkAlumno);
-        nombreAlumno.setText("Email: " + u.email);
+        nombreAlumno.setText("Email: " + u.getEmail());
         listaAlumnos.addView(view);
         return aniadirAlumnoCheck;
     }

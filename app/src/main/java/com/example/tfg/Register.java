@@ -93,17 +93,18 @@ public class Register extends AppCompatActivity {
                                     //TODO Pedir datos del usuario
                                     toMyRef(mAuth.getCurrentUser().getUid(),email);
                                     Toast.makeText(Register.this, "Registro Completado", Toast.LENGTH_SHORT).show();
-
                                     Intent intent;
-                                    if(tipoCuenta.getSelectedItem().toString().equals(tipoCuentaArray[1]))
+                                    if(tipoCuenta.getSelectedItem().toString().equals(tipoCuentaArray[1])) {
                                         intent = new Intent(getApplicationContext(), PrincipalProfesor.class);
-                                    else
-                                        if(tipoCuenta.getSelectedItem().toString().equals(tipoCuentaArray[0]))
+                                    }
+                                    else {
+                                        if (tipoCuenta.getSelectedItem().toString().equals(tipoCuentaArray[0]))
                                             intent = new Intent(getApplicationContext(), PrincipalAlumno.class);
                                         else
-                                            intent =new Intent(getApplicationContext(), PrincipalPadre.class);
+                                            intent = new Intent(getApplicationContext(), PrincipalPadre.class);
                                         startActivity(intent);
                                         finish();
+                                    }
 
 
                                 } else {
@@ -123,7 +124,8 @@ public class Register extends AppCompatActivity {
     //TODO
     private void toMyRef(String userid, String email) {
         String tipo=this.tipoCuenta.getSelectedItem().toString();
-        Usuario usuario = new Usuario();
+        Usuario usuario = new Usuario(email, tipo);
+
         myRef.child("usuarios").child(userid).setValue(usuario);
     }
 

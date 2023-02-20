@@ -10,6 +10,10 @@ public class Usuario {
     public Usuario() {
         // Default constructor required for calls to DataSnapshot.getValue(User.class)
     }
+    public Usuario(String email, String tipoCuenta) {
+        this.email = email;
+        this.tipoCuenta = tipoCuenta;
+    }
 
     public Usuario(String email, String tipoCuenta, String uid, String nombre, String apellidos) {
         this.email = email;

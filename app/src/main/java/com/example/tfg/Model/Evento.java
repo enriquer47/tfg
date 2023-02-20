@@ -15,7 +15,8 @@ public class Evento {
         this.nombre = nombre;
         this.estres = estres;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            this.fecha = LocalDate.now();
+            //TODO: Al añadir un evento a la base de datos, da error
+            //this.fecha = LocalDate.now();
         }
     }
     public String getNombre() {
