@@ -61,8 +61,6 @@ public class PrincipalAlumno extends AppCompatActivity {
         codigoAlumno="";
         buildDialog();
 
-        String centro="1";
-
 
         eventos=new ArrayList<>();
         eventosMostrados=new ArrayList<>();
