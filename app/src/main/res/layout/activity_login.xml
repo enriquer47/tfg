@@ -74,6 +74,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         ></TextView>
+    <ImageView
 
+        android:id="@+id/info"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="#4B4B4B"
+        android:backgroundTint="#0347F4"
+        app:srcCompat="@android:drawable/ic_menu_info_details" />
 
 </LinearLayout>

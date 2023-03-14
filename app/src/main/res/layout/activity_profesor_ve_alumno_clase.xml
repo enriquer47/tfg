@@ -6,7 +6,7 @@
     android:orientation="vertical"
     android:gravity="center"
     android:layout_height="match_parent"
-    tools:context=".ProfesorVeAlumnoClase">
+    tools:context=".VisualizarAlumno">
 
     <TextView
         android:layout_marginTop="20dp"

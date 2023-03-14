@@ -1,14 +1,25 @@
 package com.example.tfg;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.NumberPicker;
+import android.widget.PopupWindow;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -29,10 +40,13 @@ public class Login extends AppCompatActivity {
 
     TextInputEditText editTextEmail, editTextPassword;
     Button buttonLogIn;
-    FirebaseAuth mAuth;
     ProgressBar barraLogin;
     TextView registerNow;
+    ImageView info;
+
+    FirebaseAuth mAuth;
     DatabaseReference myRef;
+    AlertDialog infoDialogo;
     final String[] tipoCuentaArray={"Alumno", "Profesor", "Padre"};
 
 
@@ -43,7 +57,7 @@ public class Login extends AppCompatActivity {
         FirebaseUser currentUser = mAuth.getCurrentUser();
         myRef= FirebaseDatabase.getInstance("https://registro-tfg-92125-default-rtdb.europe-west1.firebasedatabase.app").getReference();
 
-
+        //Si el usuario ya está logueado, se le redirige a su pantalla
         if(currentUser != null){
             myRef.child("usuarios").child(currentUser.getUid()).child("tipoCuenta").addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
@@ -70,6 +84,8 @@ public class Login extends AppCompatActivity {
 
         }
     }
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -81,7 +97,9 @@ public class Login extends AppCompatActivity {
         buttonLogIn=findViewById(R.id.loginButton);
         barraLogin=findViewById(R.id.progreso_login);
         registerNow=findViewById(R.id.registerNow);
+        info=findViewById(R.id.info);
 
+        buildDialog();
         registerNow.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
@@ -90,6 +108,7 @@ public class Login extends AppCompatActivity {
                 finish();
             }
         });
+
         buttonLogIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -107,8 +126,8 @@ public class Login extends AppCompatActivity {
                     return;
                 }
 
-                mAuth.signInWithEmailAndPassword(email, password)
-                        .addOnCompleteListener( new OnCompleteListener<AuthResult>() {
+                //Autenticación con Firebase
+                mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener( new OnCompleteListener<AuthResult>() {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 barraLogin.setVisibility(View.GONE);
@@ -144,5 +163,20 @@ public class Login extends AppCompatActivity {
                         });
             }
         });
+        info.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                infoDialogo.show();
+            }
+        });
+    }
+    private void buildDialog() {
+        AlertDialog.Builder builder= new AlertDialog.Builder(this);
+        View view= getLayoutInflater().inflate(R.layout.infologin, null);
+
+        builder.setView(view);
+
+        infoDialogo= builder.create();
+
     }
 }

@@ -5,17 +5,16 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.tfg.Model.Usuario;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
@@ -32,58 +31,28 @@ public class Register extends AppCompatActivity {
 
     TextInputEditText editTextEmail, editTextPassword;
     Button buttonReg;
-    FirebaseAuth mAuth;
     ProgressBar barraRegistro;
     TextView loginNow;
-    //Switch profesorSwitch;
     Spinner tipoCuenta;
+
+    FirebaseAuth mAuth;
     DatabaseReference myRef;
+
     final String[] tipoCuentaArray={"Alumno", "Profesor", "Padre"};
 
-    @Override
-    public void onStart() {
-        myRef= FirebaseDatabase.getInstance("https://registro-tfg-92125-default-rtdb.europe-west1.firebasedatabase.app").getReference();
-        super.onStart();
-        // Check if user is signed in (non-null) and update UI accordingly.
-        FirebaseUser currentUser = mAuth.getCurrentUser();
-        if(currentUser != null){
-            myRef.child("usuarios").child(currentUser.getUid()).child("tipoCuenta").addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    if(snapshot.exists()){
-                        Intent intent;
-                        if(snapshot.getValue(String.class).equals(tipoCuentaArray[1]))
-                            intent = new Intent(getApplicationContext(), PrincipalProfesor.class);
-                        else
-                        if(snapshot.getValue(String.class).equals(tipoCuentaArray[0]))
-                            intent = new Intent(getApplicationContext(), PrincipalAlumno.class);
-                        else
-                            intent =new Intent(getApplicationContext(), PrincipalPadre.class);
-                        startActivity(intent);
-                        finish();
-                    }
-                }
 
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {
-
-                }
-            });
-        }
-    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
-
+        myRef= FirebaseDatabase.getInstance("https://registro-tfg-92125-default-rtdb.europe-west1.firebasedatabase.app").getReference();
         mAuth= FirebaseAuth.getInstance();
         editTextEmail= findViewById(R.id.email);
         editTextPassword= findViewById(R.id.password);
         buttonReg=findViewById(R.id.registerButton);
         barraRegistro=findViewById(R.id.progreso_registro);
         loginNow=findViewById(R.id.loginNow);
-        //profesorSwitch=findViewById(R.id.profesor);
         tipoCuenta=findViewById(R.id.tipoCuenta);
 
         ArrayAdapter<String> adapter= new ArrayAdapter<String>(this, R.layout.spinner_text, tipoCuentaArray);
@@ -116,38 +85,27 @@ public class Register extends AppCompatActivity {
                     return;
                 }
 
-                mAuth.createUserWithEmailAndPassword(email, password)
-                        .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 barraRegistro.setVisibility(View.GONE);
                                 if (task.isSuccessful()) {
-                                    escribirNuevoUsuario(mAuth.getCurrentUser().getUid(),email);
-                                    Toast.makeText(Register.this, "Registro Completado",
-                                            Toast.LENGTH_SHORT).show();
+                                    //TODO Pedir datos del usuario
+                                    toMyRef(mAuth.getCurrentUser().getUid(),email);
+                                    Toast.makeText(Register.this, "Registro Completado", Toast.LENGTH_SHORT).show();
+                                    Intent intent;
+                                    if(tipoCuenta.getSelectedItem().toString().equals(tipoCuentaArray[1])) {
+                                        intent = new Intent(getApplicationContext(), PrincipalProfesor.class);
+                                    }
+                                    else {
+                                        if (tipoCuenta.getSelectedItem().toString().equals(tipoCuentaArray[0]))
+                                            intent = new Intent(getApplicationContext(), PrincipalAlumno.class);
+                                        else
+                                            intent = new Intent(getApplicationContext(), PrincipalPadre.class);
+                                        startActivity(intent);
+                                        finish();
+                                    }
 
-                                    myRef.child("usuarios").child(mAuth.getCurrentUser().getUid()).child("tipoCuenta").addListenerForSingleValueEvent(new ValueEventListener() {
-                                        @Override
-                                        public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                            if(snapshot.exists()){
-                                                Intent intent;
-                                                if(snapshot.getValue(String.class).equals(tipoCuentaArray[1]))
-                                                    intent = new Intent(getApplicationContext(), PrincipalProfesor.class);
-                                                else
-                                                    if(snapshot.getValue(String.class).equals(tipoCuentaArray[0]))
-                                                        intent = new Intent(getApplicationContext(), PrincipalAlumno.class);
-                                                    else
-                                                        intent =new Intent(getApplicationContext(), PrincipalPadre.class);
-                                                startActivity(intent);
-                                                finish();
-                                            }
-                                        }
-
-                                        @Override
-                                        public void onCancelled(@NonNull DatabaseError error) {
-
-                                        }
-                                    });
 
                                 } else {
                                     // If sign in fails, display a message to the user.
@@ -163,9 +121,11 @@ public class Register extends AppCompatActivity {
         });
 
     }
-    public void escribirNuevoUsuario(String userid, String email) {
+    //TODO
+    private void toMyRef(String userid, String email) {
         String tipo=this.tipoCuenta.getSelectedItem().toString();
-        Usuario usuario = new Usuario(email,tipo);
+        Usuario usuario = new Usuario(email, tipo);
+
         myRef.child("usuarios").child(userid).setValue(usuario);
     }
 

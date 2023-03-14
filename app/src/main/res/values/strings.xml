@@ -29,4 +29,7 @@
     <string name="verAlumnoClase">VER</string>
     <string name="aniadir_hijo">Añadir Hijo</string>
     <string name="codigo_alumno">Mostrar Código</string>
+    <string name="aniadir_alumnos">Añadir alumnos</string>
+    <string name="info_login">Para iniciar sesión necesitas haber creado una cuenta con uno de los roles permitidos. Introduce tu email y contraseña para poder iniciar sesión.</string>
+    <string name="info_login_titulo">Información del inicio de sesión</string>
 </resources>

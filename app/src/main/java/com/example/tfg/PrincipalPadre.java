@@ -1,7 +1,6 @@
 package com.example.tfg;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -12,6 +11,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.example.tfg.Model.Usuario;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -26,18 +26,17 @@ public class PrincipalPadre extends AppCompatActivity {
 
 
     Button logout;
-    FirebaseAuth auth;
     TextView detallesUsuario;
     Button  aniadirHijo;
-    FirebaseUser user;
-    DatabaseReference myRef;
-    private ArrayList<String> hijos;
-    ArrayList<String> hijosMostrados;
     LinearLayout hijosLayout;
-    String centro;
-    String codigoIntroducido;
     EditText codigoEdit;
 
+    FirebaseAuth auth;
+    FirebaseUser user;
+    DatabaseReference myRef;
+
+    String codigoIntroducido;
+    private ArrayList<String> hijos;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,48 +50,32 @@ public class PrincipalPadre extends AppCompatActivity {
         aniadirHijo=findViewById(R.id.aniadirHijo);
         user=auth.getCurrentUser();
         hijosLayout=findViewById(R.id.alumnosPadreLayout);
-        logout=findViewById(R.id.logout);
         codigoEdit=findViewById(R.id.introducirCodigo);
 
-
         hijos=new ArrayList<>();
-        hijosMostrados=new ArrayList<>();
-        centro="-1";
 
         if(user==null){
             Intent intent= new Intent(getApplicationContext(), Login.class);
             startActivity(intent);
             finish();
         } else {
-            myRef.child("usuarios").child(user.getUid()).child("centro").addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
 
-                    centro=snapshot.getValue(String.class);
-
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {
-
-                }
-            });
-            centro="1"; //ERROR AL CONSEGUIR EL VALOR DE centro, CUANDO EJECUTA LA SIGUIENTE LINEA, SIGUE SIENDO -1 (creo que basta con meter el event listener siguiente dentro del anterior)
             myRef.child("usuarios").child(user.getUid()).child("hijos").addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
+
                     hijos=new ArrayList<>();
                     hijosLayout.removeAllViews();
-                    hijosMostrados=new ArrayList<>();
+
                     for (DataSnapshot hijosSnap : snapshot.getChildren()) {
-                        String h=hijosSnap.getValue(String.class);
-                        hijos.add(h);
-                        myRef.child("usuarios").child(h).addListenerForSingleValueEvent(new ValueEventListener() {
+                        String hijoId=hijosSnap.getValue(String.class);
+                        hijos.add(hijoId);
+                        myRef.child("usuarios").child(hijoId).addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                Usuario u =new Usuario(snapshot.child("email").getValue(String.class),"Alumno");
-                                mostrarHijo(u,h);
-                                hijosMostrados.add(h);
+                                //TODO Constructor de usuario
+                                Usuario usuario =new Usuario(snapshot.child("email").getValue(String.class),"Alumno");
+                                mostrarHijo(usuario,hijoId);
                             }
 
                             @Override
@@ -160,17 +143,17 @@ public class PrincipalPadre extends AppCompatActivity {
         });
     }
     private void mostrarHijo(Usuario u, String alumnoID) {
-        View view = getLayoutInflater().inflate(R.layout.tarjetaalumnoclase, null);
-        TextView nombreAlumno= view.findViewById(R.id.nombreAlumnoClaseTexto);
+        View view = getLayoutInflater().inflate(R.layout.tarjetamostraralumno, null);
+        TextView nombreAlumno= view.findViewById(R.id.nombreMostarAlumnoTexto);
 
-        TextView estresAlumno= view.findViewById(R.id.nivelEstresAlumnoClaseTexto);
-        Button borrarAlumnoClase=view.findViewById(R.id.borrarAlumnoClase);
-        Button verAlumnoClase=view.findViewById(R.id.verAlumnoClase);
+        TextView estresAlumno= view.findViewById(R.id.nivelEstresMostrarAlumnoTexto);
+        Button borrarAlumnoClase=view.findViewById(R.id.borrarMostrarAlumno);
+        Button verAlumnoClase=view.findViewById(R.id.verMostrarAlumno);
         verAlumnoClase.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                Intent intent= new Intent(getApplicationContext(), ProfesorVeAlumnoClase.class);
+                Intent intent= new Intent(getApplicationContext(), VisualizarAlumno.class);
                 intent.putExtra("alumnoID",alumnoID);
                 startActivity(intent);
                 finish();
@@ -198,7 +181,7 @@ public class PrincipalPadre extends AppCompatActivity {
                 });
             }
         });
-        nombreAlumno.setText("Email: " + u.email);
+        nombreAlumno.setText("Email: " + u.getEmail());
         hijosLayout.addView(view);
 
     }

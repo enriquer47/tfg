@@ -11,10 +11,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.NumberPicker;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.tfg.Model.Usuario;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -22,8 +22,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-
-import java.util.ArrayList;
 
 public class PrincipalProfesor extends AppCompatActivity {
 
@@ -33,11 +31,8 @@ public class PrincipalProfesor extends AppCompatActivity {
     DatabaseReference myRef;
 
     Button logout;
-    Button crearClase;
-    ArrayList<Clase> clases;
-    ArrayList<String> clasesMostradas;
-    AlertDialog nuevaClaseDialogo;
-    LinearLayout clasesLayout;
+    Button aniadirAlumnos;
+    LinearLayout alumnosLayout;
     String centro;
 
     @Override
@@ -52,46 +47,38 @@ public class PrincipalProfesor extends AppCompatActivity {
 
         auth = FirebaseAuth.getInstance();
         logout=findViewById(R.id.logout);
-        crearClase=findViewById(R.id.crearClase);
+        aniadirAlumnos =findViewById(R.id.aniadirAlumnoProfesor);
         user=auth.getCurrentUser();
-        clasesLayout=findViewById(R.id.clasesLayout);
-        buildDialog();
+        alumnosLayout =findViewById(R.id.alumnosProfesorLayout);
 
 
-        clases=new ArrayList<>();
-        clasesMostradas=new ArrayList<>();
-        centro="-1";
 
         if(user==null){
             Intent intent= new Intent(getApplicationContext(), Login.class);
             startActivity(intent);
             finish();
         } else {
-            myRef.child("usuarios").child(user.getUid()).child("centro").addListenerForSingleValueEvent(new ValueEventListener() {
+            myRef.child("usuarios").child(user.getUid()).child("alumnos").addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
 
-                    centro=snapshot.getValue(String.class);
+                    alumnosLayout.removeAllViews();
 
-                }
+                    for (DataSnapshot alumnosSnap : snapshot.getChildren()) {
+                        String alumnoId=alumnosSnap.getValue(String.class);
+                        myRef.child("usuarios").child(alumnoId).addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                Usuario usuario =new Usuario(snapshot.child("email").getValue(String.class),"Alumno");
+                                mostrarHijo(usuario,alumnoId);
+                            }
 
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
 
-                }
-            });
-            centro="1"; //ERROR AL CONSEGUIR EL VALOR DE centro, CUANDO EJECUTA LA SIGUIENTE LINEA, SIGUE SIENDO -1 (creo que basta con meter el event listener siguiente dentro del anterior)
-            myRef.child("clases").orderByChild("centro").equalTo(centro).addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    clases=new ArrayList<>();
-                    clasesLayout.removeAllViews();
-                    clasesMostradas=new ArrayList<>();
-                    for (DataSnapshot clasesSnapshot : snapshot.getChildren()) {
-                        Clase c = clasesSnapshot.getValue(Clase.class);
-                        clases.add(c);
-                        mostrarClase(c);
-                        clasesMostradas.add(clasesSnapshot.getKey());
+                            }
+                        });
+
                     }
 
                 }
@@ -101,10 +88,10 @@ public class PrincipalProfesor extends AppCompatActivity {
 
                 }
             });
-            crearClase.setOnClickListener(new View.OnClickListener() {
+            aniadirAlumnos.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    nuevaClaseDialogo.show();
+
                 }
             });
 
@@ -118,150 +105,60 @@ public class PrincipalProfesor extends AppCompatActivity {
                 finish();
             }
         });
-
-    }
-    private void buildDialog() {
-        AlertDialog.Builder builder= new AlertDialog.Builder(this);
-        View view= getLayoutInflater().inflate(R.layout.nuevaclase, null);
-
-        EditText nombreClase= view.findViewById(R.id.nombreClase);
-
-        builder.setView(view);
-        builder.setTitle("Nueva clase").setPositiveButton("Añadir", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                aniadirClase(nombreClase.getText().toString());
-
-            }
-        }).setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-
-            }
-        });
-
-        nuevaClaseDialogo= builder.create();
-
-    }
-    private void aniadirClase(String nombre) {
-
-        myRef.child("clases").orderByChild("centro").equalTo(centro).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if(snapshot.exists()){
-                    boolean yaexiste=false;
-                    for (DataSnapshot snap: snapshot.getChildren()) {
-                        if(snap.child("nombre").getValue().equals(nombre)){
-
-                            yaexiste=true;
-                        }
-                    }
-                    if(!yaexiste) {
-                        Clase clase= new Clase(nombre,centro);
-                        clase.addProfesor(user.getUid());
-                        myRef.child("clases").push().setValue(clase);
-                    }else{
-                        Toast.makeText(PrincipalProfesor.this, "Ya hay una clase con ese nombre", Toast.LENGTH_LONG).show();
-
-                    }
-
-                }else{
-                    Clase clase= new Clase(nombre,centro);
-                    clase.addProfesor(user.getUid());
-                    myRef.child("clases").push().setValue(clase);
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-
-
-
-
-    }
-    private void mostrarClase(Clase c) {
-
-        View view = getLayoutInflater().inflate(R.layout.tarjetaclase, null);
-
-        TextView nombreMostrar = view.findViewById(R.id.nombreClaseTexto);
-        Button borrarClase = view.findViewById(R.id.borrarClase);
-        Button aniadirAlumno = view.findViewById(R.id.aniadirAlumno);
-        //TODO Ver clase con el estado de los alumnos
-        Button verClase = view.findViewById(R.id.verClase);
-        TextView centroMostrar = view.findViewById(R.id.centroTexto);
-        nombreMostrar.setText("Clase: " + c.getNombre());
-        centroMostrar.setText("Centro: " + centro);
-
-        verClase.setOnClickListener(new View.OnClickListener() {
+        aniadirAlumnos.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                myRef.child("clases").orderByChild("centro_nombre").equalTo(c.getCentro_nombre()).addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        Intent intent= new Intent(getApplicationContext(), VerClase.class);
-                        String claseID="";
-                        for(DataSnapshot hijos: snapshot.getChildren()){
-                            claseID=hijos.getKey();
-                        }
-                        intent.putExtra("claseID",claseID);
-                        startActivity(intent);
-                        finish();
-                    }
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-
-                    }
-                });
+                Intent intent= new Intent(getApplicationContext(), AgregarAlumnos.class);
+                startActivity(intent);
+                finish();
 
             }
         });
-        borrarClase.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                clasesLayout.removeView(view);
-                myRef.child("clases").orderByChild("centro_nombre").equalTo(c.getCentro_nombre()).addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        for(DataSnapshot hijos: snapshot.getChildren()){
-                            clasesMostradas.remove(hijos.getKey());
-                            myRef.child("clases").child(hijos.getKey()).removeValue();
-                        }
-                    }
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
 
-                    }
-                });
+    }
 
-            }
-        });
-        aniadirAlumno.setOnClickListener(new View.OnClickListener() {
+
+    private void mostrarHijo(Usuario u, String alumnoID) {
+        View view = getLayoutInflater().inflate(R.layout.tarjetamostraralumno, null);
+        TextView nombreAlumno= view.findViewById(R.id.nombreMostarAlumnoTexto);
+
+        TextView estresAlumno= view.findViewById(R.id.nivelEstresMostrarAlumnoTexto);
+        Button borrarAlumno=view.findViewById(R.id.borrarMostrarAlumno);
+        Button verAlumno=view.findViewById(R.id.verMostrarAlumno);
+        verAlumno.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                myRef.child("clases").orderByChild("centro_nombre").equalTo(c.getCentro_nombre()).addListenerForSingleValueEvent(new ValueEventListener() {
+
+                Intent intent= new Intent(getApplicationContext(), VisualizarAlumno.class);
+                intent.putExtra("alumnoID",alumnoID);
+                startActivity(intent);
+                finish();
+
+            }
+        });
+
+
+        borrarAlumno.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                myRef.child("usuarios").child(user.getUid()).child("alumnos").orderByValue().equalTo(alumnoID).addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        Intent intent= new Intent(getApplicationContext(), AgregarAlumnos.class);
-                        String claseID="";
-                        for(DataSnapshot hijos: snapshot.getChildren()){
-                            claseID=hijos.getKey();
-                        }
-                        intent.putExtra("claseID",claseID);
-                        startActivity(intent);
-                        finish();
+                        for(DataSnapshot snap: snapshot.getChildren()) {
+                            myRef.child("usuarios").child(user.getUid()).child("alumnos").child(snap.getKey()).removeValue();
+                        };
+
                     }
+
                     @Override
                     public void onCancelled(@NonNull DatabaseError error) {
 
                     }
                 });
-
             }
         });
-        clasesLayout.addView(view);
+        nombreAlumno.setText("Email: " + u.getEmail());
+        alumnosLayout.addView(view);
 
     }
 }
