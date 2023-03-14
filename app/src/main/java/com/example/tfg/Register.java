@@ -127,6 +127,9 @@ public class Register extends AppCompatActivity {
         Usuario usuario = new Usuario(email, tipo);
 
         myRef.child("usuarios").child(userid).setValue(usuario);
+        if(tipo.equals(tipoCuentaArray[0])){
+            myRef.child("usuarios").child(userid).child("estres").setValue(0);
+        }
     }
 
 }

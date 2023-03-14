@@ -188,6 +188,18 @@ public class VisualizarAlumno extends AppCompatActivity {
         if(!yaexiste) {
             Evento evento = new Evento(nombre, estres);
             myRef.child("usuarios").child(alumnoID).child("eventos").push().setValue(evento);
+            myRef.child("usuarios").child(alumnoID).child("estres").addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    int estresActual=snapshot.getValue(Integer.class);
+                    myRef.child("usuarios").child(alumnoID).child("estres").setValue(estresActual+estres);
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+            });
         }else{
             Toast.makeText(VisualizarAlumno.this, "Ya hay un evento con ese nombre", Toast.LENGTH_LONG).show();
 
@@ -214,6 +226,18 @@ public class VisualizarAlumno extends AppCompatActivity {
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         for(DataSnapshot hijos: snapshot.getChildren()){
                             myRef.child("usuarios").child(alumnoID).child("eventos").child(hijos.getKey()).removeValue();
+                            myRef.child("usuarios").child(alumnoID).child("estres").addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                    int estresActual=snapshot.getValue(Integer.class);
+                                    myRef.child("usuarios").child(alumnoID).child("estres").setValue(estresActual-e.getEstres());
+                                }
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError error) {
+
+                                }
+                            });
                         }
                     }
                     @Override

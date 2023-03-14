@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -146,9 +147,27 @@ public class PrincipalPadre extends AppCompatActivity {
         View view = getLayoutInflater().inflate(R.layout.tarjetamostraralumno, null);
         TextView nombreAlumno= view.findViewById(R.id.nombreMostarAlumnoTexto);
 
-        TextView estresAlumno= view.findViewById(R.id.nivelEstresMostrarAlumnoTexto);
-        Button borrarAlumnoClase=view.findViewById(R.id.borrarMostrarAlumno);
-        Button verAlumnoClase=view.findViewById(R.id.verMostrarAlumno);
+        //TextView estresAlumno= view.findViewById(R.id.nivelEstresMostrarAlumnoTexto);
+        ImageButton borrarAlumnoClase=view.findViewById(R.id.borrarMostrarAlumno);
+        ImageButton verAlumnoClase=view.findViewById(R.id.verMostrarAlumno);
+
+        myRef.child("usuarios").child(alumnoID).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if(snapshot.exists()){
+                    int estres = snapshot.child("estres").getValue(Integer.class);
+                    if(estres>=50)
+                        verAlumnoClase.setBackgroundResource(R.drawable.ic_mostraralumnotriste);
+                    else
+                        verAlumnoClase.setBackgroundResource(R.drawable.ic_mostraralumnofeliz);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
         verAlumnoClase.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -181,7 +200,7 @@ public class PrincipalPadre extends AppCompatActivity {
                 });
             }
         });
-        nombreAlumno.setText("Email: " + u.getEmail());
+        nombreAlumno.setText(u.getEmail());
         hijosLayout.addView(view);
 
     }
