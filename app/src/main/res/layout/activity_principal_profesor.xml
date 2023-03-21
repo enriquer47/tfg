@@ -31,7 +31,7 @@
         app:layout_constraintStart_toStartOf="parent"
         android:layout_margin="20dp"></Button>
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/aniadirAlumnoProfesor"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -43,6 +43,8 @@
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/alumnosProfesorLayout"
-        app:layout_constraintVertical_bias="0.631"></Button>
+        app:layout_constraintVertical_bias="0.631"
+        style="@style/AcceptButtonStyle"
+        ></androidx.appcompat.widget.AppCompatButton>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

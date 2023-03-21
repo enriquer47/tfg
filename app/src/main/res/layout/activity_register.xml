@@ -70,13 +70,13 @@
     </com.google.android.material.textfield.TextInputLayout>
 
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/registerButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/registrarse"
-
-        ></Button>
+        style="@style/AcceptButtonStyle"
+        ></androidx.appcompat.widget.AppCompatButton>
 
     <TextView
         android:id="@+id/loginNow"

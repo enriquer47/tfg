@@ -22,4 +22,14 @@
     <style name="Theme.TFG.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="Theme.TFG.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+
+    <style name="AcceptButtonStyle" parent="Widget.AppCompat.Button">
+        <item name="android:background">@drawable/accept_button</item>
+        <item name="android:backgroundTint">@color/green</item>
+        <item name="android:padding">10dp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:layout_margin">10dp</item>
+    </style>
 </resources>

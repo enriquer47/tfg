@@ -22,7 +22,11 @@
         android:textSize="20dp"
         app:layout_constraintBottom_toTopOf="@+id/aniadirHijo"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"></EditText>
+        app:layout_constraintStart_toStartOf="parent"
+        android:background="@color/ligth_gray"
+        android:padding="5dp"
+        android:layout_margin="10dp"
+        ></EditText>
     <Button
         android:id="@+id/logout"
         android:layout_width="wrap_content"
@@ -34,13 +38,17 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/aniadirHijo"></Button>
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/aniadirHijo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/aniadir_hijo"
+        style="@style/AcceptButtonStyle"
+
+
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/alumnosPadreLayout"></Button>
+        app:layout_constraintTop_toBottomOf="@+id/alumnosPadreLayout"
+        ></androidx.appcompat.widget.AppCompatButton>
 </androidx.constraintlayout.widget.ConstraintLayout>

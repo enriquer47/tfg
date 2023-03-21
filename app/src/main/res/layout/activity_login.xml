@@ -55,13 +55,14 @@
 
         </ProgressBar>
     </com.google.android.material.textfield.TextInputLayout>
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/loginButton"
         android:text="@string/entrar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        style="@style/AcceptButtonStyle"
 
-        ></Button>
+        ></androidx.appcompat.widget.AppCompatButton>
     <TextView
         android:textStyle="bold"
         android:textSize="20sp"
