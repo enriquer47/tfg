@@ -53,6 +53,9 @@ public class AgregarAlumnos extends AppCompatActivity {
         aniadir=findViewById(R.id.aniadirAlumnosMarcados);
         listaAlumnos=findViewById(R.id.listaAlumnos);
 
+        getSupportActionBar().setTitle("Agregar Alumnos");
+
+
         //Cada vez que haya un cambio en los usuarios, se actualiza la lista de alumnos
         myRef.child("usuarios").addValueEventListener(new ValueEventListener() {
             @Override
@@ -132,4 +135,13 @@ public class AgregarAlumnos extends AppCompatActivity {
         listaAlumnos.addView(view);
         return aniadirAlumnoCheck;
     }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent intent= new Intent(getApplicationContext(), PrincipalProfesor.class);
+        startActivity(intent);
+        finish();
+    }
+
 }

@@ -60,6 +60,7 @@ public class PrincipalAlumno extends AppCompatActivity {
         codigoAlumno="";
 
         eventos=new ArrayList<>();
+        getSupportActionBar().setTitle("Principal Alumno");
 
 
         if(user==null){

@@ -47,7 +47,7 @@ public class VisualizarAlumno extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_profesor_ve_alumno_clase);
+        setContentView(R.layout.activity_visualizar_alumno);
 
         myRef= FirebaseDatabase.getInstance("https://registro-tfg-92125-default-rtdb.europe-west1.firebasedatabase.app").getReference();
 
@@ -65,6 +65,9 @@ public class VisualizarAlumno extends AppCompatActivity {
         buildDialog();
 
         eventos=new ArrayList<>();
+
+        getSupportActionBar().setTitle("Visualizar alumno");
+
 
         if(user==null){
             Intent intent= new Intent(getApplicationContext(), Login.class);
@@ -251,4 +254,31 @@ public class VisualizarAlumno extends AppCompatActivity {
         eventosLayout.addView(view);
 
     }
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        myRef.child("usuarios").child(user.getUid()).child("tipoCuenta").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if(snapshot.exists()){
+                    Intent intent;
+                    if(snapshot.getValue(String.class).equals(tipoCuentaArray[1]))
+                        intent = new Intent(getApplicationContext(), PrincipalProfesor.class);
+                    else
+                    if(snapshot.getValue(String.class).equals(tipoCuentaArray[0]))
+                        intent = new Intent(getApplicationContext(), PrincipalAlumno.class);
+                    else
+                        intent =new Intent(getApplicationContext(), PrincipalPadre.class);
+                    startActivity(intent);
+                    finish();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
 }

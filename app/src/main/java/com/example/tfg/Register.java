@@ -58,6 +58,9 @@ public class Register extends AppCompatActivity {
         ArrayAdapter<String> adapter= new ArrayAdapter<String>(this, R.layout.spinner_text, tipoCuentaArray);
         tipoCuenta.setAdapter(adapter);
 
+        getSupportActionBar().setTitle("Registro");
+
+
         loginNow.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){

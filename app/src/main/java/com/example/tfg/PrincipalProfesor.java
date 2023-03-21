@@ -52,6 +52,8 @@ public class PrincipalProfesor extends AppCompatActivity {
         user=auth.getCurrentUser();
         alumnosLayout =findViewById(R.id.alumnosProfesorLayout);
 
+        getSupportActionBar().setTitle("Principal Profesor");
+
 
 
         if(user==null){

@@ -55,6 +55,8 @@ public class PrincipalPadre extends AppCompatActivity {
 
         hijos=new ArrayList<>();
 
+        getSupportActionBar().setTitle("Principal Padre");
+
         if(user==null){
             Intent intent= new Intent(getApplicationContext(), Login.class);
             startActivity(intent);

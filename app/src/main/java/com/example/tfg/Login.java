@@ -57,6 +57,8 @@ public class Login extends AppCompatActivity {
         FirebaseUser currentUser = mAuth.getCurrentUser();
         myRef= FirebaseDatabase.getInstance("https://registro-tfg-92125-default-rtdb.europe-west1.firebasedatabase.app").getReference();
 
+        getSupportActionBar().setTitle("Inicio de sesión");
+
         //Si el usuario ya está logueado, se le redirige a su pantalla
         if(currentUser != null){
             myRef.child("usuarios").child(currentUser.getUid()).child("tipoCuenta").addListenerForSingleValueEvent(new ValueEventListener() {
