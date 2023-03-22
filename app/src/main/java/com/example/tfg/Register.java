@@ -38,7 +38,8 @@ public class Register extends AppCompatActivity {
     FirebaseAuth mAuth;
     DatabaseReference myRef;
 
-    final String[] tipoCuentaArray={"Alumno", "Profesor", "Padre"};
+    //final String[] tipoCuentaArray={"Alumno", "Profesor", "Padre"};
+    final String[] tipoCuentaArray={"Profesor", "Padre"};
 
 
     @Override
@@ -97,23 +98,19 @@ public class Register extends AppCompatActivity {
                                     toMyRef(mAuth.getCurrentUser().getUid(),email);
                                     Toast.makeText(Register.this, "Registro Completado", Toast.LENGTH_SHORT).show();
                                     Intent intent;
-                                    if(tipoCuenta.getSelectedItem().toString().equals(tipoCuentaArray[1])) {
+                                    if(tipoCuenta.getSelectedItem().toString().equals(tipoCuentaArray[0])) {
                                         intent = new Intent(getApplicationContext(), PrincipalProfesor.class);
                                     }
                                     else {
-                                        if (tipoCuenta.getSelectedItem().toString().equals(tipoCuentaArray[0]))
-                                            intent = new Intent(getApplicationContext(), PrincipalAlumno.class);
-                                        else
-                                            intent = new Intent(getApplicationContext(), PrincipalPadre.class);
-                                        startActivity(intent);
-                                        finish();
+                                        intent = new Intent(getApplicationContext(), PrincipalPadre.class);
                                     }
+                                    startActivity(intent);
+                                    finish();
 
 
                                 } else {
                                     // If sign in fails, display a message to the user.
-                                    Toast.makeText(Register.this, "Error en el registro",
-                                            Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(Register.this, "Error en el registro", Toast.LENGTH_SHORT).show();
 
                                 }
                             }
@@ -130,9 +127,9 @@ public class Register extends AppCompatActivity {
         Usuario usuario = new Usuario(email, tipo);
 
         myRef.child("usuarios").child(userid).setValue(usuario);
-        if(tipo.equals(tipoCuentaArray[0])){
+       /* if(tipo.equals(tipoCuentaArray[0])){
             myRef.child("usuarios").child(userid).child("estres").setValue(0);
-        }
+        }*/
     }
 
 }

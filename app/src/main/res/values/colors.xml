@@ -11,5 +11,6 @@
     <color name="ligth_gray">#D3D3D3</color>
     <color name="green">#00FF48</color>
     <color name="light_green">#89CFF0</color>
+    <color name="red">#D32E2E</color>
 
 </resources>

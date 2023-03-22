@@ -72,8 +72,7 @@ public class PrincipalProfesor extends AppCompatActivity {
                         myRef.child("usuarios").child(alumnoId).addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                Usuario usuario =new Usuario(snapshot.child("email").getValue(String.class),"Alumno");
-                                mostrarHijo(usuario,alumnoId);
+                                mostrarHijo(alumnoId);
                             }
 
                             @Override
@@ -121,10 +120,9 @@ public class PrincipalProfesor extends AppCompatActivity {
     }
 
 
-    private void mostrarHijo(Usuario u, String alumnoID) {
+    private void mostrarHijo(String alumnoID) {
         View view = getLayoutInflater().inflate(R.layout.tarjetamostraralumno, null);
-        TextView nombreAlumno= view.findViewById(R.id.nombreMostarAlumnoTexto);
-        int estres=0;
+
         //TextView estresAlumno= view.findViewById(R.id.nivelEstresMostrarAlumnoTexto);
         ImageButton borrarAlumno=view.findViewById(R.id.borrarMostrarAlumno);
         ImageButton verAlumno=view.findViewById(R.id.verMostrarAlumno);
@@ -134,6 +132,9 @@ public class PrincipalProfesor extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if(snapshot.exists()){
                     int estres = snapshot.child("estres").getValue(Integer.class);
+                    String textoNombre=snapshot.child("nombre").getValue(String.class);
+                    TextView nombreAlumno= view.findViewById(R.id.nombreMostarAlumnoTexto);
+                    nombreAlumno.setText(textoNombre);
                     if(estres>=50)
                         verAlumno.setBackgroundResource(R.drawable.ic_mostraralumnotriste);
                     else
@@ -178,7 +179,6 @@ public class PrincipalProfesor extends AppCompatActivity {
                 });
             }
         });
-        nombreAlumno.setText(u.getEmail());
         alumnosLayout.addView(view);
 
     }

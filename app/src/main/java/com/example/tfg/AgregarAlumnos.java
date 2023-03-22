@@ -76,8 +76,8 @@ public class AgregarAlumnos extends AppCompatActivity {
                             //Se muestran los alumnos para añadir que no pertenecen ya al profesor
                             for (DataSnapshot usuarioSnap: snapshot.getChildren()) {
                                 if(usuarioSnap.child("tipoCuenta").getValue(String.class).equals("Alumno")&&!alumnosDelProfesor.contains(usuarioSnap.getKey())){
-                                    Usuario u = usuarioSnap.getValue(Usuario.class);
-                                    listaCheckBoxes.add(mostrarAlumno(u));
+
+                                    listaCheckBoxes.add(mostrarAlumno(usuarioSnap.getKey()));
                                     alumnos.add(usuarioSnap.getKey());
                                 }
                             }
@@ -127,11 +127,24 @@ public class AgregarAlumnos extends AppCompatActivity {
 
 
 
-    private CheckBox mostrarAlumno(Usuario u) {
+    private CheckBox mostrarAlumno(String alumnoID) {
         View view = getLayoutInflater().inflate(R.layout.tarjetaalumno, null);
         TextView nombreAlumno= view.findViewById(R.id.nombreAlumnoTexto);
         CheckBox aniadirAlumnoCheck= view.findViewById(R.id.checkAlumno);
-        nombreAlumno.setText("Email: " + u.getEmail());
+        myRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if(snapshot.exists()){
+                    String textoNombre=snapshot.child("usuarios").child(alumnoID).child("nombre").getValue(String.class);
+                    nombreAlumno.setText("Nombre: " + textoNombre);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
         listaAlumnos.addView(view);
         return aniadirAlumnoCheck;
     }

@@ -77,7 +77,7 @@ public class VisualizarAlumno extends AppCompatActivity {
             myRef.child("usuarios").child(alumnoID).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    detallesUsuario.setText(snapshot.child("email").getValue(String.class));
+                    detallesUsuario.setText(snapshot.child("nombre").getValue(String.class));
                 }
 
                 @Override

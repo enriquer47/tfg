@@ -14,6 +14,7 @@
         android:orientation="vertical"
         app:layout_constraintTop_toTopOf="parent"></LinearLayout>
 
+<!--
     <EditText
         android:id="@+id/introducirCodigo"
         android:layout_width="wrap_content"
@@ -27,17 +28,20 @@
         android:padding="5dp"
         android:layout_margin="10dp"
         ></EditText>
-    <Button
+    -->
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/logout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-
         android:layout_margin="20dp"
         android:text="@string/logout"
+        style="@style/CancelButtonStyle"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/aniadirHijo"></Button>
+        app:layout_constraintTop_toBottomOf="@+id/aniadirHijo"></androidx.appcompat.widget.AppCompatButton>
+
+
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/aniadirHijo"
         android:layout_width="wrap_content"

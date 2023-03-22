@@ -1,8 +1,10 @@
 package com.example.tfg;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -10,6 +12,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.NumberPicker;
 import android.widget.TextView;
 
 import com.example.tfg.Model.Usuario;
@@ -31,12 +34,14 @@ public class PrincipalPadre extends AppCompatActivity {
     Button  aniadirHijo;
     LinearLayout hijosLayout;
     EditText codigoEdit;
+    AlertDialog nuevoHijoDialogo;
+
 
     FirebaseAuth auth;
     FirebaseUser user;
     DatabaseReference myRef;
 
-    String codigoIntroducido;
+    //String codigoIntroducido;
     private ArrayList<String> hijos;
 
     @Override
@@ -51,7 +56,10 @@ public class PrincipalPadre extends AppCompatActivity {
         aniadirHijo=findViewById(R.id.aniadirHijo);
         user=auth.getCurrentUser();
         hijosLayout=findViewById(R.id.alumnosPadreLayout);
-        codigoEdit=findViewById(R.id.introducirCodigo);
+        //codigoEdit=findViewById(R.id.introducirCodigo);
+
+
+        buildDialog();
 
         hijos=new ArrayList<>();
 
@@ -77,8 +85,8 @@ public class PrincipalPadre extends AppCompatActivity {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot snapshot) {
                                 //TODO Constructor de usuario
-                                Usuario usuario =new Usuario(snapshot.child("email").getValue(String.class),"Alumno");
-                                mostrarHijo(usuario,hijoId);
+
+                                mostrarHijo(hijoId);
                             }
 
                             @Override
@@ -96,7 +104,7 @@ public class PrincipalPadre extends AppCompatActivity {
 
                 }
             });
-            aniadirHijo.setOnClickListener(new View.OnClickListener() {
+           /* aniadirHijo.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     codigoIntroducido=codigoEdit.getText().toString();
@@ -127,11 +135,19 @@ public class PrincipalPadre extends AppCompatActivity {
                         });
 
                     }else{
-                        //TODO TOAST CODIGO INVALIDO
                     }
 
                 }
+            });*/
+
+            aniadirHijo.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    nuevoHijoDialogo.show();
+                }
             });
+
+
 
         }
 
@@ -145,19 +161,48 @@ public class PrincipalPadre extends AppCompatActivity {
             }
         });
     }
-    private void mostrarHijo(Usuario u, String alumnoID) {
+    private void buildDialog() {
+        AlertDialog.Builder builder= new AlertDialog.Builder(this);
+        View view= getLayoutInflater().inflate(R.layout.nuevohijo, null);
+
+        EditText nombre= view.findViewById(R.id.nombreHijo);
+
+        builder.setView(view);
+        builder.setTitle("Añadir Hijo").setPositiveButton("Añadir", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                aniadirHijo(nombre.getText().toString());
+                nombre.setText("");
+
+            }
+        }).setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                nombre.setText("");
+
+            }
+        });
+
+        nuevoHijoDialogo= builder.create();
+
+    }
+    private void mostrarHijo(String alumnoID) {
         View view = getLayoutInflater().inflate(R.layout.tarjetamostraralumno, null);
-        TextView nombreAlumno= view.findViewById(R.id.nombreMostarAlumnoTexto);
+
 
         //TextView estresAlumno= view.findViewById(R.id.nivelEstresMostrarAlumnoTexto);
         ImageButton borrarAlumnoClase=view.findViewById(R.id.borrarMostrarAlumno);
         ImageButton verAlumnoClase=view.findViewById(R.id.verMostrarAlumno);
+
 
         myRef.child("usuarios").child(alumnoID).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if(snapshot.exists()){
                     int estres = snapshot.child("estres").getValue(Integer.class);
+                    String textoNombre=snapshot.child("nombre").getValue(String.class);
+                    TextView nombreAlumno= view.findViewById(R.id.nombreMostarAlumnoTexto);
+                    nombreAlumno.setText(textoNombre);
                     if(estres>=50)
                         verAlumnoClase.setBackgroundResource(R.drawable.ic_mostraralumnotriste);
                     else
@@ -191,6 +236,7 @@ public class PrincipalPadre extends AppCompatActivity {
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         for(DataSnapshot snap: snapshot.getChildren()) {
                             myRef.child("usuarios").child(user.getUid()).child("hijos").child(snap.getKey()).removeValue();
+                            myRef.child("usuarios").child(alumnoID).removeValue();
                         };
 
                     }
@@ -202,9 +248,17 @@ public class PrincipalPadre extends AppCompatActivity {
                 });
             }
         });
-        nombreAlumno.setText(u.getEmail());
+
         hijosLayout.addView(view);
 
+    }
+    private void aniadirHijo(String nombre){
+
+        String hijoID=myRef.child("usuarios").push().getKey();
+        myRef.child("usuarios").child(hijoID).child("nombre").setValue(nombre);
+        myRef.child("usuarios").child(hijoID).child("estres").setValue(0);
+        myRef.child("usuarios").child(user.getUid()).child("hijos").push().setValue(hijoID);
+        myRef.child("usuarios").child(hijoID).child("tipoCuenta").setValue("Alumno");
     }
 
 }
