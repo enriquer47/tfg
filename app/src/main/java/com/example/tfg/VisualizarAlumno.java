@@ -15,6 +15,7 @@ import android.widget.NumberPicker;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.tfg.Model.Alumno;
 import com.example.tfg.Model.Evento;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -36,6 +37,7 @@ public class VisualizarAlumno extends AppCompatActivity {
     Button atras, nuevoEvento;
     AlertDialog nuevoEventoDialogo;
     LinearLayout eventosLayout;
+    int estilo=1;
 
     public ArrayList<Evento> eventos;
     String alumnoID;
@@ -47,14 +49,23 @@ public class VisualizarAlumno extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_visualizar_alumno);
-
-        myRef= FirebaseDatabase.getInstance("https://registro-tfg-92125-default-rtdb.europe-west1.firebasedatabase.app").getReference();
-
         Bundle extras=getIntent().getExtras();
         if(extras!=null){
             alumnoID=extras.getString("alumnoID");
         }
+        if(estilo==1){
+            Intent intent= new Intent(getApplicationContext(), AlumnoSimple.class);
+            intent.putExtra("alumnoID",alumnoID);
+            startActivity(intent);
+            finish();
+        }
+
+        setContentView(R.layout.activity_visualizar_alumno);
+
+        myRef= FirebaseDatabase.getInstance("https://registro-tfg-92125-default-rtdb.europe-west1.firebasedatabase.app").getReference();
+
+
+
         auth = FirebaseAuth.getInstance();
         user=auth.getCurrentUser();
 
