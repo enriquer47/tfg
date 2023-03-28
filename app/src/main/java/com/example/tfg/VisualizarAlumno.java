@@ -159,7 +159,7 @@ public class VisualizarAlumno extends AppCompatActivity {
         builder.setTitle("Nuevo evento").setPositiveButton("Añadir", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                aniadirEvento(nombre.getText().toString(), nivelEstres.getValue());
+                aniadirEvento(nombre.getText().toString(), nivelEstres.getValue()-10);
                 nombre.setText("");
                 nivelEstres.setValue(0);
             }
@@ -176,15 +176,15 @@ public class VisualizarAlumno extends AppCompatActivity {
     }
 
     private void iniciarNumberPicker(NumberPicker np) {
-        String[] nums = new String[11];
+        String[] nums = new String[21];
         for(int i=0; i<nums.length; i++)
-            nums[i] = Integer.toString(i);
+            nums[i] = Integer.toString(i-10);
 
         np.setMinValue(0);
-        np.setMaxValue(10);
+        np.setMaxValue(20);
         np.setWrapSelectorWheel(false);
         np.setDisplayedValues(nums);
-        np.setValue(1);
+        np.setValue(0);
 
     }
 
