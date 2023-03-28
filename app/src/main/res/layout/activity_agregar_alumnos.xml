@@ -30,7 +30,7 @@
         style="@style/AcceptButtonStyle"
         android:layout_marginBottom="20dp"></androidx.appcompat.widget.AppCompatButton>
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/atrasListaAlumnos"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -39,5 +39,6 @@
         app:layout_constraintHorizontal_bias="0.073"
         app:layout_constraintStart_toStartOf="parent"
         android:layout_marginBottom="20dp"
-        android:text="@string/atras"></Button>
+        style="@style/BackButtonStyle"
+        android:text="@string/atras"></androidx.appcompat.widget.AppCompatButton>
 </androidx.constraintlayout.widget.ConstraintLayout>

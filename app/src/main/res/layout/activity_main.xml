@@ -52,12 +52,12 @@
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent">
 
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/logout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-
-            android:text="@string/logout"></Button>
+            style="@style/CancelButtonStyle"
+            android:text="@string/logout"></androidx.appcompat.widget.AppCompatButton>
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -69,14 +69,15 @@
                 android:text=""
 
                 ></TextView>
-            <Button
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/mostrarCodigo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="20dp"
                 android:layout_marginLeft="20dp"
+                style="@style/BackButtonStyle"
 
-                android:text="@string/codigo_alumno"></Button>
+                android:text="@string/codigo_alumno"></androidx.appcompat.widget.AppCompatButton>
         </LinearLayout>
 
 

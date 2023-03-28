@@ -31,6 +31,7 @@
         <item name="android:textStyle">bold</item>
         <item name="android:textSize">20sp</item>
         <item name="android:layout_margin">20dp</item>
+        <item name="android:textColor">@color/dark_gray</item>
         <item name="android:elevation">5dp</item>
         <item name="background">@drawable/sombra</item>
     </style>
@@ -40,7 +41,17 @@
         <item name="android:padding">10dp</item>
         <item name="android:textStyle">bold</item>
         <item name="android:textSize">20sp</item>
-        <item name="android:layout_margin">10dp</item>
+        <item name="android:layout_margin">20dp</item>
+        <item name="android:elevation">5dp</item>
+        <item name="background">@drawable/sombra</item>
+    </style>
+    <style name="BackButtonStyle" parent="Widget.AppCompat.Button">
+        <item name="android:background">@drawable/back_button</item>
+        <item name="android:backgroundTint">@color/blue</item>
+        <item name="android:padding">10dp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:layout_margin">20dp</item>
         <item name="android:elevation">5dp</item>
         <item name="background">@drawable/sombra</item>
     </style>

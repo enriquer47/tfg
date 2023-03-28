@@ -48,12 +48,12 @@
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent">
 
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/atrasAlumnoClase"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-
-            android:text="@string/atras"></Button>
+            style="@style/BackButtonStyle"
+            android:text="@string/atras"></androidx.appcompat.widget.AppCompatButton>
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/nuevoEventoAlumnoClase"
             android:layout_width="wrap_content"
