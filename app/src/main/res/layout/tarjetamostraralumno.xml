@@ -40,24 +40,11 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-               <!--
-               <TextView
-                    android:id="@+id/nivelEstresMostrarAlumnoTexto"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Estrés: 0"
-                    android:textColor="@color/white"
-                    android:textSize="14sp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/verMostrarAlumno"
-                    app:layout_constraintStart_toEndOf="@+id/nombreMostarAlumnoTexto"
-                    app:layout_constraintTop_toTopOf="parent"></TextView>
-                -->
                 <ImageButton
                     android:id="@+id/borrarMostrarAlumno"
                     android:layout_width="60dp"
                     android:layout_height="60dp"
-                    android:background= "@drawable/ic_edit"
+                    android:background= "@drawable/ic_delete"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
@@ -70,15 +57,25 @@
                     android:id="@+id/verMostrarAlumno"
                     android:layout_width="80dp"
                     android:layout_height="80dp"
+                    android:layout_margin="-30dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginHorizontal="15dp"
                     android:background="@drawable/ic_mostraralumnofeliz"
                     app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/editarMostrarAlumno"
+                    app:layout_constraintTop_toTopOf="parent"></ImageButton>
+
+                <ImageButton
+                    android:id="@+id/editarMostrarAlumno"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_margin="15dp"
+
+                    android:background="@drawable/ic_edit"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@+id/borrarMostrarAlumno"
-                    app:layout_constraintTop_toTopOf="parent"
-                    android:layout_margin="-30dp"
-                    android:layout_marginRight="16dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginBottom="10dp">
-                </ImageButton>
+                    app:layout_constraintTop_toTopOf="parent"></ImageButton>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

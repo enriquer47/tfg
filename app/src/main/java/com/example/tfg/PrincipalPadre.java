@@ -190,9 +190,9 @@ public class PrincipalPadre extends AppCompatActivity {
         View view = getLayoutInflater().inflate(R.layout.tarjetamostraralumno, null);
 
 
-        //TextView estresAlumno= view.findViewById(R.id.nivelEstresMostrarAlumnoTexto);
-        ImageButton borrarAlumnoClase=view.findViewById(R.id.borrarMostrarAlumno);
-        ImageButton verAlumnoClase=view.findViewById(R.id.verMostrarAlumno);
+        ImageButton borrarHijo=view.findViewById(R.id.borrarMostrarAlumno);
+        ImageButton modoAlumno=view.findViewById(R.id.verMostrarAlumno);
+        ImageButton editarAlumno=view.findViewById(R.id.editarMostrarAlumno);
 
 
         myRef.child("usuarios").child(alumnoID).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -204,9 +204,9 @@ public class PrincipalPadre extends AppCompatActivity {
                     TextView nombreAlumno= view.findViewById(R.id.nombreMostarAlumnoTexto);
                     nombreAlumno.setText(textoNombre);
                     if(estres>=50)
-                        verAlumnoClase.setBackgroundResource(R.drawable.ic_mostraralumnotriste);
+                        modoAlumno.setBackgroundResource(R.drawable.ic_mostraralumnotriste);
                     else
-                        verAlumnoClase.setBackgroundResource(R.drawable.ic_mostraralumnofeliz);
+                        modoAlumno.setBackgroundResource(R.drawable.ic_mostraralumnofeliz);
                 }
             }
 
@@ -215,7 +215,18 @@ public class PrincipalPadre extends AppCompatActivity {
 
             }
         });
-        verAlumnoClase.setOnClickListener(new View.OnClickListener() {
+        modoAlumno.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Intent intent= new Intent(getApplicationContext(), AlumnoSimple.class);
+                intent.putExtra("alumnoID",alumnoID);
+                startActivity(intent);
+                finish();
+
+            }
+        });
+        editarAlumno.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
@@ -228,7 +239,7 @@ public class PrincipalPadre extends AppCompatActivity {
         });
 
 
-        borrarAlumnoClase.setOnClickListener(new View.OnClickListener() {
+        borrarHijo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 myRef.child("usuarios").child(user.getUid()).child("hijos").orderByValue().equalTo(alumnoID).addListenerForSingleValueEvent(new ValueEventListener() {

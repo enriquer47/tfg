@@ -37,7 +37,7 @@ public class VisualizarAlumno extends AppCompatActivity {
     Button atras, nuevoEvento;
     AlertDialog nuevoEventoDialogo;
     LinearLayout eventosLayout;
-    int estilo=1;
+
 
     public ArrayList<Evento> eventos;
     String alumnoID;
@@ -53,12 +53,7 @@ public class VisualizarAlumno extends AppCompatActivity {
         if(extras!=null){
             alumnoID=extras.getString("alumnoID");
         }
-        if(estilo==1){
-            Intent intent= new Intent(getApplicationContext(), AlumnoSimple.class);
-            intent.putExtra("alumnoID",alumnoID);
-            startActivity(intent);
-            finish();
-        }
+
 
         setContentView(R.layout.activity_visualizar_alumno);
 
