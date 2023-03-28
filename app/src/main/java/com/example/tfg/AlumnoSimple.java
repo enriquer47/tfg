@@ -198,13 +198,15 @@ public class AlumnoSimple extends AppCompatActivity {
         myRef.child("usuarios").child(alumnoID).child("eventos").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                int copias=0;
+                int max=0;
                 for(DataSnapshot ds: snapshot.getChildren()){
-                    if(ds.child("nombre").getValue(String.class).contains(nombre)){
-                        copias++;
+                    if(ds.child("nombre").getValue(String.class).startsWith(nombre)){
+                        if(isDigit(ds.child("nombre").getValue(String.class).substring(nombre.length())))
+                            if(Integer.parseInt(ds.child("nombre").getValue(String.class).substring(nombre.length()))>max)
+                                max=Integer.parseInt(ds.child("nombre").getValue(String.class).substring(nombre.length()));
                     }
                 }
-                Evento evento = new Evento(nombre + copias, estres);
+                Evento evento = new Evento(nombre + (max+1), estres);
                 myRef.child("usuarios").child(alumnoID).child("eventos").push().setValue(evento);
                 myRef.child("usuarios").child(alumnoID).child("estres").addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
@@ -253,6 +255,14 @@ public class AlumnoSimple extends AppCompatActivity {
 
             }
         });
+    }
+    private boolean isDigit(String s) {
+        try {
+            Integer.parseInt(s);
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
     }
 
 }

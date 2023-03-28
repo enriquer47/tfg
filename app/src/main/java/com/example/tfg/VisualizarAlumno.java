@@ -199,7 +199,7 @@ public class VisualizarAlumno extends AppCompatActivity {
             if(eventos.get(i).getNombre().equals(nombre))
                 yaexiste=true;
         }
-        if(!yaexiste) {
+        if(!yaexiste && !nombre.equals("")) {
             Evento evento = new Evento(nombre, estres);
             myRef.child("usuarios").child(alumnoID).child("eventos").push().setValue(evento);
             myRef.child("usuarios").child(alumnoID).child("estres").addListenerForSingleValueEvent(new ValueEventListener() {
@@ -215,7 +215,7 @@ public class VisualizarAlumno extends AppCompatActivity {
                 }
             });
         }else{
-            Toast.makeText(VisualizarAlumno.this, "Ya hay un evento con ese nombre", Toast.LENGTH_LONG).show();
+            Toast.makeText(VisualizarAlumno.this, "Ya hay un evento con ese nombre o el nombre está vacío", Toast.LENGTH_LONG).show();
 
         }
     }
