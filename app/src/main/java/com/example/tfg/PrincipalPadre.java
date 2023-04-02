@@ -12,10 +12,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.NumberPicker;
 import android.widget.TextView;
 
-import com.example.tfg.Model.Usuario;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -66,7 +64,7 @@ public class PrincipalPadre extends AppCompatActivity {
         getSupportActionBar().setTitle("Principal Padre");
 
         if(user==null){
-            Intent intent= new Intent(getApplicationContext(), Login.class);
+            Intent intent= new Intent(getApplicationContext(), LoginActivity.class);
             startActivity(intent);
             finish();
         } else {
@@ -155,7 +153,7 @@ public class PrincipalPadre extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 FirebaseAuth.getInstance().signOut();
-                Intent intent= new Intent(getApplicationContext(), Login.class);
+                Intent intent= new Intent(getApplicationContext(), LoginActivity.class);
                 startActivity(intent);
                 finish();
             }

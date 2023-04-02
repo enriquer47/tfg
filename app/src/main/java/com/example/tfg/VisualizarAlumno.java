@@ -15,7 +15,6 @@ import android.widget.NumberPicker;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.tfg.Model.Alumno;
 import com.example.tfg.Model.Evento;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -76,7 +75,7 @@ public class VisualizarAlumno extends AppCompatActivity {
 
 
         if(user==null){
-            Intent intent= new Intent(getApplicationContext(), Login.class);
+            Intent intent= new Intent(getApplicationContext(), LoginActivity.class);
             startActivity(intent);
             finish();
         } else {

@@ -6,7 +6,7 @@ public class Alumno extends Usuario{
         // Default constructor required for calls to DataSnapshot.getValue(User.class)
     }
     public Alumno(String email, String tipoCuenta, String uid, String nombre, String apellidos) {
-        super(email, uid, nombre, apellidos);
+        super(email, nombre, apellidos);
         this.estres = 50;
         this.setTipoCuenta("Alumno");
     }
