@@ -42,7 +42,6 @@ public class LoginController {
 
     public void saveNewUser(FirebaseUser user, String email){
         this.usuario.setNombre(user.getDisplayName());
-        this.usuario.setApellidos("");
         this.usuario.setEmail(email);
         myRef.child("usuarios").child(user.getUid()).setValue(this.usuario);
     }

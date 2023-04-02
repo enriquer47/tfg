@@ -2,7 +2,6 @@ package com.example.tfg.Model;
 
 public class Usuario {
     private String nombre;
-    private String apellidos;
     private String email;
     private String tipoCuenta;
 
@@ -13,7 +12,6 @@ public class Usuario {
     }
     public Usuario(String nombre, String apellidos, String email) {
         this.nombre = nombre;
-        this.apellidos = apellidos;
         this.email = email;
     }
 
@@ -23,14 +21,6 @@ public class Usuario {
 
     public void setNombre(String nombre) {
         this.nombre = nombre;
-    }
-
-    public String getApellidos() {
-        return apellidos;
-    }
-
-    public void setApellidos(String apellidos) {
-        this.apellidos = apellidos;
     }
 
     public String getEmail() {

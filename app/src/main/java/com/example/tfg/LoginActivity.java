@@ -33,12 +33,10 @@ public class LoginActivity extends AppCompatActivity {
         super.onStart();
         FirebaseUser currentUser = mAuth.getCurrentUser();
         getSupportActionBar().setTitle("Inicio de sesión");
-
         // Check if user is signed in (non-null) and update UI accordingly.
         if(currentUser != null){
-            Intent intent = getUserIntent(currentUser);
-            startActivity(intent);
-            finish();
+            userIntent(currentUser);
+
         }
     }
 
@@ -74,18 +72,16 @@ public class LoginActivity extends AppCompatActivity {
     private void onSignInResult(FirebaseAuthUIAuthenticationResult result) {
         IdpResponse response = result.getIdpResponse();
         FirebaseUser currentUser = mAuth.getCurrentUser();
+
         // Successfully signed in
         if (result.getResultCode() == RESULT_OK) {
             if(response.isNewUser()){
                 loginController.saveNewUser(currentUser,response.getEmail());
-
                 Intent intent = new Intent(getApplicationContext(), RegisterActivity.class);
                 startActivity(intent);
                 finish();
             }else{
-                Intent intent = getUserIntent(currentUser);
-                startActivity(intent);
-                finish();
+                userIntent(currentUser);
             }
         }else{
             // Sign in failed. If response is null the user canceled the
@@ -109,14 +105,20 @@ public class LoginActivity extends AppCompatActivity {
             }
     );
 
-    private Intent getUserIntent(FirebaseUser currentUser){
+    private void userIntent(FirebaseUser currentUser){
         String tipoCuenta=loginController.getTypeAccount(currentUser.getUid());
         if(tipoCuenta.equals(tipoCuentaArray[0])) {
-            return new Intent(getApplicationContext(), PrincipalAlumno.class);
+            Intent intent= new Intent(getApplicationContext(), PrincipalAlumno.class);
+            startActivity(intent);
+            finish();
         }else if (tipoCuenta.equals(tipoCuentaArray[1])){
-            return new Intent(getApplicationContext(), PrincipalProfesor.class);
-        }else{
-            return new Intent(getApplicationContext(), PrincipalPadre.class);
+            Intent intent= new Intent(getApplicationContext(), PrincipalProfesor.class);
+            startActivity(intent);
+            finish();
+        }else if (tipoCuenta.equals(tipoCuentaArray[2])){
+            Intent intent= new Intent(getApplicationContext(), PrincipalPadre.class);
+            startActivity(intent);
+            finish();
         }
     }
 }
