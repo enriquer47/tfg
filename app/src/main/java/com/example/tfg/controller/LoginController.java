@@ -2,15 +2,9 @@ package com.example.tfg.controller;
 
 
 
-import android.content.Intent;
 
 import androidx.annotation.NonNull;
-import com.example.tfg.LoginActivity;
-import com.example.tfg.Model.Alumno;
 import com.example.tfg.Model.Usuario;
-import com.example.tfg.PrincipalAlumno;
-import com.example.tfg.PrincipalPadre;
-import com.example.tfg.PrincipalProfesor;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -19,8 +13,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 public class LoginController {
-    private Usuario usuario;
-    private DatabaseReference myRef;
+    final Usuario usuario;
+    final DatabaseReference myRef;
 
     public LoginController() {
         this.myRef= FirebaseDatabase.getInstance("https://prueba-c426b-default-rtdb.europe-west1.firebasedatabase.app").getReference();

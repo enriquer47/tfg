@@ -22,8 +22,6 @@ public class RegisterActivity extends AppCompatActivity {
     Button buttonSoyPadre, buttonSoyprofesor;
     FirebaseAuth mAuth;
     LoginController loginController;
-
-    //final String[] tipoCuentaArray={"Alumno", "Profesor", "Padre"};
     final String[] tipoCuentaArray={"Profesor", "Padre"};
 
 
