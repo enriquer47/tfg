@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">TFG</string>
+    <string name="app_name">Tranquil-a</string>
     <string name="login">Inicio de sesión</string>
     <string name="email">Email</string>
     <string name="password">Contraseña</string>
