@@ -61,10 +61,14 @@ public class PadreController {
         TextView nombreAlumno= view.findViewById(R.id.nombreMostarAlumnoTexto);
         String nombre = pepe.getNombre();
         nombreAlumno.setText(nombre);
-        if(estres>=50){
-            modoAlumno.setBackgroundResource(R.drawable.ic_mostraralumnotriste);
+        if(estres<=66.6){
+            if(estres<=33.3){
+                modoAlumno.setBackgroundResource(R.drawable.ic_mostraralumnofeliz);
+            }else{
+                modoAlumno.setBackgroundResource(R.drawable.ic_mostraralumnomedio);
+            }
         } else {
-            modoAlumno.setBackgroundResource(R.drawable.ic_mostraralumnofeliz);
+            modoAlumno.setBackgroundResource(R.drawable.ic_mostraralumnotriste);
         }
     }
 
