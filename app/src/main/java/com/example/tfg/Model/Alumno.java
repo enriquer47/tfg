@@ -1,19 +1,26 @@
 package com.example.tfg.Model;
 
-public class Alumno extends Usuario{
-    private int estres; // 0-100 empieza en 50 que es nivel medio de estres
+public class Alumno {
+    private String nombre;
+    private double estres; // 0-100 empieza en 50 que es nivel medio de estres
+
     public Alumno() {
         // Default constructor required for calls to DataSnapshot.getValue(User.class)
     }
-    public Alumno(String email, String tipoCuenta, String uid, String nombre, String apellidos) {
-        super(email, nombre, apellidos);
+    public Alumno(String nombre) {
+        this.nombre = nombre;
         this.estres = 50;
-        this.setTipoCuenta("Alumno");
     }
-    public int getEstres() {
+    public double getEstres() {
         return estres;
     }
-    public void setEstres(int estres) {
+    public void setEstres(double estres) {
         this.estres = estres;
+    }
+    public String getNombre() {
+        return nombre;
+    }
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
     }
 }
