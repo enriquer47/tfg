@@ -36,7 +36,7 @@ public class AlumnoSimple extends AppCompatActivity {
     int estilo=1;
     public ArrayList<Evento> eventos;
     String alumnoID;
-    final String[] tipoCuentaArray={"Alumno", "Profesor", "Padre"};
+    final String[] tipoCuentaArray={"Profesor", "Padre"};
     AlumnoController alumnoController;
 
 

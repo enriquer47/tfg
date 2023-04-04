@@ -7,7 +7,7 @@
     android:gravity="center"
     android:orientation="vertical"
     android:background="@drawable/bg"
-    tools:context=".RegisterActivity">
+    tools:context=".SignUpActivity">
 
     <TextView
         android:layout_width="match_parent"

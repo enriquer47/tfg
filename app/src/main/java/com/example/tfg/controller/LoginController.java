@@ -4,6 +4,8 @@ package com.example.tfg.controller;
 
 
 import androidx.annotation.NonNull;
+
+import com.example.tfg.LoginActivity;
 import com.example.tfg.Model.Usuario;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -15,20 +17,28 @@ import com.google.firebase.database.ValueEventListener;
 public class LoginController {
     final Usuario usuario;
     final DatabaseReference myRef;
+    final LoginActivity loginActivity;
 
     public LoginController() {
         this.myRef= FirebaseDatabase.getInstance("https://prueba-c426b-default-rtdb.europe-west1.firebasedatabase.app").getReference();
         this.usuario=new Usuario();
+        this.loginActivity=new LoginActivity();
+    }
+    public LoginController(LoginActivity loginActivity) {
+        this.myRef= FirebaseDatabase.getInstance("https://prueba-c426b-default-rtdb.europe-west1.firebasedatabase.app").getReference();
+        this.usuario=new Usuario();
+        this.loginActivity=loginActivity;
     }
 
 
-    public String getTypeAccount(String userId){
-       if (this.usuario.getTipoCuenta().equals("")){
+    public void login(String userId){
            myRef.child("usuarios").child(userId).child("tipoCuenta").addListenerForSingleValueEvent(new ValueEventListener() {
                @Override
                public void onDataChange(@NonNull DataSnapshot snapshot) {
                    if(snapshot.exists()){
-                       usuario.setTipoCuenta(snapshot.getValue(String.class));
+                       String cuenta = snapshot.getValue(String.class);
+                          loginActivity.userIntent(cuenta);
+
                    }
                }
                @Override
@@ -36,8 +46,6 @@ public class LoginController {
 
                }
            });
-       }
-       return this.usuario.getTipoCuenta();
     }
 
     public void saveNewUser(FirebaseUser user, String email){
@@ -49,6 +57,7 @@ public class LoginController {
         this.usuario.setTipoCuenta(tipoCuenta);
         myRef.child("usuarios").child(user.getUid()).child("tipoCuenta").setValue(tipoCuenta);
     }
+
 
 
 

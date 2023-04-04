@@ -27,24 +27,27 @@ public class LoginActivity extends AppCompatActivity {
     FirebaseAuth mAuth;
     LoginController loginController;
     final String[] tipoCuentaArray={"Profesor", "Padre"};
-
+/*
     @Override
     public void onStart() {
         super.onStart();
         FirebaseUser currentUser = mAuth.getCurrentUser();
         getSupportActionBar().setTitle("Inicio de sesión");
         // Check if user is signed in (non-null) and update UI accordingly.
+        //TODO: DEBERIA COMPROBAR SI EL USUARIO TIENE SESION ABIERTA????
         if(currentUser != null){
             userIntent(currentUser);
 
         }
     }
 
+ */
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mAuth= FirebaseAuth.getInstance();
-        loginController=new LoginController();
+        loginController=new LoginController(this);
 
         //Change lenguage to spanish
         Locale locale = new Locale("es", "ES");
@@ -61,6 +64,7 @@ public class LoginActivity extends AppCompatActivity {
 
         Intent signInIntent = AuthUI.getInstance()
                 .createSignInIntentBuilder()
+                .setIsSmartLockEnabled(false)
                 .setAvailableProviders(providers)
                 .setLogo(R.drawable.logo)
                 .setTheme(R.style.LoginTheme)
@@ -77,11 +81,11 @@ public class LoginActivity extends AppCompatActivity {
         if (result.getResultCode() == RESULT_OK) {
             if(response.isNewUser()){
                 loginController.saveNewUser(currentUser,response.getEmail());
-                Intent intent = new Intent(getApplicationContext(), RegisterActivity.class);
+                Intent intent = new Intent(getApplicationContext(), SignUpActivity.class);
                 startActivity(intent);
                 finish();
             }else{
-                userIntent(currentUser);
+                loginController.login(currentUser.getUid());
             }
         }else{
             // Sign in failed. If response is null the user canceled the
@@ -105,14 +109,17 @@ public class LoginActivity extends AppCompatActivity {
             }
     );
 
-    private void userIntent(FirebaseUser currentUser){
-        String tipoCuenta=loginController.getTypeAccount(currentUser.getUid());
+    public void userIntent(String tipoCuenta){
         if(tipoCuenta.equals(tipoCuentaArray[0])) {
-            Intent intent= new Intent(getApplicationContext(), PrincipalProfesor.class);
+            Intent intent= new Intent(LoginActivity.this, PrincipalProfesor.class);
             startActivity(intent);
             finish();
         }else if (tipoCuenta.equals(tipoCuentaArray[1])){
-            Intent intent= new Intent(getApplicationContext(), PrincipalPadre.class);
+            Intent intent= new Intent(LoginActivity.this, PrincipalPadre.class);
+            startActivity(intent);
+            finish();
+        }else{
+            Intent intent= new Intent(LoginActivity.this, SignUpActivity.class);
             startActivity(intent);
             finish();
         }
