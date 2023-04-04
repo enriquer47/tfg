@@ -26,7 +26,7 @@ public class LoginActivity extends AppCompatActivity {
 
     FirebaseAuth mAuth;
     LoginController loginController;
-    final String[] tipoCuentaArray={"Alumno","Profesor", "Padre"};
+    final String[] tipoCuentaArray={"Profesor", "Padre"};
 
     @Override
     public void onStart() {
@@ -108,14 +108,10 @@ public class LoginActivity extends AppCompatActivity {
     private void userIntent(FirebaseUser currentUser){
         String tipoCuenta=loginController.getTypeAccount(currentUser.getUid());
         if(tipoCuenta.equals(tipoCuentaArray[0])) {
-            Intent intent= new Intent(getApplicationContext(), PrincipalAlumno.class);
-            startActivity(intent);
-            finish();
-        }else if (tipoCuenta.equals(tipoCuentaArray[1])){
             Intent intent= new Intent(getApplicationContext(), PrincipalProfesor.class);
             startActivity(intent);
             finish();
-        }else if (tipoCuenta.equals(tipoCuentaArray[2])){
+        }else if (tipoCuenta.equals(tipoCuentaArray[1])){
             Intent intent= new Intent(getApplicationContext(), PrincipalPadre.class);
             startActivity(intent);
             finish();

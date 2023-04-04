@@ -23,4 +23,8 @@ public class Alumno {
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
+    public void addEstres(double estres){
+        if (this.estres+estres<=100 && this.estres+estres>=0)
+        this.estres+=estres;
+    }
 }

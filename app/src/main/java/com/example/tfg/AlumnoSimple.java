@@ -13,6 +13,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.example.tfg.Model.Evento;
+import com.example.tfg.controller.AlumnoController;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -28,16 +29,15 @@ public class AlumnoSimple extends AppCompatActivity {
     FirebaseAuth auth;
     FirebaseUser user;
     DatabaseReference myRef;
-
-    TextView detallesUsuario;
+    public TextView detallesUsuario;
     Button atras;
     ImageButton eventoFeliz,eventoTriste;
     AlertDialog nuevoEventoDialogo;
     int estilo=1;
-
     public ArrayList<Evento> eventos;
     String alumnoID;
     final String[] tipoCuentaArray={"Alumno", "Profesor", "Padre"};
+    AlumnoController alumnoController;
 
 
 
@@ -45,7 +45,6 @@ public class AlumnoSimple extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_alumno_simple);
 
         myRef= FirebaseDatabase.getInstance("https://registro-tfg-92125-default-rtdb.europe-west1.firebasedatabase.app").getReference();
@@ -56,12 +55,11 @@ public class AlumnoSimple extends AppCompatActivity {
         }
         auth = FirebaseAuth.getInstance();
         user=auth.getCurrentUser();
-
         detallesUsuario= findViewById(R.id.detallesAlumnoClase);
         atras=findViewById(R.id.atrasAlumnoClase);
         eventoFeliz=findViewById(R.id.eventoFeliz);
         eventoTriste=findViewById(R.id.eventoTriste);
-
+        alumnoController=new AlumnoController(this);
 
         eventos=new ArrayList<>();
 
@@ -73,44 +71,13 @@ public class AlumnoSimple extends AppCompatActivity {
             startActivity(intent);
             finish();
         } else {
-            myRef.child("usuarios").child(alumnoID).addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    detallesUsuario.setText(snapshot.child("nombre").getValue(String.class));
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {
-
-                }
-            });
-
+            alumnoController.getDetallesAlumno(alumnoID,user);
         }
+
         atras.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                myRef.child("usuarios").child(user.getUid()).child("tipoCuenta").addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        if(snapshot.exists()){
-                            Intent intent;
-                            if(snapshot.getValue(String.class).equals(tipoCuentaArray[1]))
-                                intent = new Intent(getApplicationContext(), PrincipalProfesor.class);
-                            else
-                            if(snapshot.getValue(String.class).equals(tipoCuentaArray[0]))
-                                intent = new Intent(getApplicationContext(), PrincipalAlumno.class);
-                            else
-                                intent =new Intent(getApplicationContext(), PrincipalPadre.class);
-                            startActivity(intent);
-                            finish();
-                        }
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-
-                    }
-                });
+               goBack();
             }
         });
         eventoFeliz.setOnClickListener(new View.OnClickListener() {
@@ -137,7 +104,6 @@ public class AlumnoSimple extends AppCompatActivity {
         ImageButton evento2= view.findViewById(R.id.evento2);
         //TODO Generalizar esto para usar eventos predeterminados
         if(esFeliz){
-
 
             evento1.setBackground(getResources().getDrawable(R.drawable.ic_chocolate));
             evento2.setBackground(getResources().getDrawable(R.drawable.ic_consola));
@@ -190,7 +156,7 @@ public class AlumnoSimple extends AppCompatActivity {
 
 
     private void aniadirEvento(String nombre, int estres) {
-        myRef.child("usuarios").child(alumnoID).child("eventos").addListenerForSingleValueEvent(new ValueEventListener() {
+        myRef.child("usuarios").child(user.getUid()).child("hijos").child(alumnoID).child("eventos").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 int max=0;
@@ -228,28 +194,7 @@ public class AlumnoSimple extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        myRef.child("usuarios").child(user.getUid()).child("tipoCuenta").addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if(snapshot.exists()){
-                    Intent intent;
-                    if(snapshot.getValue(String.class).equals(tipoCuentaArray[1]))
-                        intent = new Intent(getApplicationContext(), PrincipalProfesor.class);
-                    else
-                    if(snapshot.getValue(String.class).equals(tipoCuentaArray[0]))
-                        intent = new Intent(getApplicationContext(), PrincipalAlumno.class);
-                    else
-                        intent =new Intent(getApplicationContext(), PrincipalPadre.class);
-                    startActivity(intent);
-                    finish();
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
+        goBack();
     }
     private boolean isDigit(String s) {
         try {
@@ -257,6 +202,19 @@ public class AlumnoSimple extends AppCompatActivity {
             return true;
         } catch (NumberFormatException e) {
             return false;
+        }
+    }
+
+    private void goBack(){
+        String tipoCuenta= alumnoController.getTypeAccount(user.getUid());
+        if(tipoCuenta.equals(tipoCuentaArray[0])) {
+            Intent intent= new Intent(getApplicationContext(), PrincipalProfesor.class);
+            startActivity(intent);
+            finish();
+        }else if (tipoCuenta.equals(tipoCuentaArray[1])){
+            Intent intent= new Intent(getApplicationContext(), PrincipalPadre.class);
+            startActivity(intent);
+            finish();
         }
     }
 
