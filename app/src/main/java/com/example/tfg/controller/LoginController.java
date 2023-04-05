@@ -36,8 +36,8 @@ public class LoginController {
                @Override
                public void onDataChange(@NonNull DataSnapshot snapshot) {
                    if(snapshot.exists()){
-                       String cuenta = snapshot.getValue(String.class);
-                          loginActivity.userIntent(cuenta);
+                       String tipoCuenta = snapshot.getValue(String.class);
+                          loginActivity.userIntent(tipoCuenta);
 
                    }
                }
