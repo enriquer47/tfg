@@ -6,18 +6,15 @@ import java.time.LocalDate;
 
 public class Evento {
     private String nombre;
-    private LocalDate fecha;
+    private String fecha;
     private int estres;
+    private String id;
     public Evento() {
         // Default constructor required for calls to DataSnapshot.getValue(User.class)
     }
     public Evento(String nombre, int estres) {
         this.nombre = nombre;
         this.estres = estres;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            //TODO: Al añadir un evento a la base de datos, da error
-            //this.fecha = LocalDate.now();
-        }
     }
     public String getNombre() {
         return nombre;
@@ -25,10 +22,10 @@ public class Evento {
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
-    public LocalDate getFecha() {
+    public String getFecha() {
         return fecha;
     }
-    public void setFecha(LocalDate fecha) {
+    public void setFecha(String fecha) {
         this.fecha = fecha;
     }
     public int getEstres() {
@@ -36,6 +33,12 @@ public class Evento {
     }
     public void setEstres(int estres) {
         this.estres = estres;
+    }
+    public String getId() {
+        return id;
+    }
+    public void setId(String id) {
+        this.id = id;
     }
 
 }

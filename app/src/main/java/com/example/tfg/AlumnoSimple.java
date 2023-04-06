@@ -32,14 +32,9 @@ public class AlumnoSimple extends AppCompatActivity {
     Button atras;
     ImageButton eventoFeliz,eventoTriste;
     AlertDialog nuevoEventoDialogo;
-    int estilo=1;
-    public ArrayList<Evento> eventos;
     String alumnoID;
     final String[] tipoCuentaArray={"Profesor", "Padre"};
     AlumnoController alumnoController;
-
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,15 +44,14 @@ public class AlumnoSimple extends AppCompatActivity {
         if(extras!=null){
             alumnoID=extras.getString("alumnoID");
         }
-        auth = FirebaseAuth.getInstance();
-        user=auth.getCurrentUser();
         detallesUsuario= findViewById(R.id.detallesAlumnoClase);
         atras=findViewById(R.id.atrasAlumnoClase);
         eventoFeliz=findViewById(R.id.eventoFeliz);
         eventoTriste=findViewById(R.id.eventoTriste);
-        alumnoController=new AlumnoController(this, alumnoID);
 
-        eventos=new ArrayList<>();
+        auth = FirebaseAuth.getInstance();
+        user=auth.getCurrentUser();
+        alumnoController=new AlumnoController(this, alumnoID);
 
         getSupportActionBar().setTitle("Visualizar alumno");
 
@@ -149,14 +143,6 @@ public class AlumnoSimple extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
         alumnoController.goBack(user.getUid());
-    }
-    private boolean isDigit(String s) {
-        try {
-            Integer.parseInt(s);
-            return true;
-        } catch (NumberFormatException e) {
-            return false;
-        }
     }
 
     public void userIntent(String tipoCuenta){

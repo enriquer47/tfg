@@ -36,7 +36,6 @@ public class PrincipalPadre extends AppCompatActivity {
     AlertDialog nuevoHijoDialogo;
     FirebaseAuth auth;
     FirebaseUser user;
-    DatabaseReference myRef;
     PadreController padreController;
 
     @Override
