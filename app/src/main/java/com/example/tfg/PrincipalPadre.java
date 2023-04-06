@@ -13,6 +13,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.tfg.Model.Alumno;
 import com.example.tfg.controller.PadreController;
@@ -50,8 +51,7 @@ public class PrincipalPadre extends AppCompatActivity {
         user=auth.getCurrentUser();
         buildDialog();
         padreController=new PadreController(this,auth.getCurrentUser());
-
-        getSupportActionBar().setTitle("Principal Padre");
+        getSupportActionBar().hide();
 
         if(user==null){
             Intent intent= new Intent(getApplicationContext(), LoginActivity.class);
@@ -87,8 +87,30 @@ public class PrincipalPadre extends AppCompatActivity {
         builder.setTitle("Añadir Hijo").setPositiveButton("Añadir", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                padreController.aniadirHijo(nombre.getText().toString());
-                nombre.setText("");
+                if (nombre.getText().toString().isEmpty()) {
+                    Toast.makeText(getApplicationContext(), "Introduce un nombre", Toast.LENGTH_SHORT).show();
+                    nombre.setError("");
+                }else if (nombre.getText().toString().length() < 3) {
+                    Toast.makeText(getApplicationContext(), "El nombre no puede tener menos de 3 caracteres", Toast.LENGTH_SHORT).show();
+                    nombre.setError("");
+                    nombre.setText("");
+                }else if (nombre.getText().toString().length() > 12) {
+                    Toast.makeText(getApplicationContext(), "El nombre no puede tener más de 12 caracteres", Toast.LENGTH_SHORT).show();
+                    nombre.setError("");
+                    nombre.setText("");
+                }else if (nombre.getText().toString().contains(" ")) {
+                    Toast.makeText(getApplicationContext(), "El nombre no puede contener espacios", Toast.LENGTH_SHORT).show();
+                    nombre.setError("");
+                    nombre.setText("");
+                }else if (nombre.getText().toString().matches("^[a-zA-Z]+$")) {
+                    padreController.aniadirHijo(nombre.getText().toString());
+                    nombre.setText("");
+                }else{
+                    Toast.makeText(getApplicationContext(), "El nombre no puede contener números", Toast.LENGTH_SHORT).show();
+                    nombre.setError("");
+                    nombre.setText("");
+                }
+
 
             }
         }).setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {

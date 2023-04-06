@@ -9,6 +9,7 @@
     <string name="loginNow">Toca para iniciar sesión</string>
     <string name="registerNow">Toca para crear una cuenta</string>
     <string name="logout">Cerrar Sesión</string>
+    <string name="asignarProfesor">Asignar Profesor</string>
     <string name="nuevoEvento">Nuevo Evento</string>
     <string name="borrar">Borrar</string>
     <string name="profesor">Soy Profesor</string>

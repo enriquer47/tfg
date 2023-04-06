@@ -27,18 +27,6 @@ public class LoginActivity extends AppCompatActivity {
     FirebaseAuth mAuth;
     LoginController loginController;
     final String[] tipoCuentaArray={"Profesor", "Padre"};
-/*
-    @Override
-    public void onStart() {
-        super.onStart();
-        FirebaseUser currentUser = mAuth.getCurrentUser();
-        getSupportActionBar().setTitle("Inicio de sesión");
-        // Check if user is signed in (non-null) and update UI accordingly.
-        //TODO: DEBERIA COMPROBAR SI EL USUARIO TIENE SESION ABIERTA????
-
-    }
-
- */
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,29 +36,29 @@ public class LoginActivity extends AppCompatActivity {
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if(currentUser != null){
             loginController.login(currentUser.getUid());
+        }else{
+            //Change lenguage to spanish
+            Locale locale = new Locale("es", "ES");
+            Locale.setDefault(locale);
+            Configuration config = new Configuration();
+            config.locale = locale;
+            getBaseContext().getResources().updateConfiguration(config, getBaseContext().getResources().getDisplayMetrics());
+
+            //UI Configuration
+            List<AuthUI.IdpConfig> providers = Arrays.asList(
+                    new AuthUI.IdpConfig.EmailBuilder().build(),
+                    new AuthUI.IdpConfig.GoogleBuilder().build()
+            );
+
+            Intent signInIntent = AuthUI.getInstance()
+                    .createSignInIntentBuilder()
+                    .setIsSmartLockEnabled(false)
+                    .setAvailableProviders(providers)
+                    .setLogo(R.drawable.logo)
+                    .setTheme(R.style.LoginTheme)
+                    .build();
+            signInLauncher.launch(signInIntent);
         }
-        //Change lenguage to spanish
-        Locale locale = new Locale("es", "ES");
-        Locale.setDefault(locale);
-        Configuration config = new Configuration();
-        config.locale = locale;
-        getBaseContext().getResources().updateConfiguration(config, getBaseContext().getResources().getDisplayMetrics());
-
-        //UI Configuration
-        List<AuthUI.IdpConfig> providers = Arrays.asList(
-                new AuthUI.IdpConfig.EmailBuilder().build(),
-                new AuthUI.IdpConfig.GoogleBuilder().build()
-                );
-
-        Intent signInIntent = AuthUI.getInstance()
-                .createSignInIntentBuilder()
-                .setIsSmartLockEnabled(false)
-                .setAvailableProviders(providers)
-                .setLogo(R.drawable.logo)
-                .setTheme(R.style.LoginTheme)
-                .build();
-        signInLauncher.launch(signInIntent);
-
     }
 
     private void onSignInResult(FirebaseAuthUIAuthenticationResult result) {
