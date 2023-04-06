@@ -35,10 +35,7 @@ public class LoginActivity extends AppCompatActivity {
         getSupportActionBar().setTitle("Inicio de sesión");
         // Check if user is signed in (non-null) and update UI accordingly.
         //TODO: DEBERIA COMPROBAR SI EL USUARIO TIENE SESION ABIERTA????
-        if(currentUser != null){
-            userIntent(currentUser);
 
-        }
     }
 
  */
@@ -48,7 +45,10 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         mAuth= FirebaseAuth.getInstance();
         loginController=new LoginController(this);
-
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if(currentUser != null){
+            loginController.login(currentUser.getUid());
+        }
         //Change lenguage to spanish
         Locale locale = new Locale("es", "ES");
         Locale.setDefault(locale);
