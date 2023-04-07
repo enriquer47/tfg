@@ -16,5 +16,6 @@
     <color name="bg">#f6f5da</color>
     <color name="buttonAzul">#4fb9fc</color>
     <color name="gris">#c2c2c2</color>
+    <color name="buttonInput">#50C878</color>
 
 </resources>

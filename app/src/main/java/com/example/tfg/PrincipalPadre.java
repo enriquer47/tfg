@@ -1,6 +1,5 @@
 package com.example.tfg;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -12,32 +11,28 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.tfg.Model.Alumno;
 import com.example.tfg.controller.PadreController;
-import com.google.android.gms.auth.api.Auth;
+import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
+
 
 import java.util.ArrayList;
 
 public class PrincipalPadre extends AppCompatActivity {
 
 
-    Button logout;
-    Button  aniadirHijo;
+    Button logout,aniadirHijo,asignarProfesor;
     public LinearLayout hijosLayout;
     AlertDialog nuevoHijoDialogo;
     FirebaseAuth auth;
     FirebaseUser user;
     PadreController padreController;
+    TextInputEditText correoProfesor;
+    ArrayList<String> hijosID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,7 +42,9 @@ public class PrincipalPadre extends AppCompatActivity {
         logout=findViewById(R.id.logout);
         aniadirHijo=findViewById(R.id.aniadirHijo);
         hijosLayout=findViewById(R.id.alumnosPadreLayout);
-
+        correoProfesor=findViewById(R.id.correoProfesor);
+        asignarProfesor=findViewById(R.id.asignarProfesor);
+        hijosID=new ArrayList<>();
         user=auth.getCurrentUser();
         buildDialog();
         padreController=new PadreController(this,auth.getCurrentUser());
@@ -59,13 +56,29 @@ public class PrincipalPadre extends AppCompatActivity {
             finish();
         } else {
             padreController.obtenerHijos();
-
             aniadirHijo.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     nuevoHijoDialogo.show();
                 }
             });
+            asignarProfesor.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    String correo=String.valueOf(correoProfesor.getText());
+                    if (correo.isEmpty()) {
+                        Toast.makeText(getApplicationContext(), "Introduce un correo", Toast.LENGTH_SHORT).show();
+                        correoProfesor.setError("");
+                    }else if (correo.matches("[a-zA-Z0-9._-]+@[a-z]+\\\\.+[a-z]+")){
+                        Toast.makeText(getApplicationContext(), "Introduce un correo valido", Toast.LENGTH_SHORT).show();
+                        correoProfesor.setError("");
+                    }else{
+                        padreController.asignarProfesor(correo,hijosID);
+                        correoProfesor.setText("");
+                    }
+                }
+            });
+
 
             logout.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -128,7 +141,7 @@ public class PrincipalPadre extends AppCompatActivity {
         ImageButton borrarHijo=view.findViewById(R.id.borrarMostrarAlumno);
         ImageButton modoAlumno=view.findViewById(R.id.verMostrarAlumno);
         ImageButton editarAlumno=view.findViewById(R.id.editarMostrarAlumno);
-
+        hijosID.add(alumnoID);
         padreController.visualizarHijos(view,modoAlumno,hijo);
         hijosLayout.addView(view);
 
@@ -160,6 +173,7 @@ public class PrincipalPadre extends AppCompatActivity {
         borrarHijo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                hijosID.remove(alumnoID);
                 padreController.borrarHijo(alumnoID);
             }
         });

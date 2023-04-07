@@ -18,21 +18,6 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0"></androidx.appcompat.widget.AppCompatButton>
 
-    <!--
-    <EditText
-        android:id="@+id/introducirCodigo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:hint="alumno@correo.comXXXXX"
-        android:textSize="20dp"
-        app:layout_constraintBottom_toTopOf="@+id/aniadirHijo"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        android:background="@color/ligth_gray"
-        android:padding="5dp"
-        android:layout_margin="10dp"
-        ></EditText>
-    -->
     <LinearLayout
         android:id="@+id/alumnosPadreLayout"
         android:layout_width="match_parent"
@@ -43,18 +28,33 @@
         app:layout_constraintVertical_bias="0.234"
         tools:layout_editor_absoluteX="16dp"></LinearLayout>
 
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/asignarProfesor"
+
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/correoProfesor"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="20dp"
-        android:text="@string/asignarProfesor"
-        style="@style/AcceptButtonStyle"
+        android:hint="@string/escribeProfesor"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/aniadirHijo"></androidx.appcompat.widget.AppCompatButton>
+        app:layout_constraintTop_toBottomOf="@+id/aniadirHijo"
+        app:layout_constraintVertical_bias="0.303" />
 
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/asignarProfesor"
+        style="@style/InputButtonStyle"
+        android:layout_width="124dp"
+        android:layout_height="60dp"
+        android:layout_margin="20dp"
+        android:text="@string/asignarProfesor"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@+id/correoProfesor"
+        app:layout_constraintTop_toBottomOf="@+id/aniadirHijo"
+        app:layout_constraintVertical_bias="0.29"></androidx.appcompat.widget.AppCompatButton>
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/aniadirHijo"

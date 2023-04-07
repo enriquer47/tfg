@@ -5,12 +5,9 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
-
 import com.example.tfg.Model.Alumno;
 import com.example.tfg.Model.Evento;
-import com.example.tfg.Model.Usuario;
 import com.example.tfg.PrincipalPadre;
 import com.example.tfg.R;
 import com.example.tfg.VisualizarAlumno;
@@ -22,7 +19,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -88,7 +84,6 @@ public class PadreController {
 
     public void visualizarHijos(View view, ImageButton modoAlumno,Alumno pepe){
         double estres = pepe.getEstres();
-
         TextView nombreAlumno= view.findViewById(R.id.nombreMostarAlumnoTexto);
         String nombre = pepe.getNombre();
         nombreAlumno.setText(nombre);
@@ -196,6 +191,46 @@ public class PadreController {
         });
     }
 
+    public void asignarProfesor(String profesorCorreo,ArrayList<String> alumnosID){
+        //Comprobamos que hay hijos para asignar
+        if (alumnosID.size()==0){
+            Toast.makeText(principalPadre, "No hay hijos para asignar", Toast.LENGTH_LONG).show();
+        }else{
+            myRef.child("usuarios").addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    Boolean existe=false;
+                    //comprobamos si existe un profesor con ese correo
+                    for (DataSnapshot usuario : snapshot.getChildren()) {
+                        if (profesorCorreo.equals(usuario.child("email").getValue(String.class))){
+                            existe=true;
+                            //eliminamos los alumnos que ya estan asignados por si el padre asigna
+                            //varias veces al mismo hijo
+                            elminarRepetidos(alumnosID,usuario);
+                            if (alumnosID.isEmpty()){
+                                Toast.makeText(principalPadre, "Todos tus hijos ya estan asignados", Toast.LENGTH_LONG).show();
+                                return;
+                            }else{
+                                for (String alumnoID:alumnosID){
+                                    usuario.getRef().child("padres").child(padre.getUid()).child("hijos").push().child("referencia").setValue(alumnoID);
+                                }
+                            }
+                        }
+                    }
+                    if (!existe){
+                        Toast.makeText(principalPadre, "No existe el profesor", Toast.LENGTH_LONG).show();
+                    }else{
+                        Toast.makeText(principalPadre, "Profesor asignado", Toast.LENGTH_LONG).show();
+                    }
+                }
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+                }
+            });
+        }
+
+    }
+
     public void goBack(String userId){
         myRef.child("usuarios").child(userId).child("tipoCuenta").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -211,5 +246,11 @@ public class PadreController {
         });
     }
 
+    private void elminarRepetidos(ArrayList<String> lista, DataSnapshot snapshot){
+        for(DataSnapshot hijo: snapshot.child("padres").child(padre.getUid()).child("hijos").getChildren()){
+            lista.remove(hijo.child("referencia").getValue(String.class));
+        }
+    }
 
 }
+
