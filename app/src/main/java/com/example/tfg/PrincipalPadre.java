@@ -1,6 +1,5 @@
 package com.example.tfg;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -12,209 +11,140 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.NumberPicker;
-import android.widget.TextView;
+import android.widget.Toast;
 
-import com.example.tfg.Model.Usuario;
+import com.example.tfg.Model.Alumno;
+import com.example.tfg.controller.PadreController;
+import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
+
 
 import java.util.ArrayList;
 
 public class PrincipalPadre extends AppCompatActivity {
 
 
-    Button logout;
-    TextView detallesUsuario;
-    Button  aniadirHijo;
-    LinearLayout hijosLayout;
-    EditText codigoEdit;
+    Button logout,aniadirHijo,asignarProfesor;
+    public LinearLayout hijosLayout;
     AlertDialog nuevoHijoDialogo;
-
-
     FirebaseAuth auth;
     FirebaseUser user;
-    DatabaseReference myRef;
-
-    //String codigoIntroducido;
-    private ArrayList<String> hijos;
+    PadreController padreController;
+    TextInputEditText correoProfesor;
+    ArrayList<String> hijosID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_principal_padre);
-
-        myRef= FirebaseDatabase.getInstance("https://registro-tfg-92125-default-rtdb.europe-west1.firebasedatabase.app").getReference();
-
         auth = FirebaseAuth.getInstance();
         logout=findViewById(R.id.logout);
         aniadirHijo=findViewById(R.id.aniadirHijo);
-        user=auth.getCurrentUser();
         hijosLayout=findViewById(R.id.alumnosPadreLayout);
-        //codigoEdit=findViewById(R.id.introducirCodigo);
-
-
+        correoProfesor=findViewById(R.id.correoProfesor);
+        asignarProfesor=findViewById(R.id.asignarProfesor);
+        hijosID=new ArrayList<>();
+        user=auth.getCurrentUser();
         buildDialog();
-
-        hijos=new ArrayList<>();
-
-        getSupportActionBar().setTitle("Principal Padre");
+        padreController=new PadreController(this,auth.getCurrentUser());
+        getSupportActionBar().hide();
 
         if(user==null){
-            Intent intent= new Intent(getApplicationContext(), Login.class);
+            Intent intent= new Intent(getApplicationContext(), LoginActivity.class);
             startActivity(intent);
             finish();
         } else {
-
-            myRef.child("usuarios").child(user.getUid()).child("hijos").addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
-
-                    hijos=new ArrayList<>();
-                    hijosLayout.removeAllViews();
-
-                    for (DataSnapshot hijosSnap : snapshot.getChildren()) {
-                        String hijoId=hijosSnap.getValue(String.class);
-                        hijos.add(hijoId);
-                        myRef.child("usuarios").child(hijoId).addListenerForSingleValueEvent(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                //TODO Constructor de usuario
-
-                                mostrarHijo(hijoId);
-                            }
-
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError error) {
-
-                            }
-                        });
-
-                    }
-
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {
-
-                }
-            });
-           /* aniadirHijo.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    codigoIntroducido=codigoEdit.getText().toString();
-                    if(codigoIntroducido.length()>10) {
-                        String email=codigoIntroducido.substring(0,codigoIntroducido.length()-5);
-
-                        //falta comprobar si el email es valido
-
-                        myRef.child("usuarios").orderByChild("email").equalTo(email).addListenerForSingleValueEvent(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                String codigo="codigocompletamentefalso";
-                                String hijoID="idcompletamentefalso";
-                                for(DataSnapshot snap: snapshot.getChildren()) {
-                                    hijoID=snap.getKey();
-                                    codigo = hijoID.substring(0, 5);
-                                }
-                                if (codigoIntroducido.equals(email+codigo)){
-                                    myRef.child("usuarios").child(user.getUid()).child("hijos").push().setValue(hijoID);
-                                    codigoEdit.setText("");
-                                }
-                            }
-
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError error) {
-
-                            }
-                        });
-
-                    }else{
-                    }
-
-                }
-            });*/
-
+            padreController.obtenerHijos();
             aniadirHijo.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     nuevoHijoDialogo.show();
                 }
             });
+            asignarProfesor.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    String correo=String.valueOf(correoProfesor.getText());
+                    if (correo.isEmpty()) {
+                        Toast.makeText(getApplicationContext(), "Introduce un correo", Toast.LENGTH_SHORT).show();
+                        correoProfesor.setError("");
+                    }else if (correo.matches("[a-zA-Z0-9._-]+@[a-z]+\\\\.+[a-z]+")){
+                        Toast.makeText(getApplicationContext(), "Introduce un correo valido", Toast.LENGTH_SHORT).show();
+                        correoProfesor.setError("");
+                    }else{
+                        padreController.asignarProfesor(correo,hijosID);
+                        correoProfesor.setText("");
+                    }
+                }
+            });
 
 
-
+            logout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    FirebaseAuth.getInstance().signOut();
+                    Intent intent= new Intent(getApplicationContext(), LoginActivity.class);
+                    startActivity(intent);
+                    finish();
+                }
+            });
         }
 
-        logout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                FirebaseAuth.getInstance().signOut();
-                Intent intent= new Intent(getApplicationContext(), Login.class);
-                startActivity(intent);
-                finish();
-            }
-        });
     }
     private void buildDialog() {
         AlertDialog.Builder builder= new AlertDialog.Builder(this);
         View view= getLayoutInflater().inflate(R.layout.nuevohijo, null);
-
         EditText nombre= view.findViewById(R.id.nombreHijo);
-
         builder.setView(view);
         builder.setTitle("Añadir Hijo").setPositiveButton("Añadir", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                aniadirHijo(nombre.getText().toString());
-                nombre.setText("");
+                if (nombre.getText().toString().isEmpty()) {
+                    Toast.makeText(getApplicationContext(), "Introduce un nombre", Toast.LENGTH_SHORT).show();
+                    nombre.setError("");
+                }else if (nombre.getText().toString().length() < 3) {
+                    Toast.makeText(getApplicationContext(), "El nombre no puede tener menos de 3 caracteres", Toast.LENGTH_SHORT).show();
+                    nombre.setError("");
+                    nombre.setText("");
+                }else if (nombre.getText().toString().length() > 12) {
+                    Toast.makeText(getApplicationContext(), "El nombre no puede tener más de 12 caracteres", Toast.LENGTH_SHORT).show();
+                    nombre.setError("");
+                    nombre.setText("");
+                }else if (nombre.getText().toString().contains(" ")) {
+                    Toast.makeText(getApplicationContext(), "El nombre no puede contener espacios", Toast.LENGTH_SHORT).show();
+                    nombre.setError("");
+                    nombre.setText("");
+                }else if (nombre.getText().toString().matches("^[a-zA-Z]+$")) {
+                    padreController.aniadirHijo(nombre.getText().toString());
+                    nombre.setText("");
+                }else{
+                    Toast.makeText(getApplicationContext(), "El nombre no puede contener números", Toast.LENGTH_SHORT).show();
+                    nombre.setError("");
+                    nombre.setText("");
+                }
+
 
             }
         }).setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 nombre.setText("");
-
             }
         });
-
         nuevoHijoDialogo= builder.create();
-
     }
-    private void mostrarHijo(String alumnoID) {
+    public void mostrarHijo(String alumnoID, Alumno hijo) {
         View view = getLayoutInflater().inflate(R.layout.tarjetamostraralumno, null);
 
 
         ImageButton borrarHijo=view.findViewById(R.id.borrarMostrarAlumno);
         ImageButton modoAlumno=view.findViewById(R.id.verMostrarAlumno);
         ImageButton editarAlumno=view.findViewById(R.id.editarMostrarAlumno);
+        hijosID.add(alumnoID);
+        padreController.visualizarHijos(view,modoAlumno,hijo);
+        hijosLayout.addView(view);
 
-
-        myRef.child("usuarios").child(alumnoID).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if(snapshot.exists()){
-                    int estres = snapshot.child("estres").getValue(Integer.class);
-                    String textoNombre=snapshot.child("nombre").getValue(String.class);
-                    TextView nombreAlumno= view.findViewById(R.id.nombreMostarAlumnoTexto);
-                    nombreAlumno.setText(textoNombre);
-                    if(estres>=50)
-                        modoAlumno.setBackgroundResource(R.drawable.ic_mostraralumnotriste);
-                    else
-                        modoAlumno.setBackgroundResource(R.drawable.ic_mostraralumnofeliz);
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
         modoAlumno.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -226,6 +156,7 @@ public class PrincipalPadre extends AppCompatActivity {
 
             }
         });
+
         editarAlumno.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -242,34 +173,14 @@ public class PrincipalPadre extends AppCompatActivity {
         borrarHijo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                myRef.child("usuarios").child(user.getUid()).child("hijos").orderByValue().equalTo(alumnoID).addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        for(DataSnapshot snap: snapshot.getChildren()) {
-                            myRef.child("usuarios").child(user.getUid()).child("hijos").child(snap.getKey()).removeValue();
-                            myRef.child("usuarios").child(alumnoID).removeValue();
-                        };
-
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-
-                    }
-                });
+                hijosID.remove(alumnoID);
+                padreController.borrarHijo(alumnoID);
             }
         });
 
-        hijosLayout.addView(view);
+
 
     }
-    private void aniadirHijo(String nombre){
 
-        String hijoID=myRef.child("usuarios").push().getKey();
-        myRef.child("usuarios").child(hijoID).child("nombre").setValue(nombre);
-        myRef.child("usuarios").child(hijoID).child("estres").setValue(0);
-        myRef.child("usuarios").child(user.getUid()).child("hijos").push().setValue(hijoID);
-        myRef.child("usuarios").child(hijoID).child("tipoCuenta").setValue("Alumno");
-    }
 
 }

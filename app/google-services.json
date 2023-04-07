@@ -1,33 +1,34 @@
 {
   "project_info": {
-    "project_number": "1043110770125",
-    "project_id": "registro-tfg-92125",
-    "storage_bucket": "registro-tfg-92125.appspot.com"
+    "project_number": "859478566686",
+    "firebase_url": "https://prueba-c426b-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "prueba-c426b",
+    "storage_bucket": "prueba-c426b.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:1043110770125:android:9ab959f290daf07b12c084",
+        "mobilesdk_app_id": "1:859478566686:android:f1f71c4259829cc4220b0f",
         "android_client_info": {
           "package_name": "com.example.tfg"
         }
       },
       "oauth_client": [
         {
-          "client_id": "1043110770125-fsn99urblj57vc2tcmhvo02trceqttvq.apps.googleusercontent.com",
+          "client_id": "859478566686-r7ndl7j242d0q49uvu4iel4vtcsfn10l.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCQZRIeGpIuGRyoBtNAJjCbZWhaLyoBEKY"
+          "current_key": "AIzaSyDIJHTfIIOgDy4ZAAdFqkxdLh9B-W04lII"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "1043110770125-fsn99urblj57vc2tcmhvo02trceqttvq.apps.googleusercontent.com",
+              "client_id": "859478566686-r7ndl7j242d0q49uvu4iel4vtcsfn10l.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

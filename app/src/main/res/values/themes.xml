@@ -26,8 +26,7 @@
 
     <style name="AcceptButtonStyle" parent="Widget.AppCompat.Button">
         <item name="android:background">@drawable/accept_button</item>
-        <item name="android:backgroundTint">@color/green</item>
-        <item name="android:padding">10dp</item>
+        <item name="android:padding">20dp</item>
         <item name="android:textStyle">bold</item>
         <item name="android:textSize">20sp</item>
         <item name="android:layout_margin">20dp</item>
@@ -35,13 +34,21 @@
         <item name="android:elevation">5dp</item>
         <item name="background">@drawable/sombra</item>
     </style>
+    <style name="InputButtonStyle" parent="Widget.AppCompat.Button">
+        <item name="android:background">@drawable/input_button</item>
+        <item name="android:padding">15dp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:layout_margin">20dp</item>
+        <item name="android:textColor">@color/dark_gray</item>
+        <item name="android:elevation">5dp</item>
+        <item name="background">@drawable/sombra</item>
+    </style>
     <style name="CancelButtonStyle" parent="Widget.AppCompat.Button">
         <item name="android:background">@drawable/cancel_button</item>
-        <item name="android:backgroundTint">@color/red</item>
         <item name="android:padding">10dp</item>
         <item name="android:textStyle">bold</item>
-        <item name="android:textSize">20sp</item>
-        <item name="android:layout_margin">20dp</item>
+        <item name="android:textSize">15sp</item>
         <item name="android:elevation">5dp</item>
         <item name="background">@drawable/sombra</item>
     </style>

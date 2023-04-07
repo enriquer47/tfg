@@ -1,17 +1,20 @@
 <resources>
-    <string name="app_name">TFG</string>
+    <string name="app_name">Tranquil-a</string>
     <string name="login">Inicio de sesión</string>
     <string name="email">Email</string>
     <string name="password">Contraseña</string>
     <string name="entrar">Entrar</string>
-    <string name="registro">Registro</string>
+    <string name="registro">Elige el tipo de cuenta</string>
     <string name="registrarse">Registrarse</string>
     <string name="loginNow">Toca para iniciar sesión</string>
     <string name="registerNow">Toca para crear una cuenta</string>
     <string name="logout">Cerrar Sesión</string>
+    <string name="asignarProfesor">Asignar profesor</string>
+    <string name="escribeProfesor">Escribe el correo del profesor</string>
     <string name="nuevoEvento">Nuevo Evento</string>
     <string name="borrar">Borrar</string>
     <string name="profesor">Soy Profesor</string>
+    <string name="padre">Soy Padre</string>
     <string name="title_activity_principal_profesor">PrincipalProfesor</string>
     <!-- Strings used for fragments for navigation -->
     <string name="first_fragment_label">First Fragment</string>
