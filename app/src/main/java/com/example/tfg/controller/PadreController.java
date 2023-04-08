@@ -99,9 +99,41 @@ public class PadreController {
     }
 
     public void borrarHijo(String idHijo){
+
+        //Borrar hijo de la lista de profesores
+        myRef.child("usuarios").child(padre).child("hijos").child(idHijo).child("profesores").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if(snapshot.exists()){
+                    for (DataSnapshot profesoresSnap : snapshot.getChildren()) {
+                        String profesorID = profesoresSnap.child("referencia").getValue().toString();
+                        myRef.child("usuarios").child(profesorID).child("padres").child(padre).child("hijos").addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                for (DataSnapshot hijoSnap : snapshot.getChildren()) {
+                                    if(hijoSnap.child("referencia").getValue().toString().equals(idHijo)){
+                                        hijoSnap.getRef().removeValue();
+                                    }
+                                }
+                            }
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
+
+                            }
+                        });
+                    }
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+        //borra hijo de la lista de hijos del padre
         myRef.child("usuarios").child(padre).child("hijos").child(idHijo).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
+
                         // Write was successful!
                         Log.i("borrarHijo", "borrado con exito");
 
@@ -114,6 +146,10 @@ public class PadreController {
                         Log.i("borrarHijo", "error al borrar");
                     }
                 });
+
+
+
+
     }
 
     public void borrarEvento(String alumnoID,int estres,String idEvento){
@@ -206,13 +242,14 @@ public class PadreController {
                             existe=true;
                             //eliminamos los alumnos que ya estan asignados por si el padre asigna
                             //varias veces al mismo hijo
-                            elminarRepetidos(alumnosID,usuario);
-                            if (alumnosID.isEmpty()){
+                            ArrayList<String> aux= elminarRepetidos(alumnosID,usuario);
+                            if (aux.isEmpty()){
                                 Toast.makeText(principalPadre, "Todos tus hijos ya estan asignados", Toast.LENGTH_LONG).show();
                                 return;
                             }else{
-                                for (String alumnoID:alumnosID){
+                                for (String alumnoID:aux){
                                     usuario.getRef().child("padres").child(padre).child("hijos").push().child("referencia").setValue(alumnoID);
+                                    myRef.child("usuarios").child(padre).child("hijos").child(alumnoID).child("profesores").push().child("referencia").setValue(usuario.getKey());
                                 }
                             }
                         }
@@ -246,10 +283,15 @@ public class PadreController {
         });
     }
 
-    private void elminarRepetidos(ArrayList<String> lista, DataSnapshot snapshot){
-        for(DataSnapshot hijo: snapshot.child("padres").child(padre).child("hijos").getChildren()){
-            lista.remove(hijo.child("referencia").getValue(String.class));
+    private ArrayList<String>  elminarRepetidos(ArrayList<String> lista, DataSnapshot snapshot){
+        ArrayList<String> aux=new ArrayList<>();
+        for (String alumnoID:lista){
+            aux.add(alumnoID);
         }
+        for(DataSnapshot hijo: snapshot.child("padres").child(padre).child("hijos").getChildren()){
+            aux.remove(hijo.child("referencia").getValue(String.class));
+        }
+        return aux;
     }
 
 }

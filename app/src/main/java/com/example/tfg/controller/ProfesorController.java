@@ -91,6 +91,22 @@ public class ProfesorController {
             }
         });
 
+        myRef.child("usuarios").child(padreID).child("hijos").child(alumnoID).child("profesores").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot profesorSnap : snapshot.getChildren()){
+                    if(profesorSnap.child("referencia").getValue(String.class).equals(profesor.getUid())){
+                        profesorSnap.getRef().removeValue();
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
     }
 
 }

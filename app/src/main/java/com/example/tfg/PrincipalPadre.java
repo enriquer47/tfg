@@ -141,7 +141,9 @@ public class PrincipalPadre extends AppCompatActivity {
         ImageButton borrarHijo=view.findViewById(R.id.borrarMostrarAlumno);
         ImageButton modoAlumno=view.findViewById(R.id.verMostrarAlumno);
         ImageButton editarAlumno=view.findViewById(R.id.editarMostrarAlumno);
-        hijosID.add(alumnoID);
+        if(!hijosID.contains(alumnoID)){
+            hijosID.add(alumnoID);
+        }
         padreController.visualizarHijos(view,modoAlumno,hijo);
         hijosLayout.addView(view);
 
