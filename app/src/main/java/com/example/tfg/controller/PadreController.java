@@ -24,18 +24,18 @@ import java.util.ArrayList;
 import java.util.Calendar;
 
 public class PadreController {
-    final FirebaseUser padre;
+    final String padre;
     final DatabaseReference myRef;
     final PrincipalPadre principalPadre;
     final VisualizarAlumno visualizarAlumno;
 
-    public PadreController(PrincipalPadre principalPadre,FirebaseUser currentUser) {
+    public PadreController(PrincipalPadre principalPadre,String currentUser) {
         this.myRef= FirebaseDatabase.getInstance("https://prueba-c426b-default-rtdb.europe-west1.firebasedatabase.app").getReference();
         this.principalPadre=principalPadre;
         this.padre=currentUser;
         this.visualizarAlumno=null;
     }
-    public PadreController(VisualizarAlumno visualizarAlumno,FirebaseUser currentUser) {
+    public PadreController(VisualizarAlumno visualizarAlumno,String currentUser) {
         this.myRef= FirebaseDatabase.getInstance("https://prueba-c426b-default-rtdb.europe-west1.firebasedatabase.app").getReference();
         this.visualizarAlumno=visualizarAlumno;
         this.padre=currentUser;
@@ -43,7 +43,7 @@ public class PadreController {
     }
 
     public void obtenerHijos(){
-        myRef.child("usuarios").child(padre.getUid()).child("hijos").addValueEventListener(new ValueEventListener() {
+        myRef.child("usuarios").child(padre).child("hijos").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 principalPadre.hijosLayout.removeAllViews();
@@ -65,7 +65,7 @@ public class PadreController {
     }
     public void obtenerEventos(String alumnoID){
 
-        myRef.child("usuarios").child(padre.getUid()).child("hijos").child(alumnoID).child("eventos").addValueEventListener(new ValueEventListener() {
+        myRef.child("usuarios").child(padre).child("hijos").child(alumnoID).child("eventos").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 visualizarAlumno.eventosLayout.removeAllViews();
@@ -99,7 +99,7 @@ public class PadreController {
     }
 
     public void borrarHijo(String idHijo){
-        myRef.child("usuarios").child(padre.getUid()).child("hijos").child(idHijo).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
+        myRef.child("usuarios").child(padre).child("hijos").child(idHijo).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
                         // Write was successful!
@@ -118,7 +118,7 @@ public class PadreController {
 
     public void borrarEvento(String alumnoID,int estres,String idEvento){
         updateEstres(estres*-1,alumnoID);
-        myRef.child("usuarios").child(padre.getUid()).child("hijos").child(alumnoID).child("eventos").child(idEvento).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
+        myRef.child("usuarios").child(padre).child("hijos").child(alumnoID).child("eventos").child(idEvento).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
                 // Write was successful!
@@ -136,13 +136,13 @@ public class PadreController {
 
     public void aniadirHijo(String nombre){
         Alumno newHijo =new Alumno(nombre);
-        String hijoID=myRef.child("usuarios").child(padre.getUid()).child("hijos").push().getKey();
-        myRef.child("usuarios").child(padre.getUid()).child("hijos").child(hijoID).setValue(newHijo);
+        String hijoID=myRef.child("usuarios").child(padre).child("hijos").push().getKey();
+        myRef.child("usuarios").child(padre).child("hijos").child(hijoID).setValue(newHijo);
     }
 
     public void aniadirEvento(String nombre, int estres,String alumnoID) {
         if(!nombre.equals("")) {
-            myRef.child("usuarios").child(padre.getUid()).child("hijos").child(alumnoID).child("eventos").addListenerForSingleValueEvent(new ValueEventListener() {
+            myRef.child("usuarios").child(padre).child("hijos").child(alumnoID).child("eventos").addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     Evento evento = new Evento(nombre , estres);
@@ -165,7 +165,7 @@ public class PadreController {
     }
 
     public void getDetallesAlumno(String alumnoID){
-        myRef.child("usuarios").child(padre.getUid()).child("hijos").child(alumnoID).addListenerForSingleValueEvent(new ValueEventListener() {
+        myRef.child("usuarios").child(padre).child("hijos").child(alumnoID).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 visualizarAlumno.detallesUsuario.setText(snapshot.child("nombre").getValue(String.class));
@@ -176,7 +176,7 @@ public class PadreController {
         });
     }
     private void updateEstres(int estres,String alumnoID){
-        myRef.child("usuarios").child(padre.getUid()).child("hijos").child(alumnoID).child("estres").addListenerForSingleValueEvent(new ValueEventListener() {
+        myRef.child("usuarios").child(padre).child("hijos").child(alumnoID).child("estres").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 Integer estresActual=snapshot.getValue(Integer.class);
@@ -212,7 +212,7 @@ public class PadreController {
                                 return;
                             }else{
                                 for (String alumnoID:alumnosID){
-                                    usuario.getRef().child("padres").child(padre.getUid()).child("hijos").push().child("referencia").setValue(alumnoID);
+                                    usuario.getRef().child("padres").child(padre).child("hijos").push().child("referencia").setValue(alumnoID);
                                 }
                             }
                         }
@@ -247,7 +247,7 @@ public class PadreController {
     }
 
     private void elminarRepetidos(ArrayList<String> lista, DataSnapshot snapshot){
-        for(DataSnapshot hijo: snapshot.child("padres").child(padre.getUid()).child("hijos").getChildren()){
+        for(DataSnapshot hijo: snapshot.child("padres").child(padre).child("hijos").getChildren()){
             lista.remove(hijo.child("referencia").getValue(String.class));
         }
     }

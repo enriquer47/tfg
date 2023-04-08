@@ -37,6 +37,7 @@ public class VisualizarAlumno extends AppCompatActivity {
     public LinearLayout eventosLayout;
     public ArrayList<Evento> eventos;
     String alumnoID;
+    String padreID;
     final String[] tipoCuentaArray={"Profesor", "Padre"};
     PadreController padreController;
 
@@ -49,6 +50,7 @@ public class VisualizarAlumno extends AppCompatActivity {
         Bundle extras=getIntent().getExtras();
         if(extras!=null){
             alumnoID=extras.getString("alumnoID");
+            padreID=extras.getString("padreID");
         }
         setContentView(R.layout.activity_visualizar_alumno);
         detallesUsuario= findViewById(R.id.detallesAlumnoClase);
@@ -58,7 +60,7 @@ public class VisualizarAlumno extends AppCompatActivity {
 
         auth = FirebaseAuth.getInstance();
         user=auth.getCurrentUser();
-        padreController=new PadreController(this,user);
+        padreController=new PadreController(this,padreID);
 
         buildDialog();
 

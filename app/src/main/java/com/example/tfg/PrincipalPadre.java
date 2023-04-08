@@ -47,7 +47,7 @@ public class PrincipalPadre extends AppCompatActivity {
         hijosID=new ArrayList<>();
         user=auth.getCurrentUser();
         buildDialog();
-        padreController=new PadreController(this,auth.getCurrentUser());
+        padreController=new PadreController(this,user.getUid());
         getSupportActionBar().hide();
 
         if(user==null){
@@ -163,6 +163,7 @@ public class PrincipalPadre extends AppCompatActivity {
 
                 Intent intent= new Intent(getApplicationContext(), VisualizarAlumno.class);
                 intent.putExtra("alumnoID",alumnoID);
+                intent.putExtra("padreID",user.getUid());
                 startActivity(intent);
                 finish();
 

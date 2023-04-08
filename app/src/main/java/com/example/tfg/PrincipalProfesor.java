@@ -89,6 +89,7 @@ public class PrincipalProfesor extends AppCompatActivity {
 
                 Intent intent= new Intent(getApplicationContext(), VisualizarAlumno.class);
                 intent.putExtra("alumnoID",alumnoID);
+                intent.putExtra("padreID",padreID);
                 startActivity(intent);
                 finish();
 
