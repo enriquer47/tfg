@@ -35,6 +35,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="20dp"
         android:hint="@string/escribeProfesor"
+        android:singleLine="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
