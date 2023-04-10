@@ -1,4 +1,4 @@
-package com.example.tfg.controller;
+package com.example.tfg.Controller;
 
 import android.util.Log;
 import android.view.View;
@@ -13,7 +13,6 @@ import com.example.tfg.R;
 import com.example.tfg.VisualizarAlumno;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -24,19 +23,20 @@ import java.util.ArrayList;
 import java.util.Calendar;
 
 public class PadreController {
+    final String linkDatabase= "https://afaniastfg-67ecd-default-rtdb.europe-west1.firebasedatabase.app/";
     final String padre;
     final DatabaseReference myRef;
     final PrincipalPadre principalPadre;
     final VisualizarAlumno visualizarAlumno;
 
     public PadreController(PrincipalPadre principalPadre,String currentUser) {
-        this.myRef= FirebaseDatabase.getInstance("https://prueba-c426b-default-rtdb.europe-west1.firebasedatabase.app").getReference();
+        this.myRef= FirebaseDatabase.getInstance(linkDatabase).getReference();
         this.principalPadre=principalPadre;
         this.padre=currentUser;
         this.visualizarAlumno=null;
     }
     public PadreController(VisualizarAlumno visualizarAlumno,String currentUser) {
-        this.myRef= FirebaseDatabase.getInstance("https://prueba-c426b-default-rtdb.europe-west1.firebasedatabase.app").getReference();
+        this.myRef= FirebaseDatabase.getInstance(linkDatabase).getReference();
         this.visualizarAlumno=visualizarAlumno;
         this.padre=currentUser;
         this.principalPadre=null;

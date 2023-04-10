@@ -10,7 +10,7 @@ import android.os.Bundle;
 
 import android.util.Log;
 
-import com.example.tfg.controller.LoginController;
+import com.example.tfg.Controller.LoginController;
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.FirebaseAuthUIActivityResultContract;
 import com.firebase.ui.auth.IdpResponse;

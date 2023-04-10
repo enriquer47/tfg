@@ -1,6 +1,4 @@
-package com.example.tfg.controller;
-
-import android.os.Build;
+package com.example.tfg.Controller;
 
 import androidx.annotation.NonNull;
 import com.example.tfg.AlumnoSimple;
@@ -14,16 +12,16 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.util.Calendar;
 
 public class AlumnoController {
+    final String linkDatabase= "https://afaniastfg-67ecd-default-rtdb.europe-west1.firebasedatabase.app/";
     final DatabaseReference myRef;
     final AlumnoSimple alumnoSimple;
     final String alumnoID;
 
     public AlumnoController(AlumnoSimple alumnoSimple, String alumnoID) {
-        this.myRef= FirebaseDatabase.getInstance("https://prueba-c426b-default-rtdb.europe-west1.firebasedatabase.app").getReference();
+        this.myRef= FirebaseDatabase.getInstance(linkDatabase).getReference();
         this.alumnoSimple=alumnoSimple;
         this.alumnoID=alumnoID;
     }

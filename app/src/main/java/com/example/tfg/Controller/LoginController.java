@@ -1,4 +1,4 @@
-package com.example.tfg.controller;
+package com.example.tfg.Controller;
 
 
 
@@ -15,17 +15,18 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 public class LoginController {
+    final String linkDatabase= "https://afaniastfg-67ecd-default-rtdb.europe-west1.firebasedatabase.app/";
     final Usuario usuario;
     final DatabaseReference myRef;
     final LoginActivity loginActivity;
 
     public LoginController() {
-        this.myRef= FirebaseDatabase.getInstance("https://prueba-c426b-default-rtdb.europe-west1.firebasedatabase.app").getReference();
+        this.myRef= FirebaseDatabase.getInstance(linkDatabase).getReference();
         this.usuario=new Usuario();
         this.loginActivity=new LoginActivity();
     }
     public LoginController(LoginActivity loginActivity) {
-        this.myRef= FirebaseDatabase.getInstance("https://prueba-c426b-default-rtdb.europe-west1.firebasedatabase.app").getReference();
+        this.myRef= FirebaseDatabase.getInstance(linkDatabase).getReference();
         this.usuario=new Usuario();
         this.loginActivity=loginActivity;
     }

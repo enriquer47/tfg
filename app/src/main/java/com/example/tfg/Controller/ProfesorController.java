@@ -1,4 +1,4 @@
-package com.example.tfg.controller;
+package com.example.tfg.Controller;
 
 import android.view.View;
 import android.widget.ImageButton;
@@ -18,12 +18,13 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 public class ProfesorController {
+    final String linkDatabase= "https://afaniastfg-67ecd-default-rtdb.europe-west1.firebasedatabase.app/";
     final FirebaseUser profesor;
     final DatabaseReference myRef;
     final PrincipalProfesor principalProfesor;
 
     public ProfesorController(PrincipalProfesor principalProfesor,FirebaseUser profesor) {
-        this.myRef= FirebaseDatabase.getInstance("https://prueba-c426b-default-rtdb.europe-west1.firebasedatabase.app").getReference();
+        this.myRef= FirebaseDatabase.getInstance(linkDatabase).getReference();
         this.profesor = profesor;
         this.principalProfesor = principalProfesor;
     }

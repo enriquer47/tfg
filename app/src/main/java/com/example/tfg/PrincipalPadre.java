@@ -14,7 +14,7 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.example.tfg.Model.Alumno;
-import com.example.tfg.controller.PadreController;
+import com.example.tfg.Controller.PadreController;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
