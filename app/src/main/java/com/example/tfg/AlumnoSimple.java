@@ -26,7 +26,7 @@ public class AlumnoSimple extends AppCompatActivity {
     AlertDialog nuevoEventoDialogo;
     String alumnoID;
     final String[] tipoCuentaArray={"Profesor", "Padre"};
-    public int estres=0;
+
     AlumnoController alumnoController;
 
     public int tipoVista = 1; //0 = simple, 1 = vaso
@@ -64,7 +64,7 @@ public class AlumnoSimple extends AppCompatActivity {
             finish();
         } else {
             alumnoController.getDetallesAlumno(user);
-
+            alumnoController.getEstres(user);
         }
 
         atras.setOnClickListener(new View.OnClickListener() {
@@ -87,11 +87,10 @@ public class AlumnoSimple extends AppCompatActivity {
                 nuevoEventoDialogo.show();
             }
         });
-        if (tipoVista == 1) {
-            actualizarVaso();
-        }
+
 
     }
+
 
     private void buildDialog(boolean esFeliz) {
         AlertDialog.Builder builder= new AlertDialog.Builder(this);
@@ -164,8 +163,7 @@ public class AlumnoSimple extends AppCompatActivity {
         }
 
     }
-    public void actualizarVaso(){
-        alumnoController.getEstres(user);
+    public void actualizarVaso(int estres){
         ImageView vaso = findViewById(R.id.vaso);
         int imagenes[] = {R.drawable.ic_vaso0, R.drawable.ic_vaso1, R.drawable.ic_vaso2, R.drawable.ic_vaso3, R.drawable.ic_vaso4, R.drawable.ic_vaso5, R.drawable.ic_vaso6, R.drawable.ic_vaso7, R.drawable.ic_vaso8, R.drawable.ic_vaso9, R.drawable.ic_vaso10, R.drawable.ic_vaso11, R.drawable.ic_vaso12, R.drawable.ic_vaso13};
         int numeroImagen = (int) Math.floor(estres/7.69);

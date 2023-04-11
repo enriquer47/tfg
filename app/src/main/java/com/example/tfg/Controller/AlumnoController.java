@@ -84,7 +84,7 @@ public class AlumnoController {
                 alumno.addEstres(estres);
                 myRef.child("usuarios").child(user.getUid()).child("hijos").child(alumnoID).child("estres").setValue(alumno.getEstres());
                 if (alumnoSimple.tipoVista == 1) {
-                    alumnoSimple.actualizarVaso();
+                    alumnoSimple.actualizarVaso(alumno.getEstres());
                 }
             }
             @Override
@@ -96,16 +96,16 @@ public class AlumnoController {
         myRef.child("usuarios").child(user.getUid()).child("hijos").child(alumnoID).child("estres").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                Integer estres=snapshot.getValue(Integer.class);
-                if(estres==null){
-                    estres=0;
-                }
-                alumnoSimple.estres=estres;
+                int estres=snapshot.getValue(Integer.class);
+                alumnoSimple.actualizarVaso(estres);
+
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
             }
         });
 
+
     }
+
 }
