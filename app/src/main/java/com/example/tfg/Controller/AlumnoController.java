@@ -79,13 +79,33 @@ public class AlumnoController {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 Integer estresActual=snapshot.getValue(Integer.class);
                 Alumno alumno=new Alumno();
+
                 alumno.setEstres(estresActual);
                 alumno.addEstres(estres);
                 myRef.child("usuarios").child(user.getUid()).child("hijos").child(alumnoID).child("estres").setValue(alumno.getEstres());
+                if (alumnoSimple.tipoVista == 1) {
+                    alumnoSimple.actualizarVaso();
+                }
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
             }
         });
+    }
+    public void getEstres(FirebaseUser user){
+        myRef.child("usuarios").child(user.getUid()).child("hijos").child(alumnoID).child("estres").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                Integer estres=snapshot.getValue(Integer.class);
+                if(estres==null){
+                    estres=0;
+                }
+                alumnoSimple.estres=estres;
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
+        });
+
     }
 }

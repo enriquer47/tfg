@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.tfg.Controller.AlumnoController;
@@ -25,12 +26,22 @@ public class AlumnoSimple extends AppCompatActivity {
     AlertDialog nuevoEventoDialogo;
     String alumnoID;
     final String[] tipoCuentaArray={"Profesor", "Padre"};
+    public int estres=0;
     AlumnoController alumnoController;
+
+    public int tipoVista = 1; //0 = simple, 1 = vaso
+
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_alumno_simple);
+        if (tipoVista == 0) {
+            setContentView(R.layout.activity_alumno_simple);
+        } else {
+            setContentView(R.layout.activity_alumno_vaso);
+        }
         Bundle extras=getIntent().getExtras();
         if(extras!=null){
             alumnoID=extras.getString("alumnoID");
@@ -53,6 +64,7 @@ public class AlumnoSimple extends AppCompatActivity {
             finish();
         } else {
             alumnoController.getDetallesAlumno(user);
+
         }
 
         atras.setOnClickListener(new View.OnClickListener() {
@@ -75,6 +87,10 @@ public class AlumnoSimple extends AppCompatActivity {
                 nuevoEventoDialogo.show();
             }
         });
+        if (tipoVista == 1) {
+            actualizarVaso();
+        }
+
     }
 
     private void buildDialog(boolean esFeliz) {
@@ -146,6 +162,14 @@ public class AlumnoSimple extends AppCompatActivity {
             startActivity(intent);
             finish();
         }
+
+    }
+    public void actualizarVaso(){
+        alumnoController.getEstres(user);
+        ImageView vaso = findViewById(R.id.vaso);
+        int imagenes[] = {R.drawable.ic_vaso0, R.drawable.ic_vaso1, R.drawable.ic_vaso2, R.drawable.ic_vaso3, R.drawable.ic_vaso4, R.drawable.ic_vaso5, R.drawable.ic_vaso6, R.drawable.ic_vaso7, R.drawable.ic_vaso8, R.drawable.ic_vaso9, R.drawable.ic_vaso10, R.drawable.ic_vaso11, R.drawable.ic_vaso12, R.drawable.ic_vaso13};
+        int numeroImagen = (int) Math.floor(estres/7.69);
+        vaso.setImageResource(imagenes[numeroImagen]);
 
     }
 }
