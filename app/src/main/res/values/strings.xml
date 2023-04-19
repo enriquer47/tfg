@@ -11,7 +11,8 @@
     <string name="logout">Cerrar Sesión</string>
     <string name="asignarProfesor">Asignar profesor</string>
     <string name="escribeProfesor">Escribe el correo del profesor</string>
-    <string name="nuevoEvento">Nuevo Evento</string>
+    <string name="nuevoEvento">Añadir Situación Puntual</string>
+    <string name="configSituacionesPredet">Gestionar Situaciones Predeterminadas</string>
     <string name="borrar">Borrar</string>
     <string name="profesor">Soy Profesor</string>
     <string name="padre">Soy Padre</string>
@@ -35,4 +36,6 @@
     <string name="aniadir_alumnos">Añadir alumnos</string>
     <string name="info_login">Para iniciar sesión necesitas haber creado una cuenta con uno de los roles permitidos. Introduce tu email y contraseña para poder iniciar sesión.</string>
     <string name="info_login_titulo">Información del inicio de sesión</string>
+    <string name="situaciones">Situaciones</string>
+    <string name="nueva_situacion_predeterminada">Nueva situación predeterminada</string>
 </resources>

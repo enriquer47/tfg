@@ -18,6 +18,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
     <ScrollView
+        android:contentDescription="@string/situaciones"
         android:id="@+id/scrollEventosAlumnoClase"
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -45,8 +46,29 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="15dp"
         android:gravity="center"
-        android:orientation="horizontal"
+        android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent">
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/configSituacionesPredet"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:text="@string/configSituacionesPredet"
+            style="@style/AcceptButtonStyle"></androidx.appcompat.widget.AppCompatButton>
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/nuevoEventoAlumnoClase"
+            style="@style/AcceptButtonStyle"
+            android:layout_width="wrap_content"
+
+            android:layout_height="wrap_content"
+            android:text="@string/nuevoEvento"
+            app:layout_constraintBottom_toTopOf="@+id/linearLayout"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/scrollEventosAlumnoClase"></androidx.appcompat.widget.AppCompatButton>
+
+
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/atrasAlumnoClase"
@@ -54,18 +76,6 @@
             android:layout_height="wrap_content"
             style="@style/BackButtonStyle"
             android:text="@string/atras"></androidx.appcompat.widget.AppCompatButton>
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/nuevoEventoAlumnoClase"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-
-            android:text="@string/nuevoEvento"
-            app:layout_constraintBottom_toTopOf="@+id/linearLayout"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/scrollEventosAlumnoClase"
-            style="@style/AcceptButtonStyle"></androidx.appcompat.widget.AppCompatButton>
-
     </LinearLayout>
 
 
