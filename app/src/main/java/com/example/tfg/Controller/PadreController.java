@@ -6,8 +6,11 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
+
+import com.example.tfg.ConfigSituacionesPredet;
 import com.example.tfg.Model.Alumno;
 import com.example.tfg.Model.Evento;
+import com.example.tfg.Model.Predet;
 import com.example.tfg.PrincipalPadre;
 import com.example.tfg.R;
 import com.example.tfg.VisualizarAlumno;
@@ -28,18 +31,29 @@ public class PadreController {
     final DatabaseReference myRef;
     final PrincipalPadre principalPadre;
     final VisualizarAlumno visualizarAlumno;
+    final ConfigSituacionesPredet visualizarPredet;
+
 
     public PadreController(PrincipalPadre principalPadre,String currentUser) {
         this.myRef= FirebaseDatabase.getInstance(linkDatabase).getReference();
         this.principalPadre=principalPadre;
         this.padre=currentUser;
         this.visualizarAlumno=null;
+        this.visualizarPredet=null;
     }
     public PadreController(VisualizarAlumno visualizarAlumno,String currentUser) {
         this.myRef= FirebaseDatabase.getInstance(linkDatabase).getReference();
         this.visualizarAlumno=visualizarAlumno;
         this.padre=currentUser;
         this.principalPadre=null;
+        this.visualizarPredet=null;
+    }
+    public PadreController(ConfigSituacionesPredet visualizarPredet, String currentUser) {
+        this.myRef= FirebaseDatabase.getInstance(linkDatabase).getReference();
+        this.visualizarPredet=visualizarPredet;
+        this.padre=currentUser;
+        this.principalPadre=null;
+        this.visualizarAlumno=null;
     }
 
     public void obtenerHijos(){
@@ -73,6 +87,24 @@ public class PadreController {
                 for (DataSnapshot eventosSnap : snapshot.getChildren()) {
                     Evento evento = eventosSnap.getValue(Evento.class);
                     visualizarAlumno.mostrarEvento(evento);
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+    public void obtenerPredetsPadre(){
+
+        myRef.child("usuarios").child(padre).child("predef").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                visualizarPredet.predetsLayout.removeAllViews();
+
+                for (DataSnapshot predetsSnap : snapshot.getChildren()) {
+                    Predet predet = predetsSnap.getValue(Predet.class);
+                    visualizarPredet.mostrarPredet(predet);
                 }
             }
             @Override

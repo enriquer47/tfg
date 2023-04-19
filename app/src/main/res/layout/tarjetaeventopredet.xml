@@ -26,7 +26,7 @@
                 android:padding="10dp">
 
                 <TextView
-                    android:id="@+id/nombreEventoTexto"
+                    android:id="@+id/nombrePredetTexto"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Nombre"
@@ -35,21 +35,21 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
-                    android:id="@+id/nivelEstresTexto"
+                    android:id="@+id/nivelEstresPredetTexto"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="0"
                     app:layout_constraintBottom_toBottomOf="parent"
                     android:layout_marginLeft="10dp"
-                    app:layout_constraintStart_toEndOf="@+id/nombreEventoTexto"
+                    app:layout_constraintStart_toEndOf="@+id/nombrePredetTexto"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <ImageButton
-
+                    android:contentDescription="Borrar"
                     android:layout_width="60dp"
                     android:layout_height="60dp"
                     android:layout_margin="15dp"
-                    android:id="@+id/borrarEvento"
+                    android:id="@+id/borrarPredet"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
@@ -60,6 +60,7 @@
                 </ImageButton>
 
                 <ImageButton
+                    android:contentDescription="Editar"
                     android:id="@+id/editarSituacionPredet"
                     android:layout_width="60dp"
                     android:layout_height="60dp"
@@ -67,11 +68,12 @@
 
                     android:background="@drawable/ic_edit_black"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/borrarEvento"
+                    app:layout_constraintEnd_toStartOf="@+id/borrarPredet"
                     app:layout_constraintTop_toTopOf="parent"></ImageButton>
 
                 <ImageButton
-                    android:id="@+id/miniaturaSituacion"
+                    android:contentDescription="Foto"
+                    android:id="@+id/miniaturaPredet"
                     android:layout_width="60dp"
                     android:layout_height="60dp"
                     android:layout_margin="15dp"

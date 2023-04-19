@@ -29,7 +29,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
         <LinearLayout
-            android:id="@+id/eventosAlumnosClase"
+            android:id="@+id/eventosPredetLayout"
             android:layout_width="match_parent"
             android:layout_margin="20dp"
             android:layout_height="wrap_content"
@@ -66,7 +66,7 @@
 
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/atrasAlumnoClase"
+            android:id="@+id/atrasGestionPredet"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             style="@style/BackButtonStyle"
