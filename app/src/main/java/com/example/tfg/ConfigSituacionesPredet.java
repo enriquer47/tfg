@@ -65,7 +65,7 @@ public class ConfigSituacionesPredet extends AppCompatActivity {
             startActivity(intent);
             finish();
         } else {
-            padreController.obtenerPredetsPadre();
+            padreController.obtenerPredetsHijo(alumnoID);
 
         }
         atras.setOnClickListener(new View.OnClickListener() {
@@ -85,21 +85,20 @@ public class ConfigSituacionesPredet extends AppCompatActivity {
     public void mostrarPredet(Predet p) {
         View view = getLayoutInflater().inflate(R.layout.tarjetaeventopredet, null);
         TextView nombreMostrar = view.findViewById(R.id.nombrePredetTexto);
-        ImageButton borrarEvento = view.findViewById(R.id.borrarPredet);
+        ImageButton borrarPredet = view.findViewById(R.id.borrarPredet);
         TextView estresMostrar = view.findViewById(R.id.nivelEstresPredetTexto);
-        ImageButton editarPredet = view.findViewById(R.id.editarSituacionPredet);
         ImageButton miniaturaPredet = view.findViewById(R.id.miniaturaPredet);
-        nombreMostrar.setText("Evento: " + p.getNombre());
+        nombreMostrar.setText( p.getNombre());
         estresMostrar.setText("Estrés: " + p.getEstres());
 
-        borrarEvento.setOnClickListener(new View.OnClickListener() {
+        borrarPredet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 predetsLayout.removeView(view);
-                padreController.borrarEvento(alumnoID,p.getEstres(),p.getId());
+                padreController.borrarPredet(alumnoID,p.getId());
             }
         });
-
+        miniaturaPredet.setBackground(getDrawable(R.drawable.ic_imagen_basica)); //cambiar para que muestre la imagen seleccionada
         predetsLayout.addView(view);
 
     }
@@ -115,7 +114,8 @@ public class ConfigSituacionesPredet extends AppCompatActivity {
         builder.setTitle("Nueva Situación Predeterminada").setPositiveButton("Crear", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                padreController.aniadirEvento(nombre.getText().toString(), nivelEstres.getValue()-10, alumnoID);
+                Predet predet = new Predet(nombre.getText().toString(), nivelEstres.getValue()-10);
+                padreController.aniadirPredetHijo(alumnoID,predet);
                 nombre.setText("");
                 nivelEstres.setValue(0);
             }

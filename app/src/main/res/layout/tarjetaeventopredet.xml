@@ -60,27 +60,15 @@
                 </ImageButton>
 
                 <ImageButton
-                    android:contentDescription="Editar"
-                    android:id="@+id/editarSituacionPredet"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:layout_margin="15dp"
-
-                    android:background="@drawable/ic_edit_black"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/borrarPredet"
-                    app:layout_constraintTop_toTopOf="parent"></ImageButton>
-
-                <ImageButton
-                    android:contentDescription="Foto"
                     android:id="@+id/miniaturaPredet"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:layout_margin="15dp"
-
                     android:background="@drawable/ic_sed"
+
+                    android:contentDescription="Foto"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/editarSituacionPredet"
+                    app:layout_constraintEnd_toStartOf="@+id/borrarPredet"
                     app:layout_constraintTop_toTopOf="parent"></ImageButton>
 
             </androidx.constraintlayout.widget.ConstraintLayout>

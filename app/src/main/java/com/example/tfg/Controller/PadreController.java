@@ -95,9 +95,9 @@ public class PadreController {
             }
         });
     }
-    public void obtenerPredetsPadre(){
+    public void obtenerPredetsHijo(String alumnoID){
 
-        myRef.child("usuarios").child(padre).child("predef").addValueEventListener(new ValueEventListener() {
+        myRef.child("usuarios").child(padre).child("hijos").child(alumnoID).child("predet").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 visualizarPredet.predetsLayout.removeAllViews();
@@ -110,6 +110,21 @@ public class PadreController {
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
 
+            }
+        });
+    }
+    public void aniadirPredetHijo(String alumnoID, Predet predet){
+        String key = myRef.child("usuarios").child(padre).child("hijos").child(alumnoID).child("predet").push().getKey();
+        predet.setId(key);
+        myRef.child("usuarios").child(padre).child("hijos").child(alumnoID).child("predet").child(key).setValue(predet).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                Toast.makeText(visualizarPredet, "Predeterminada añadida", Toast.LENGTH_SHORT).show();
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(visualizarPredet, "Error al añadir predeterminada", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -329,5 +344,8 @@ public class PadreController {
         return aux;
     }
 
+    public void borrarPredet(String alumnoID, String idpredet) {
+        myRef.child("usuarios").child(padre).child("hijos").child(alumnoID).child("predet").child(idpredet).removeValue();
+    }
 }
 

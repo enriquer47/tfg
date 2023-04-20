@@ -14,6 +14,11 @@ public class Predet {
         this.estres = estres;
         this.imagen = imagen;
     }
+    public Predet(String nombre, int estres) {
+        this.nombre = nombre;
+        this.estres = estres;
+        this.imagen = null;
+    }
     public String getNombre() {
         return nombre;
     }

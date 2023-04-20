@@ -17,9 +17,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Nombre Evento"
+            android:singleLine="true"
             android:textSize="20dp"
-            app:layout_constraintTop_toTopOf="parent"
 
+            app:layout_constraintTop_toTopOf="parent"
             tools:layout_editor_absoluteX="10dp"></EditText>
 
         <NumberPicker
