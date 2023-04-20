@@ -306,7 +306,10 @@ public class PadreController {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if(snapshot.exists()){
                     String tipoCuenta = snapshot.getValue(String.class);
-                    visualizarAlumno.userIntent(tipoCuenta);
+                    if(visualizarAlumno!=null)
+                        visualizarAlumno.userIntent(tipoCuenta);
+                    else if(visualizarPredet!=null)
+                        visualizarPredet.userIntent(tipoCuenta);
                 }
             }
             @Override

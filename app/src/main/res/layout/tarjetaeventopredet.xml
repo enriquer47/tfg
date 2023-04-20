@@ -46,8 +46,8 @@
 
                 <ImageButton
                     android:contentDescription="Borrar"
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
                     android:layout_margin="15dp"
                     android:id="@+id/borrarPredet"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -62,8 +62,8 @@
                 <ImageButton
                     android:contentDescription="Editar"
                     android:id="@+id/editarSituacionPredet"
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
                     android:layout_margin="15dp"
 
                     android:background="@drawable/ic_edit_black"
@@ -74,8 +74,8 @@
                 <ImageButton
                     android:contentDescription="Foto"
                     android:id="@+id/miniaturaPredet"
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
                     android:layout_margin="15dp"
 
                     android:background="@drawable/ic_sed"

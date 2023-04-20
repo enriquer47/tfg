@@ -25,7 +25,7 @@ public class VisualizarAlumno extends AppCompatActivity {
     FirebaseAuth auth;
     FirebaseUser user;
     public TextView detallesUsuario;
-    Button atras, nuevoEvento;
+    Button atras, nuevoEvento, configSituacionesPredet;
     AlertDialog nuevoEventoDialogo;
     public LinearLayout eventosLayout;
     public ArrayList<Evento> eventos;
@@ -50,6 +50,7 @@ public class VisualizarAlumno extends AppCompatActivity {
         atras=findViewById(R.id.atrasAlumnoClase);
         nuevoEvento=findViewById(R.id.nuevoEventoAlumnoClase);
         eventosLayout=findViewById(R.id.eventosAlumnosClase);
+        configSituacionesPredet=findViewById(R.id.configSituacionesPredet);
 
         auth = FirebaseAuth.getInstance();
         user=auth.getCurrentUser();
@@ -71,6 +72,15 @@ public class VisualizarAlumno extends AppCompatActivity {
             padreController.obtenerEventos(alumnoID);
 
         }
+        configSituacionesPredet.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent= new Intent(getApplicationContext(), ConfigSituacionesPredet.class);
+                intent.putExtra("alumnoID", alumnoID);
+                intent.putExtra("padreID", padreID);
+                startActivity(intent);
+            }
+        });
         atras.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

@@ -3,11 +3,15 @@ package com.example.tfg;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.NumberPicker;
 import android.widget.TextView;
 
 import com.example.tfg.Controller.PadreController;
@@ -38,10 +42,12 @@ public class ConfigSituacionesPredet extends AppCompatActivity {
         if(extras!=null){
             alumnoID=extras.getString("alumnoID");
             padreID=extras.getString("padreID");
+
         }
         setContentView(R.layout.activity_config_situaciones_predet);
         atras=findViewById(R.id.atrasGestionPredet);
         predetsLayout=findViewById(R.id.eventosPredetLayout);
+        nuevoPredet=findViewById(R.id.nuevaSituacionPredeterminada);
 
         auth = FirebaseAuth.getInstance();
         user=auth.getCurrentUser();
@@ -79,10 +85,10 @@ public class ConfigSituacionesPredet extends AppCompatActivity {
     public void mostrarPredet(Predet p) {
         View view = getLayoutInflater().inflate(R.layout.tarjetaeventopredet, null);
         TextView nombreMostrar = view.findViewById(R.id.nombrePredetTexto);
-        Button borrarEvento = view.findViewById(R.id.borrarPredet);
+        ImageButton borrarEvento = view.findViewById(R.id.borrarPredet);
         TextView estresMostrar = view.findViewById(R.id.nivelEstresPredetTexto);
-        Button editarPredet = view.findViewById(R.id.editarSituacionPredet);
-        Button miniaturaPredet = view.findViewById(R.id.miniaturaPredet);
+        ImageButton editarPredet = view.findViewById(R.id.editarSituacionPredet);
+        ImageButton miniaturaPredet = view.findViewById(R.id.miniaturaPredet);
         nombreMostrar.setText("Evento: " + p.getNombre());
         estresMostrar.setText("Estrés: " + p.getEstres());
 
@@ -95,6 +101,62 @@ public class ConfigSituacionesPredet extends AppCompatActivity {
         });
 
         predetsLayout.addView(view);
+
+    }
+    private void buildDialog() {
+        AlertDialog.Builder builder= new AlertDialog.Builder(this);
+        View view= getLayoutInflater().inflate(R.layout.nuevopredet, null);
+
+        EditText nombre= view.findViewById(R.id.nombrePredet);
+        NumberPicker nivelEstres= view.findViewById(R.id.nivelEstresPredet);
+
+        builder.setView(view);
+        iniciarNumberPicker(nivelEstres);
+        builder.setTitle("Nueva Situación Predeterminada").setPositiveButton("Crear", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                padreController.aniadirEvento(nombre.getText().toString(), nivelEstres.getValue()-10, alumnoID);
+                nombre.setText("");
+                nivelEstres.setValue(0);
+            }
+        }).setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                nombre.setText("");
+                nivelEstres.setValue(0);
+            }
+        });
+
+        nuevoPredetDialogo= builder.create();
+
+    }
+
+    private void iniciarNumberPicker(NumberPicker np) {
+        String[] nums = new String[21];
+        for(int i=0; i<nums.length; i++)
+            nums[i] = Integer.toString(i-10);
+        np.setMinValue(0);
+        np.setMaxValue(20);
+        np.setWrapSelectorWheel(false);
+        np.setDisplayedValues(nums);
+        np.setValue(0);
+
+    }
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        padreController.goBack(user.getUid());
+    }
+    public void userIntent(String tipoCuenta){
+        if(tipoCuenta.equals(tipoCuentaArray[0])) {
+            Intent intent= new Intent(ConfigSituacionesPredet.this, PrincipalProfesor.class);
+            startActivity(intent);
+            finish();
+        }else if (tipoCuenta.equals(tipoCuentaArray[1])){
+            Intent intent= new Intent(ConfigSituacionesPredet.this, PrincipalPadre.class);
+            startActivity(intent);
+            finish();
+        }
 
     }
 }

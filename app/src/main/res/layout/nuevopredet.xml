@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+
+        >
+
+        <EditText
+            android:id="@+id/nombrePredet"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Nombre Evento"
+            android:textSize="20dp"
+            app:layout_constraintTop_toTopOf="parent"
+
+            tools:layout_editor_absoluteX="10dp"></EditText>
+
+        <NumberPicker
+            android:id="@+id/nivelEstresPredet"
+            android:layout_width="wrap_content"
+            android:layout_height="70dp"
+            android:layout_alignParentTop="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/guideline"
+            app:layout_constraintTop_toBottomOf="@+id/nombrePredet"></NumberPicker>
+
+        <ImageButton
+            android:id="@+id/imagenPredet"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:background="@drawable/ic_imagen_basica"
+            android:contentDescription="Seleccionar imagen"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/guideline"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/nombrePredet"></ImageButton>
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_begin="201dp" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</RelativeLayout>
