@@ -87,9 +87,11 @@ public class ConfigSituacionesPredet extends AppCompatActivity {
         TextView nombreMostrar = view.findViewById(R.id.nombrePredetTexto);
         ImageButton borrarPredet = view.findViewById(R.id.borrarPredet);
         TextView estresMostrar = view.findViewById(R.id.nivelEstresPredetTexto);
+        TextView categoriaMostrar = view.findViewById(R.id.categoriaPredetTexto);
         ImageButton miniaturaPredet = view.findViewById(R.id.miniaturaPredet);
         nombreMostrar.setText( p.getNombre());
         estresMostrar.setText("Estrés: " + p.getEstres());
+        categoriaMostrar.setText(p.getCategoria());
 
         borrarPredet.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -107,16 +109,19 @@ public class ConfigSituacionesPredet extends AppCompatActivity {
         View view= getLayoutInflater().inflate(R.layout.nuevopredet, null);
 
         EditText nombre= view.findViewById(R.id.nombrePredet);
+        EditText categoria= view.findViewById(R.id.categoriaPredet);
         NumberPicker nivelEstres= view.findViewById(R.id.nivelEstresPredet);
+        nivelEstres.setValue(0);
 
         builder.setView(view);
         iniciarNumberPicker(nivelEstres);
         builder.setTitle("Nueva Situación Predeterminada").setPositiveButton("Crear", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                Predet predet = new Predet(nombre.getText().toString(), nivelEstres.getValue()-10);
+                Predet predet = new Predet(nombre.getText().toString(), categoria.getText().toString().toUpperCase(), nivelEstres.getValue()-10);
                 padreController.aniadirPredetHijo(alumnoID,predet);
                 nombre.setText("");
+                categoria.setText("");
                 nivelEstres.setValue(0);
             }
         }).setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {

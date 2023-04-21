@@ -30,17 +30,24 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Nombre"
-                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/categoriaPredetTexto"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="CATEGORIA"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/nombrePredetTexto" />
 
                 <TextView
                     android:id="@+id/nivelEstresPredetTexto"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="0"
-                    app:layout_constraintBottom_toBottomOf="parent"
                     android:layout_marginLeft="10dp"
+                    android:text="0"
                     app:layout_constraintStart_toEndOf="@+id/nombrePredetTexto"
                     app:layout_constraintTop_toTopOf="parent" />
 

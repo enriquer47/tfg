@@ -16,10 +16,22 @@
             android:id="@+id/nombrePredet"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Nombre Evento"
+            android:hint="Nombre Situación"
             android:singleLine="true"
             android:textSize="20dp"
 
+            app:layout_constraintTop_toTopOf="parent"
+            tools:layout_editor_absoluteX="10dp"></EditText>
+
+        <EditText
+            android:id="@+id/categoriaPredet"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Categoría"
+            android:singleLine="true"
+            android:textSize="20dp"
+
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:layout_editor_absoluteX="10dp"></EditText>
 
@@ -31,7 +43,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@+id/guideline"
-            app:layout_constraintTop_toBottomOf="@+id/nombrePredet"></NumberPicker>
+            app:layout_constraintTop_toBottomOf="@+id/categoriaPredet"></NumberPicker>
 
         <ImageButton
             android:id="@+id/imagenPredet"
@@ -42,7 +54,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/guideline"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/nombrePredet"></ImageButton>
+            app:layout_constraintTop_toBottomOf="@+id/categoriaPredet"></ImageButton>
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline"

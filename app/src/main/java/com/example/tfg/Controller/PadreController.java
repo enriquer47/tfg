@@ -128,6 +128,20 @@ public class PadreController {
             }
         });
     }
+    //Mismo método que el anterior pero sin mostrar el toast, ya que da error al cargar los iniciales
+    public void aniadirPredetHijoOculto(String alumnoID, Predet predet){
+        String key = myRef.child("usuarios").child(padre).child("hijos").child(alumnoID).child("predet").push().getKey();
+        predet.setId(key);
+        myRef.child("usuarios").child(padre).child("hijos").child(alumnoID).child("predet").child(key).setValue(predet).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+            }
+        });
+    }
 
     public void visualizarHijos(View view, ImageButton modoAlumno,Alumno pepe){
         double estres = pepe.getEstres();
@@ -221,6 +235,20 @@ public class PadreController {
         Alumno newHijo =new Alumno(nombre);
         String hijoID=myRef.child("usuarios").child(padre).child("hijos").push().getKey();
         myRef.child("usuarios").child(padre).child("hijos").child(hijoID).setValue(newHijo);
+        myRef.child("predets").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot predetsSnap : snapshot.getChildren()) {
+                    Predet predet = predetsSnap.getValue(Predet.class);
+                    predet.setId(predetsSnap.getKey());
+                    aniadirPredetHijoOculto(hijoID,predet);
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
 
     public void aniadirEvento(String nombre, int estres,String alumnoID) {

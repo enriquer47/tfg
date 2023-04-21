@@ -6,6 +6,7 @@ public class Predet {
     private String imagen;
     private int estres;
     private String id;
+    private String categoria;
     public Predet() {
         // Default constructor required for calls to DataSnapshot.getValue(User.class)
     }
@@ -13,11 +14,28 @@ public class Predet {
         this.nombre = nombre;
         this.estres = estres;
         this.imagen = imagen;
+        this.categoria ="SIN CATEGORÍA";
     }
+    public Predet(String nombre, String categoria, int estres, String imagen) {
+        this.nombre = nombre;
+        this.estres = estres;
+        this.imagen = imagen;
+        this.categoria = categoria;
+    }
+
+
     public Predet(String nombre, int estres) {
         this.nombre = nombre;
         this.estres = estres;
         this.imagen = null;
+        this.categoria ="SIN CATEGORÍA";
+
+    }
+    public Predet(String nombre, String categoria, int estres) {
+        this.nombre = nombre;
+        this.estres = estres;
+        this.imagen = null;
+        this.categoria = categoria;
     }
     public String getNombre() {
         return nombre;
@@ -42,6 +60,12 @@ public class Predet {
     }
     public void setId(String id) {
         this.id = id;
+    }
+    public String getCategoria() {
+        return categoria;
+    }
+    public void setCategoria(String categoria) {
+        this.categoria = categoria;
     }
 
 }
