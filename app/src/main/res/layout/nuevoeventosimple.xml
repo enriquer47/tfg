@@ -6,6 +6,7 @@
     android:layout_height="match_parent">
 
     <LinearLayout
+        android:id="@+id/predetSimpleLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="10dp"
@@ -15,20 +16,5 @@
 
         >
 
-        <ImageButton
-            android:id="@+id/evento1"
-            android:layout_width="180dp"
-            android:layout_height="180dp"
-            android:layout_margin="0dp"
-            android:background="@drawable/ic_hambre"
-            ></ImageButton>
-
-        <ImageButton
-            android:id="@+id/evento2"
-            android:layout_width="180dp"
-            android:layout_height="180dp"
-            android:layout_margin="0dp"
-            android:background="@drawable/ic_sed"
-            ></ImageButton>
     </LinearLayout>
 </RelativeLayout>

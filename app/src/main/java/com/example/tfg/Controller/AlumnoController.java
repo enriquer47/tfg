@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import com.example.tfg.AlumnoSimple;
 import com.example.tfg.Model.Alumno;
 import com.example.tfg.Model.Evento;
+import com.example.tfg.Model.Predet;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -12,6 +13,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 
 public class AlumnoController {
@@ -107,5 +109,34 @@ public class AlumnoController {
 
 
     }
-
+    public void obtenerPredets(FirebaseUser user, OnPredetsLoadedListener listener){
+        ArrayList<Predet> predetsFelices=new ArrayList<>();
+        ArrayList<Predet> predetsTristes=new ArrayList<>();
+        myRef.child("usuarios").child(user.getUid()).child("hijos").child(alumnoID).child("predet").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if(snapshot.exists()){
+                    for(DataSnapshot ds: snapshot.getChildren()){
+                        Predet predet = ds.getValue(Predet.class);
+                        if(predet.getEstres()<=0){
+                            predetsFelices.add(predet);
+                        }else{
+                            predetsTristes.add(predet);
+                        }
+                    }
+                    System.out.println(predetsFelices.size());
+                    System.out.println(predetsTristes.size());
+                }else{
+                    System.out.println("No hay predets");
+                }
+                listener.onPredetsLoaded(predetsFelices, predetsTristes);
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
+        });
+    }
+    public interface OnPredetsLoadedListener {
+        void onPredetsLoaded(ArrayList<Predet> predetsFelices, ArrayList<Predet> predetsTristes);
+    }
 }

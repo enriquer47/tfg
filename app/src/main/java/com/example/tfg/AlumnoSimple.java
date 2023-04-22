@@ -6,15 +6,21 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.TypedValue;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.tfg.Controller.AlumnoController;
+import com.example.tfg.Model.Predet;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+
+import java.util.ArrayList;
 
 public class AlumnoSimple extends AppCompatActivity {
 
@@ -94,56 +100,88 @@ public class AlumnoSimple extends AppCompatActivity {
 
     private void buildDialog(boolean esFeliz) {
         AlertDialog.Builder builder= new AlertDialog.Builder(this);
-        View view= getLayoutInflater().inflate(R.layout.nuevoeventosimple, null);
-
-        ImageButton evento1= view.findViewById(R.id.evento1);
-        ImageButton evento2= view.findViewById(R.id.evento2);
-        //TODO Generalizar esto para usar eventos predeterminados
-        if(esFeliz){
-
-            evento1.setBackground(getResources().getDrawable(R.drawable.ic_chocolate));
-            evento2.setBackground(getResources().getDrawable(R.drawable.ic_consola));
-
-            evento1.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    alumnoController.aniadirEvento("Chocolate", -5,user);
-                    nuevoEventoDialogo.dismiss();
-                }
-            });
-            evento2.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    alumnoController.aniadirEvento("Consola", -10,user);
-                    nuevoEventoDialogo.dismiss();
-                }
-            });
-        }else{
-            evento1.setBackground(getResources().getDrawable(R.drawable.ic_hambre));
-            evento2.setBackground(getResources().getDrawable(R.drawable.ic_sed));
-            evento1.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    alumnoController.aniadirEvento("Hambre", 10,user);
-                    nuevoEventoDialogo.dismiss();
-                }
-            });
-            evento2.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    alumnoController.aniadirEvento("Sed", 5,user);
-                    nuevoEventoDialogo.dismiss();
-                }
-            });
-        }
-        builder.setView(view);
         builder.setTitle("Nuevo evento").setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
             }
         });
+        View view= getLayoutInflater().inflate(R.layout.nuevoeventosimple, null);
+        LinearLayout predetsLayout = view.findViewById(R.id.predetSimpleLayout);
+
+        int widthInDp = 60;
+        int heightInDp = 60;
+        int widthInPixels = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, widthInDp, getResources().getDisplayMetrics());
+        int heightInPixels = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, heightInDp, getResources().getDisplayMetrics());
+
+        alumnoController.obtenerPredets(user, new AlumnoController.OnPredetsLoadedListener() {
+            @Override
+            public void onPredetsLoaded(ArrayList<Predet> predetsFelices, ArrayList<Predet> predetsTristes) {
+
+                if(esFeliz) {
+                    if (predetsFelices.size() == 0) {
+                        builder.setMessage("No hay situaciones predeterminadas relajantes");
+                    }
+                    for (Predet predetfeliz : predetsFelices) {
+                        System.out.println("PREDET FELIZ: " + predetfeliz.getNombre());
+                        System.out.println("PREDET FELIZ: " + predetfeliz.getEstres());
+                        ImageButton predet = new ImageButton(getApplicationContext());
+                        int resId;
+
+                        if (predetfeliz.getImagen() == null) {
+                            resId=getResources().getIdentifier("ic_imagen_basica", "drawable", getPackageName());
+                        } else {
+                            resId = getResources().getIdentifier(predetfeliz.getImagen(), "drawable", getPackageName());
+                        }
+                        predet.setBackground(getResources().getDrawable(resId));
+
+                        predet.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+
+                                alumnoController.aniadirEvento(predetfeliz.getNombre(), predetfeliz.getEstres(), user);
+                                nuevoEventoDialogo.dismiss();
+                            }
+                        });
+                        predet.setLayoutParams(new ViewGroup.LayoutParams(widthInPixels, heightInPixels));
+
+                        predetsLayout.addView(predet);
+
+                    }
+                }else {
+                    if (predetsTristes.size() == 0) {
+                        builder.setMessage("No hay situaciones predeterminadas estresantes");
+                    }
+                    for (Predet predettriste : predetsTristes) {
+                        ImageButton predet = new ImageButton(getApplicationContext());
+                        System.out.println("PREDET TRISTE: " + predettriste.getNombre());
+                        System.out.println("PREDET TRISTE: " + predettriste.getEstres());
+                        int resId;
+
+                        if (predettriste.getImagen() == null) {
+                            resId=getResources().getIdentifier("ic_imagen_basica", "drawable", getPackageName());
+                        } else {
+                            resId = getResources().getIdentifier(predettriste.getImagen(), "drawable", getPackageName());
+                        }
+                        predet.setBackground(getResources().getDrawable(resId));
+                        predet.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                alumnoController.aniadirEvento(predettriste.getNombre(), predettriste.getEstres(), user);
+                                nuevoEventoDialogo.dismiss();
+                            }
+                        });
+                        predet.setLayoutParams(new ViewGroup.LayoutParams(widthInPixels, heightInPixels));
+
+                        predetsLayout.addView(predet);
+                    }
+                }
+            }
+        });
+        builder.setView(view);
         nuevoEventoDialogo= builder.create();
+        nuevoEventoDialogo.show();
     }
+
 
     @Override
     public void onBackPressed() {

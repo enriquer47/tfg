@@ -100,7 +100,14 @@ public class ConfigSituacionesPredet extends AppCompatActivity {
                 padreController.borrarPredet(alumnoID,p.getId());
             }
         });
-        miniaturaPredet.setBackground(getDrawable(R.drawable.ic_imagen_basica)); //cambiar para que muestre la imagen seleccionada
+        int resId;
+
+        if (p.getImagen() == null) {
+            resId=getResources().getIdentifier("ic_imagen_basica", "drawable", getPackageName());
+        } else {
+            resId = getResources().getIdentifier(p.getImagen(), "drawable", getPackageName());
+        }
+        miniaturaPredet.setBackground(getResources().getDrawable(resId));
         predetsLayout.addView(view);
 
     }
