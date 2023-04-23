@@ -21,9 +21,13 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import android.net.Uri;
 
 public class PadreController {
     final String linkDatabase= "https://afaniastfg-67ecd-default-rtdb.europe-west1.firebasedatabase.app/";
@@ -32,6 +36,9 @@ public class PadreController {
     final PrincipalPadre principalPadre;
     final VisualizarAlumno visualizarAlumno;
     final ConfigSituacionesPredet visualizarPredet;
+
+    final StorageReference storageRef = FirebaseStorage.getInstance().getReference();
+
 
 
     public PadreController(PrincipalPadre principalPadre,String currentUser) {
@@ -116,17 +123,44 @@ public class PadreController {
     public void aniadirPredetHijo(String alumnoID, Predet predet){
         String key = myRef.child("usuarios").child(padre).child("hijos").child(alumnoID).child("predet").push().getKey();
         predet.setId(key);
-        myRef.child("usuarios").child(padre).child("hijos").child(alumnoID).child("predet").child(key).setValue(predet).addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void aVoid) {
-                Toast.makeText(visualizarPredet, "Predeterminada añadida", Toast.LENGTH_SHORT).show();
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Toast.makeText(visualizarPredet, "Error al añadir predeterminada", Toast.LENGTH_SHORT).show();
-            }
-        });
+        if(predet.getImagen()==null) {
+            myRef.child("usuarios").child(padre).child("hijos").child(alumnoID).child("predet").child(key).setValue(predet).addOnSuccessListener(new OnSuccessListener<Void>() {
+                @Override
+                public void onSuccess(Void aVoid) {
+                    Toast.makeText(visualizarPredet, "Predeterminada añadida", Toast.LENGTH_SHORT).show();
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Toast.makeText(visualizarPredet, "Error al añadir la predeterminada", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }else {
+            StorageReference imageRef = storageRef.child("images/" + Uri.parse(predet.getImagen()).getLastPathSegment());
+            imageRef.putFile(Uri.parse(predet.getImagen())).addOnSuccessListener(new OnSuccessListener<com.google.firebase.storage.UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(com.google.firebase.storage.UploadTask.TaskSnapshot taskSnapshot) {
+                    imageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                        @Override
+                        public void onSuccess(Uri uri) {
+                            predet.setImagen(uri.toString());
+                            myRef.child("usuarios").child(padre).child("hijos").child(alumnoID).child("predet").child(key).setValue(predet).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    Toast.makeText(visualizarPredet, "Predeterminada añadida", Toast.LENGTH_SHORT).show();
+                                }
+                            }).addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Toast.makeText(visualizarPredet, "Error al añadir predeterminada", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                        }
+                    });
+                }
+            });
+        }
+
     }
     //Mismo método que el anterior pero sin mostrar el toast, ya que da error al cargar los iniciales
     public void aniadirPredetHijoOculto(String alumnoID, Predet predet){

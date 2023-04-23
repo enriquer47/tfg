@@ -1,19 +1,25 @@
 package com.example.tfg;
 
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.NumberPicker;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.example.tfg.Controller.PadreController;
 import com.example.tfg.Model.Evento;
 import com.example.tfg.Model.Predet;
@@ -33,6 +39,7 @@ public class ConfigSituacionesPredet extends AppCompatActivity {
     String padreID;
     final String[] tipoCuentaArray={"Profesor", "Padre"};
     PadreController padreController;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,6 +51,7 @@ public class ConfigSituacionesPredet extends AppCompatActivity {
             padreID=extras.getString("padreID");
 
         }
+
         setContentView(R.layout.activity_config_situaciones_predet);
         atras=findViewById(R.id.atrasGestionPredet);
         predetsLayout=findViewById(R.id.eventosPredetLayout);
@@ -92,6 +100,8 @@ public class ConfigSituacionesPredet extends AppCompatActivity {
         nombreMostrar.setText( p.getNombre());
         estresMostrar.setText("Estrés: " + p.getEstres());
         categoriaMostrar.setText(p.getCategoria());
+        miniaturaPredet.setScaleType(ImageView.ScaleType.FIT_XY);
+        miniaturaPredet.setAdjustViewBounds(true);
 
         borrarPredet.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -100,48 +110,77 @@ public class ConfigSituacionesPredet extends AppCompatActivity {
                 padreController.borrarPredet(alumnoID,p.getId());
             }
         });
-        int resId;
 
         if (p.getImagen() == null) {
-            resId=getResources().getIdentifier("ic_imagen_basica", "drawable", getPackageName());
+            miniaturaPredet.setImageURI(Uri.parse("android.resource://com.example.tfg/drawable/ic_imagen_basica"));
         } else {
-            resId = getResources().getIdentifier(p.getImagen(), "drawable", getPackageName());
+            Glide.with(miniaturaPredet.getContext()).load(p.getImagen()).into(miniaturaPredet);
+
         }
-        miniaturaPredet.setBackground(getResources().getDrawable(resId));
+
         predetsLayout.addView(view);
 
     }
     private void buildDialog() {
         AlertDialog.Builder builder= new AlertDialog.Builder(this);
         View view= getLayoutInflater().inflate(R.layout.nuevopredet, null);
-
+        ActivityResultLauncher<String>  mGetContent;
         EditText nombre= view.findViewById(R.id.nombrePredet);
         EditText categoria= view.findViewById(R.id.categoriaPredet);
         NumberPicker nivelEstres= view.findViewById(R.id.nivelEstresPredet);
+        ImageButton imagenPredet= view.findViewById(R.id.imagenPredet);
         nivelEstres.setValue(0);
+        Predet predet = new Predet();
+        imagenPredet.setImageURI(Uri.parse("android.resource://com.example.tfg/drawable/ic_imagen_basica"));
+        imagenPredet.setScaleType(ImageView.ScaleType.FIT_XY);
+        imagenPredet.setAdjustViewBounds(true);
+        mGetContent = registerForActivityResult(new ActivityResultContracts.GetContent(),
+                new ActivityResultCallback<Uri>() {
+                    @Override
+                    public void onActivityResult(Uri result) {
+                        // Do something with the selected image URI
+
+                        imagenPredet.setImageURI(result);
+                        predet.setImagen(result.toString());
+
+                    }
+                });
+        imagenPredet.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mGetContent.launch("image/*");
+            }
+        });
 
         builder.setView(view);
         iniciarNumberPicker(nivelEstres);
         builder.setTitle("Nueva Situación Predeterminada").setPositiveButton("Crear", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                Predet predet = new Predet(nombre.getText().toString(), categoria.getText().toString().toUpperCase(), nivelEstres.getValue()-10);
+                predet.setEstres(nivelEstres.getValue()-10);
+                predet.setNombre(nombre.getText().toString());
+                predet.setCategoria(categoria.getText().toString().toUpperCase());
                 padreController.aniadirPredetHijo(alumnoID,predet);
                 nombre.setText("");
                 categoria.setText("");
                 nivelEstres.setValue(0);
+                imagenPredet.setImageURI(Uri.parse("android.resource://com.example.tfg/drawable/ic_imagen_basica"));
+
             }
         }).setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 nombre.setText("");
                 nivelEstres.setValue(0);
+                imagenPredet.setImageURI(Uri.parse("android.resource://com.example.tfg/drawable/ic_imagen_basica"));
+
             }
         });
 
         nuevoPredetDialogo= builder.create();
 
     }
+
 
     private void iniciarNumberPicker(NumberPicker np) {
         String[] nums = new String[21];

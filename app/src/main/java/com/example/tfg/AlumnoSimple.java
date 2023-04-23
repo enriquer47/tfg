@@ -5,6 +5,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.TypedValue;
 import android.view.View;
@@ -20,8 +23,9 @@ import com.example.tfg.Model.Predet;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
-
+import com.bumptech.glide.Glide;
 public class AlumnoSimple extends AppCompatActivity {
 
     FirebaseAuth auth;
@@ -122,17 +126,17 @@ public class AlumnoSimple extends AppCompatActivity {
                         builder.setMessage("No hay situaciones predeterminadas relajantes");
                     }
                     for (Predet predetfeliz : predetsFelices) {
-                        System.out.println("PREDET FELIZ: " + predetfeliz.getNombre());
-                        System.out.println("PREDET FELIZ: " + predetfeliz.getEstres());
+
                         ImageButton predet = new ImageButton(getApplicationContext());
-                        int resId;
+
+
 
                         if (predetfeliz.getImagen() == null) {
-                            resId=getResources().getIdentifier("ic_imagen_basica", "drawable", getPackageName());
+                            predet.setImageURI(Uri.parse("android.resource://com.example.tfg/drawable/ic_imagen_basica"));
                         } else {
-                            resId = getResources().getIdentifier(predetfeliz.getImagen(), "drawable", getPackageName());
+                                Glide.with(predet.getContext()).load(predetfeliz.getImagen()).into(predet);
                         }
-                        predet.setBackground(getResources().getDrawable(resId));
+
 
                         predet.setOnClickListener(new View.OnClickListener() {
                             @Override
@@ -143,7 +147,9 @@ public class AlumnoSimple extends AppCompatActivity {
                             }
                         });
                         predet.setLayoutParams(new ViewGroup.LayoutParams(widthInPixels, heightInPixels));
-
+                        predet.setScaleType(ImageView.ScaleType.FIT_XY);
+                        predet.setAdjustViewBounds(true);
+                        predet.setBackgroundTintMode(null);
                         predetsLayout.addView(predet);
 
                     }
@@ -153,16 +159,15 @@ public class AlumnoSimple extends AppCompatActivity {
                     }
                     for (Predet predettriste : predetsTristes) {
                         ImageButton predet = new ImageButton(getApplicationContext());
-                        System.out.println("PREDET TRISTE: " + predettriste.getNombre());
-                        System.out.println("PREDET TRISTE: " + predettriste.getEstres());
-                        int resId;
 
                         if (predettriste.getImagen() == null) {
-                            resId=getResources().getIdentifier("ic_imagen_basica", "drawable", getPackageName());
+                            predet.setImageURI(Uri.parse("android.resource://com.example.tfg/drawable/ic_imagen_basica"));
+
                         } else {
-                            resId = getResources().getIdentifier(predettriste.getImagen(), "drawable", getPackageName());
+                            Glide.with(predet.getContext()).load(predettriste.getImagen()).into(predet);
+
                         }
-                        predet.setBackground(getResources().getDrawable(resId));
+
                         predet.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
@@ -171,6 +176,9 @@ public class AlumnoSimple extends AppCompatActivity {
                             }
                         });
                         predet.setLayoutParams(new ViewGroup.LayoutParams(widthInPixels, heightInPixels));
+                        predet.setScaleType(ImageView.ScaleType.FIT_XY);
+                        predet.setAdjustViewBounds(true);
+                        predet.setBackgroundTintMode(null);
 
                         predetsLayout.addView(predet);
                     }

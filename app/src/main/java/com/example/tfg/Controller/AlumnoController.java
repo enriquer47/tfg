@@ -124,8 +124,7 @@ public class AlumnoController {
                             predetsTristes.add(predet);
                         }
                     }
-                    System.out.println(predetsFelices.size());
-                    System.out.println(predetsTristes.size());
+
                 }else{
                     System.out.println("No hay predets");
                 }
