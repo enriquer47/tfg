@@ -101,7 +101,6 @@ public class ConfigSituacionesPredet extends AppCompatActivity {
         estresMostrar.setText("Estrés: " + p.getEstres());
         categoriaMostrar.setText(p.getCategoria());
         miniaturaPredet.setScaleType(ImageView.ScaleType.FIT_XY);
-        miniaturaPredet.setAdjustViewBounds(true);
 
         borrarPredet.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -133,7 +132,7 @@ public class ConfigSituacionesPredet extends AppCompatActivity {
         Predet predet = new Predet();
         imagenPredet.setImageURI(Uri.parse("android.resource://com.example.tfg/drawable/ic_imagen_basica"));
         imagenPredet.setScaleType(ImageView.ScaleType.FIT_XY);
-        imagenPredet.setAdjustViewBounds(true);
+        //imagenPredet.setAdjustViewBounds(true);
         mGetContent = registerForActivityResult(new ActivityResultContracts.GetContent(),
                 new ActivityResultCallback<Uri>() {
                     @Override

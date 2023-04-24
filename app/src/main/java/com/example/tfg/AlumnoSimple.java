@@ -104,6 +104,8 @@ public class AlumnoSimple extends AppCompatActivity {
 
     private void buildDialog(boolean esFeliz) {
         AlertDialog.Builder builder= new AlertDialog.Builder(this);
+
+
         builder.setTitle("Nuevo evento").setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
@@ -112,8 +114,8 @@ public class AlumnoSimple extends AppCompatActivity {
         View view= getLayoutInflater().inflate(R.layout.nuevoeventosimple, null);
         LinearLayout predetsLayout = view.findViewById(R.id.predetSimpleLayout);
 
-        int widthInDp = 60;
-        int heightInDp = 60;
+        int widthInDp = 100;
+        int heightInDp = 100;
         int widthInPixels = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, widthInDp, getResources().getDisplayMetrics());
         int heightInPixels = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, heightInDp, getResources().getDisplayMetrics());
 
@@ -148,7 +150,7 @@ public class AlumnoSimple extends AppCompatActivity {
                         });
                         predet.setLayoutParams(new ViewGroup.LayoutParams(widthInPixels, heightInPixels));
                         predet.setScaleType(ImageView.ScaleType.FIT_XY);
-                        predet.setAdjustViewBounds(true);
+                        //predet.setAdjustViewBounds(true);
                         predet.setBackgroundTintMode(null);
                         predetsLayout.addView(predet);
 
@@ -177,7 +179,7 @@ public class AlumnoSimple extends AppCompatActivity {
                         });
                         predet.setLayoutParams(new ViewGroup.LayoutParams(widthInPixels, heightInPixels));
                         predet.setScaleType(ImageView.ScaleType.FIT_XY);
-                        predet.setAdjustViewBounds(true);
+                        //predet.setAdjustViewBounds(true);
                         predet.setBackgroundTintMode(null);
 
                         predetsLayout.addView(predet);
@@ -187,7 +189,9 @@ public class AlumnoSimple extends AppCompatActivity {
         });
         builder.setView(view);
         nuevoEventoDialogo= builder.create();
+
         nuevoEventoDialogo.show();
+
     }
 
 
