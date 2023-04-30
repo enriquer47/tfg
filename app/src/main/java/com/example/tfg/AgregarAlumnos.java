@@ -56,6 +56,7 @@ public class AgregarAlumnos extends AppCompatActivity {
         getSupportActionBar().setTitle("Agregar Alumnos");
 
 
+
         //Cada vez que haya un cambio en los usuarios, se actualiza la lista de alumnos
         myRef.child("usuarios").addValueEventListener(new ValueEventListener() {
             @Override

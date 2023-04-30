@@ -44,6 +44,16 @@
                     app:layout_constraintStart_toEndOf="@+id/nombreEventoTexto"
                     app:layout_constraintTop_toTopOf="parent" />
 
+                <TextView
+                    android:id="@+id/creadorTexto"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Creador"
+                    android:layout_margin="5dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/borrarEvento"
+                    app:layout_constraintTop_toTopOf="parent" />
+
                 <Button
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

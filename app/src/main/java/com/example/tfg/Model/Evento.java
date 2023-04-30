@@ -9,6 +9,7 @@ public class Evento {
     private String fecha;
     private int estres;
     private String id;
+    private String creador;
     public Evento() {
         // Default constructor required for calls to DataSnapshot.getValue(User.class)
     }
@@ -39,6 +40,12 @@ public class Evento {
     }
     public void setId(String id) {
         this.id = id;
+    }
+    public void setCreador(String creador) {
+        this.creador = creador;
+    }
+    public String getCreador() {
+        return creador;
     }
 
 }

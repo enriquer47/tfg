@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.TypedValue;
@@ -218,6 +219,13 @@ public class AlumnoSimple extends AppCompatActivity {
         int imagenes[] = {R.drawable.ic_vaso0, R.drawable.ic_vaso1, R.drawable.ic_vaso2, R.drawable.ic_vaso3, R.drawable.ic_vaso4, R.drawable.ic_vaso5, R.drawable.ic_vaso6, R.drawable.ic_vaso7, R.drawable.ic_vaso8, R.drawable.ic_vaso9, R.drawable.ic_vaso10, R.drawable.ic_vaso11, R.drawable.ic_vaso12, R.drawable.ic_vaso13};
         int numeroImagen = (int) Math.floor(estres/7.69);
         vaso.setImageResource(imagenes[numeroImagen]);
+        if (estres>50 && estres<75){
+
+        }else if (estres>=75&&estres<100){
+
+        }else if (estres>=100){
+
+        }
 
     }
 }

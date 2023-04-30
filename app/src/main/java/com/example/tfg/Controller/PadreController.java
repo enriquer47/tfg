@@ -285,21 +285,55 @@ public class PadreController {
         });
     }
 
-    public void aniadirEvento(String nombre, int estres,String alumnoID) {
+    public void aniadirEvento(String nombre, int estres,String alumnoID, String id_creador) {
         if(!nombre.equals("")) {
-            myRef.child("usuarios").child(padre).child("hijos").child(alumnoID).child("eventos").addListenerForSingleValueEvent(new ValueEventListener() {
+            myRef.child("usuarios").child(id_creador).child("tipoCuenta").addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    Evento evento = new Evento(nombre , estres);
-                    Calendar calendar = Calendar.getInstance();
-                    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                    String currentDate = dateFormat.format(calendar.getTime());
-                    evento.setFecha(currentDate);
-                    String eventoID = snapshot.getRef().push().getKey();
-                    evento.setId(eventoID);
-                    snapshot.getRef().child(eventoID).setValue(evento);
-                    updateEstres(estres,alumnoID);
+                    String tipoCuenta = snapshot.getValue().toString();
+                    System.out.println(tipoCuenta);
+                    if (tipoCuenta.equals("Profesor")) {
+                        myRef.child("usuarios").child(padre).child("hijos").child(alumnoID).child("eventos").addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                Evento evento = new Evento(nombre, estres);
+                                evento.setCreador("Profesor");
+                                Calendar calendar = Calendar.getInstance();
+                                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                                String currentDate = dateFormat.format(calendar.getTime());
+                                evento.setFecha(currentDate);
+                                String eventoID = snapshot.getRef().push().getKey();
+                                evento.setId(eventoID);
+                                snapshot.getRef().child(eventoID).setValue(evento);
+                                updateEstres(estres, alumnoID);
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
+                            }
+                        });
+                    } else {
+                        myRef.child("usuarios").child(padre).child("hijos").child(alumnoID).child("eventos").addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                Evento evento = new Evento(nombre, estres);
+                                evento.setCreador("Padre");
+                                Calendar calendar = Calendar.getInstance();
+                                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                                String currentDate = dateFormat.format(calendar.getTime());
+                                evento.setFecha(currentDate);
+                                String eventoID = snapshot.getRef().push().getKey();
+                                evento.setId(eventoID);
+                                snapshot.getRef().child(eventoID).setValue(evento);
+                                updateEstres(estres, alumnoID);
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
+                            }
+                        });                    }
                 }
+
                 @Override
                 public void onCancelled(@NonNull DatabaseError error) {
                 }

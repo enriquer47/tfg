@@ -59,6 +59,7 @@ public class AlumnoController {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 Evento evento = new Evento(nombre , estres);
+                evento.setCreador("Alumno");
                 Calendar calendar = Calendar.getInstance();
                 SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                 String currentDate = dateFormat.format(calendar.getTime());

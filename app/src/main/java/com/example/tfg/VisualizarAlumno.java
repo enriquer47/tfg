@@ -108,7 +108,7 @@ public class VisualizarAlumno extends AppCompatActivity {
         builder.setTitle("Nuevo evento").setPositiveButton("Añadir", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                padreController.aniadirEvento(nombre.getText().toString(), nivelEstres.getValue()-10, alumnoID);
+                padreController.aniadirEvento(nombre.getText().toString(), nivelEstres.getValue()-10, alumnoID, user.getUid() );
                 nombre.setText("");
                 nivelEstres.setValue(0);
             }
@@ -141,8 +141,10 @@ public class VisualizarAlumno extends AppCompatActivity {
         TextView nombreMostrar = view.findViewById(R.id.nombreEventoTexto);
         Button borrarEvento = view.findViewById(R.id.borrarEvento);
         TextView estresMostrar = view.findViewById(R.id.nivelEstresTexto);
-        nombreMostrar.setText("Evento: " + e.getNombre());
+        TextView creadorMostrar = view.findViewById(R.id.creadorTexto);
+        nombreMostrar.setText("" + e.getNombre());
         estresMostrar.setText("Estrés: " + e.getEstres());
+        creadorMostrar.setText("Por: " + e.getCreador());
 
         borrarEvento.setOnClickListener(new View.OnClickListener() {
             @Override
