@@ -64,17 +64,6 @@ public class PrincipalProfesor extends AppCompatActivity {
         profesorController.visualizarAlumno(view,alumnoID,padreID,modoAlumno);
         alumnosLayout.addView(view);
 
-        modoAlumno.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                Intent intent= new Intent(getApplicationContext(), AlumnoSimple.class);
-                intent.putExtra("alumnoID",alumnoID);
-                startActivity(intent);
-                finish();
-
-            }
-        });
 
         editarAlumno.setOnClickListener(new View.OnClickListener() {
             @Override
