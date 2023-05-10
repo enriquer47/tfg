@@ -65,7 +65,7 @@ public class ConfigSituacionesPredet extends AppCompatActivity {
 
         eventos=new ArrayList<>();
 
-        getSupportActionBar().setTitle("Visualizar alumno");
+        getSupportActionBar().setTitle("Situaciones predeterminadas");
 
 
         if(user==null){
