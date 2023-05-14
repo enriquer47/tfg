@@ -18,6 +18,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.NumberPicker;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.tfg.Controller.PadreController;
@@ -97,10 +98,23 @@ public class ConfigSituacionesPredet extends AppCompatActivity {
         TextView estresMostrar = view.findViewById(R.id.nivelEstresPredetTexto);
         TextView categoriaMostrar = view.findViewById(R.id.categoriaPredetTexto);
         ImageButton miniaturaPredet = view.findViewById(R.id.miniaturaPredet);
+        ImageButton aniadirPredet= view.findViewById(R.id.aniadirEventoPredetPadre);
         nombreMostrar.setText( p.getNombre());
         estresMostrar.setText("Estrés: " + p.getEstres());
         categoriaMostrar.setText(p.getCategoria());
         miniaturaPredet.setScaleType(ImageView.ScaleType.FIT_XY);
+
+        aniadirPredet.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                padreController.aniadirEventoConCategoria(p.getNombre(), p.getEstres(), alumnoID, user.getUid(), p.getCategoria());
+
+
+                Toast.makeText(getApplicationContext(), "Situación añadida", Toast.LENGTH_SHORT).show();
+
+
+            }
+        });
 
         borrarPredet.setOnClickListener(new View.OnClickListener() {
             @Override

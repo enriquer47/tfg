@@ -10,6 +10,7 @@ public class Evento {
     private int estres;
     private String id;
     private String creador;
+    private String categoria;
     public Evento() {
         // Default constructor required for calls to DataSnapshot.getValue(User.class)
     }
@@ -46,6 +47,12 @@ public class Evento {
     }
     public String getCreador() {
         return creador;
+    }
+    public String getCategoria() {
+        return categoria;
+    }
+    public void setCategoria(String categoria) {
+        this.categoria = categoria;
     }
 
 }

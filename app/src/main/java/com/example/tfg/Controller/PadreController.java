@@ -292,6 +292,91 @@ public class PadreController {
         });
     }
 
+    public void aniadirEventoConCategoria(String nombre, int estres,String alumnoID, String id_creador, String categoria) {
+        if(!nombre.equals("")) {
+            if(id_creador!="Alumno") {
+                myRef.child("usuarios").child(id_creador).child("tipoCuenta").addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        String tipoCuenta = snapshot.getValue().toString();
+                        System.out.println(tipoCuenta);
+                        if (tipoCuenta.equals("Profesor")) {
+                            myRef.child("usuarios").child(padre).child("hijos").child(alumnoID).child("eventos").addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                    Evento evento = new Evento(nombre, estres);
+                                    evento.setCreador("Profesor");
+                                    evento.setCategoria(categoria);
+                                    Calendar calendar = Calendar.getInstance();
+                                    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                                    String currentDate = dateFormat.format(calendar.getTime());
+                                    evento.setFecha(currentDate);
+                                    String eventoID = snapshot.getRef().push().getKey();
+                                    evento.setId(eventoID);
+                                    snapshot.getRef().child(eventoID).setValue(evento);
+                                    updateEstres(estres, alumnoID);
+                                }
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError error) {
+                                }
+                            });
+                        } else {
+                            myRef.child("usuarios").child(padre).child("hijos").child(alumnoID).child("eventos").addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                    Evento evento = new Evento(nombre, estres);
+                                    evento.setCreador("Padre");
+                                    Calendar calendar = Calendar.getInstance();
+                                    evento.setCategoria(categoria);
+
+                                    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                                    String currentDate = dateFormat.format(calendar.getTime());
+                                    evento.setFecha(currentDate);
+                                    String eventoID = snapshot.getRef().push().getKey();
+                                    evento.setId(eventoID);
+                                    snapshot.getRef().child(eventoID).setValue(evento);
+                                    updateEstres(estres, alumnoID);
+                                }
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError error) {
+                                }
+                            });
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                    }
+                });
+            }
+            else {
+                myRef.child("usuarios").child(padre).child("hijos").child(alumnoID).child("eventos").addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        Evento evento = new Evento(nombre, estres);
+                        evento.setCreador("Alumno");
+                        evento.setCategoria(categoria);
+                        Calendar calendar = Calendar.getInstance();
+                        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                        String currentDate = dateFormat.format(calendar.getTime());
+                        evento.setFecha(currentDate);
+                        String eventoID = snapshot.getRef().push().getKey();
+                        evento.setId(eventoID);
+                        snapshot.getRef().child(eventoID).setValue(evento);
+                        updateEstres(estres, alumnoID);
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                    }
+                });
+            }
+        }else{
+            Toast.makeText(visualizarAlumno, "El nombre está vacío", Toast.LENGTH_LONG).show();
+        }
+    }
     public void aniadirEvento(String nombre, int estres,String alumnoID, String id_creador) {
         if(!nombre.equals("")) {
             if(id_creador!="Alumno") {
@@ -374,7 +459,9 @@ public class PadreController {
         }
     }
 
-    public void getDetallesAlumno(String alumnoID){
+
+
+        public void getDetallesAlumno(String alumnoID){
         myRef.child("usuarios").child(padre).child("hijos").child(alumnoID).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {

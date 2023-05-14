@@ -67,6 +67,18 @@
                 </ImageButton>
 
                 <ImageButton
+                    android:id="@+id/aniadirEventoPredetPadre"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_margin="15dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/borrarPredet"
+                    android:background="@drawable/ic_plussign"
+
+
+                    app:layout_constraintTop_toTopOf="parent"></ImageButton>
+
+                <ImageButton
                     android:id="@+id/miniaturaPredet"
                     android:layout_width="60dp"
                     android:layout_height="60dp"
@@ -76,7 +88,7 @@
                     android:backgroundTint="#00FFFFFF"
                     android:contentDescription="Foto"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/borrarPredet"
+                    app:layout_constraintEnd_toStartOf="@+id/aniadirEventoPredetPadre"
                     app:layout_constraintTop_toTopOf="parent"></ImageButton>
 
             </androidx.constraintlayout.widget.ConstraintLayout>

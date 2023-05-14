@@ -161,7 +161,7 @@ public class AlumnoSimple extends AppCompatActivity {
                             @Override
                             public void onClick(View view) {
 
-                                alumnoController.aniadirEvento(predetfeliz.getNombre(), predetfeliz.getEstres(), user);
+                                alumnoController.aniadirEventoConCategoria(predetfeliz.getNombre(), predetfeliz.getEstres(), user, predetfeliz.getCategoria());
                                 nuevoEventoDialogo.dismiss();
                             }
                         });
@@ -190,7 +190,7 @@ public class AlumnoSimple extends AppCompatActivity {
                         predet.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
-                                alumnoController.aniadirEvento(predettriste.getNombre(), predettriste.getEstres(), user);
+                                alumnoController.aniadirEventoConCategoria(predettriste.getNombre(), predettriste.getEstres(), user, predettriste.getCategoria());
                                 nuevoEventoDialogo.dismiss();
                             }
                         });

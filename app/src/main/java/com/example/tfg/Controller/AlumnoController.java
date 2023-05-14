@@ -75,6 +75,29 @@ public class AlumnoController {
             }
         });
     }
+    public void aniadirEventoConCategoria(String nombre, int estres,FirebaseUser user, String categoria) {
+        myRef.child("usuarios").child(user.getUid()).child("hijos").child(alumnoID).child("eventos").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                Evento evento = new Evento(nombre , estres);
+                evento.setCreador("Alumno");
+                evento.setCategoria(categoria);
+                Calendar calendar = Calendar.getInstance();
+                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                String currentDate = dateFormat.format(calendar.getTime());
+                evento.setFecha(currentDate);
+                String eventoID = snapshot.getRef().push().getKey();
+                evento.setId(eventoID);
+                snapshot.getRef().child(eventoID).setValue(evento);
+                updateEstres(user,estres);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
+        });
+    }
+
 
     private void updateEstres(FirebaseUser user,int estres){
         myRef.child("usuarios").child(user.getUid()).child("hijos").child(alumnoID).child("estres").addListenerForSingleValueEvent(new ValueEventListener() {
