@@ -14,12 +14,15 @@ import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.NumberPicker;
 import android.widget.TextView;
 
 import com.example.tfg.Controller.AlumnoController;
+import com.example.tfg.Controller.PadreController;
 import com.example.tfg.Model.Predet;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -32,13 +35,15 @@ public class AlumnoSimple extends AppCompatActivity {
     FirebaseAuth auth;
     FirebaseUser user;
     public TextView detallesUsuario;
-    Button atras;
+    Button atras, eventoTexto;
     ImageButton eventoFeliz,eventoTriste;
-    AlertDialog nuevoEventoDialogo;
+    AlertDialog nuevoEventoDialogo, nuevoEventoTextoDialogo;
     String alumnoID;
     final String[] tipoCuentaArray={"Profesor", "Padre"};
 
     AlumnoController alumnoController;
+
+    PadreController padreController;
 
     public int tipoVista = 1; //0 = simple, 1 = vaso
 
@@ -61,12 +66,14 @@ public class AlumnoSimple extends AppCompatActivity {
         atras=findViewById(R.id.atrasAlumnoClase);
         eventoFeliz=findViewById(R.id.eventoFeliz);
         eventoTriste=findViewById(R.id.eventoTriste);
+        eventoTexto=findViewById(R.id.crearEventoTexto);
 
         auth = FirebaseAuth.getInstance();
         user=auth.getCurrentUser();
         alumnoController=new AlumnoController(this, alumnoID);
 
         getSupportActionBar().setTitle("Visualizar alumno");
+        padreController= new PadreController(user.getUid());
 
 
         if(user==null){
@@ -77,6 +84,15 @@ public class AlumnoSimple extends AppCompatActivity {
             alumnoController.getDetallesAlumno(user);
             alumnoController.getEstres(user);
         }
+
+        eventoTexto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                buildDialogTexto();
+                nuevoEventoTextoDialogo.show();
+
+            }
+        });
 
         atras.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -227,5 +243,42 @@ public class AlumnoSimple extends AppCompatActivity {
 
         }
 
+    }
+    private void buildDialogTexto(){
+            AlertDialog.Builder builder= new AlertDialog.Builder(this);
+            View view= getLayoutInflater().inflate(R.layout.nuevoevento, null);
+
+            EditText nombre= view.findViewById(R.id.nombreEvento);
+            NumberPicker nivelEstres= view.findViewById(R.id.nivelEstres);
+
+            builder.setView(view);
+            iniciarNumberPicker(nivelEstres);
+            builder.setTitle("Nuevo evento").setPositiveButton("Añadir", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    padreController.aniadirEvento(nombre.getText().toString(), nivelEstres.getValue()-10, alumnoID, "Alumno" );
+                    nombre.setText("");
+                    nivelEstres.setValue(0);
+                }
+            }).setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    nombre.setText("");
+                    nivelEstres.setValue(0);
+                }
+            });
+
+            nuevoEventoTextoDialogo= builder.create();
+
+        }
+    private void iniciarNumberPicker(NumberPicker np) {
+        String[] nums = new String[21];
+        for(int i=0; i<nums.length; i++)
+            nums[i] = Integer.toString(i-10);
+        np.setMinValue(0);
+        np.setMaxValue(20);
+        np.setWrapSelectorWheel(false);
+        np.setDisplayedValues(nums);
+        np.setValue(0);
     }
 }

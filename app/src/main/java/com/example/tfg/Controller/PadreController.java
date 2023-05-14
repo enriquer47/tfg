@@ -48,6 +48,13 @@ public class PadreController {
         this.visualizarAlumno=null;
         this.visualizarPredet=null;
     }
+    public PadreController(String currentUser) {
+        this.myRef= FirebaseDatabase.getInstance(linkDatabase).getReference();
+        this.padre=currentUser;
+        this.principalPadre=null;
+        this.visualizarAlumno=null;
+        this.visualizarPredet=null;
+    }
     public PadreController(VisualizarAlumno visualizarAlumno,String currentUser) {
         this.myRef= FirebaseDatabase.getInstance(linkDatabase).getReference();
         this.visualizarAlumno=visualizarAlumno;
@@ -287,57 +294,81 @@ public class PadreController {
 
     public void aniadirEvento(String nombre, int estres,String alumnoID, String id_creador) {
         if(!nombre.equals("")) {
-            myRef.child("usuarios").child(id_creador).child("tipoCuenta").addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    String tipoCuenta = snapshot.getValue().toString();
-                    System.out.println(tipoCuenta);
-                    if (tipoCuenta.equals("Profesor")) {
-                        myRef.child("usuarios").child(padre).child("hijos").child(alumnoID).child("eventos").addListenerForSingleValueEvent(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                Evento evento = new Evento(nombre, estres);
-                                evento.setCreador("Profesor");
-                                Calendar calendar = Calendar.getInstance();
-                                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                                String currentDate = dateFormat.format(calendar.getTime());
-                                evento.setFecha(currentDate);
-                                String eventoID = snapshot.getRef().push().getKey();
-                                evento.setId(eventoID);
-                                snapshot.getRef().child(eventoID).setValue(evento);
-                                updateEstres(estres, alumnoID);
-                            }
+            if(id_creador!="Alumno") {
+                myRef.child("usuarios").child(id_creador).child("tipoCuenta").addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        String tipoCuenta = snapshot.getValue().toString();
+                        System.out.println(tipoCuenta);
+                        if (tipoCuenta.equals("Profesor")) {
+                            myRef.child("usuarios").child(padre).child("hijos").child(alumnoID).child("eventos").addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                    Evento evento = new Evento(nombre, estres);
+                                    evento.setCreador("Profesor");
+                                    Calendar calendar = Calendar.getInstance();
+                                    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                                    String currentDate = dateFormat.format(calendar.getTime());
+                                    evento.setFecha(currentDate);
+                                    String eventoID = snapshot.getRef().push().getKey();
+                                    evento.setId(eventoID);
+                                    snapshot.getRef().child(eventoID).setValue(evento);
+                                    updateEstres(estres, alumnoID);
+                                }
 
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError error) {
-                            }
-                        });
-                    } else {
-                        myRef.child("usuarios").child(padre).child("hijos").child(alumnoID).child("eventos").addListenerForSingleValueEvent(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                Evento evento = new Evento(nombre, estres);
-                                evento.setCreador("Padre");
-                                Calendar calendar = Calendar.getInstance();
-                                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                                String currentDate = dateFormat.format(calendar.getTime());
-                                evento.setFecha(currentDate);
-                                String eventoID = snapshot.getRef().push().getKey();
-                                evento.setId(eventoID);
-                                snapshot.getRef().child(eventoID).setValue(evento);
-                                updateEstres(estres, alumnoID);
-                            }
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError error) {
+                                }
+                            });
+                        } else {
+                            myRef.child("usuarios").child(padre).child("hijos").child(alumnoID).child("eventos").addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                    Evento evento = new Evento(nombre, estres);
+                                    evento.setCreador("Padre");
+                                    Calendar calendar = Calendar.getInstance();
+                                    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                                    String currentDate = dateFormat.format(calendar.getTime());
+                                    evento.setFecha(currentDate);
+                                    String eventoID = snapshot.getRef().push().getKey();
+                                    evento.setId(eventoID);
+                                    snapshot.getRef().child(eventoID).setValue(evento);
+                                    updateEstres(estres, alumnoID);
+                                }
 
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError error) {
-                            }
-                        });                    }
-                }
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError error) {
+                                }
+                            });
+                        }
+                    }
 
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {
-                }
-            });
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                    }
+                });
+            }
+            else {
+                myRef.child("usuarios").child(padre).child("hijos").child(alumnoID).child("eventos").addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        Evento evento = new Evento(nombre, estres);
+                        evento.setCreador("Alumno");
+                        Calendar calendar = Calendar.getInstance();
+                        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                        String currentDate = dateFormat.format(calendar.getTime());
+                        evento.setFecha(currentDate);
+                        String eventoID = snapshot.getRef().push().getKey();
+                        evento.setId(eventoID);
+                        snapshot.getRef().child(eventoID).setValue(evento);
+                        updateEstres(estres, alumnoID);
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                    }
+                });
+            }
         }else{
             Toast.makeText(visualizarAlumno, "El nombre está vacío", Toast.LENGTH_LONG).show();
         }

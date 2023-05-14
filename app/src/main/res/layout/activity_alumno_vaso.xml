@@ -32,14 +32,15 @@
         app:layout_constraintVertical_bias="0.098"></ImageView>
 
     <LinearLayout
-        android:id="@+id/linearLayout2"
+        android:id="@+id/linearLayout3"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:orientation="horizontal"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/vaso">
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
 
+
+        app:layout_constraintTop_toBottomOf="@+id/vaso">
 
         <ImageButton
             android:id="@+id/eventoFeliz"
@@ -58,7 +59,10 @@
             android:background="@drawable/ic_mostraralumnotriste"
             android:text="@string/nuevoEvento"></ImageButton>
 
+
     </LinearLayout>
+
+
     <LinearLayout
         android:id="@+id/linearLayout"
         android:layout_width="match_parent"
@@ -67,6 +71,12 @@
         android:gravity="center"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent">
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/crearEventoTexto"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/InputButtonStyle"
+            android:text="Escribir nuevo evento"></androidx.appcompat.widget.AppCompatButton>
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/atrasAlumnoClase"
