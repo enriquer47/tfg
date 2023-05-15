@@ -67,7 +67,7 @@ public class AlumnoController {
                 String eventoID = snapshot.getRef().push().getKey();
                 evento.setId(eventoID);
                 snapshot.getRef().child(eventoID).setValue(evento);
-                //updateEstres(user,estres);
+                updateEstres(user,estres);
             }
 
             @Override
@@ -89,7 +89,7 @@ public class AlumnoController {
                 String eventoID = snapshot.getRef().push().getKey();
                 evento.setId(eventoID);
                 snapshot.getRef().child(eventoID).setValue(evento);
-                //updateEstres(user,estres);
+                updateEstres(user,estres);
             }
 
             @Override
