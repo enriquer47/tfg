@@ -77,10 +77,15 @@ public class PadreController {
                 principalPadre.hijosLayout.removeAllViews();
 
                 for (DataSnapshot hijosSnap : snapshot.getChildren()) {
+                    resetEventos(hijosSnap.getKey());
                     String nombre = hijosSnap.child("nombre").getValue().toString();
-                    int estres = hijosSnap.child("estres").getValue(Integer.class);
+                    int estres = Integer.parseInt(hijosSnap.child("estres").getValue().toString());
                     Alumno hijo = new Alumno(nombre);
+
+
                     hijo.setEstres(estres);
+                    //myRef.child("usuarios").child(padre).child("hijos").child(hijosSnap.getKey()).child("estres").setValue(estres);
+
                     principalPadre.mostrarHijo(hijosSnap.getKey(),hijo);
                 }
 
@@ -91,6 +96,50 @@ public class PadreController {
             }
         });
     }
+    //tambien actualiza el estres de los alumnos, habria que separarlo
+    private void resetEventos(String key) {
+        myRef.child("usuarios").child(padre).child("hijos").child(key).child("eventos").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot eventosSnap : snapshot.getChildren()) {
+                    SimpleDateFormat today = new SimpleDateFormat("yyyy-MM-dd");
+
+                    String fecha = today.format(Calendar.getInstance().getTime());
+                    //fecha+="xd";//HAY QUE BORRAR ESTA LINEA para que falle y los meta al historico
+
+                    if(!eventosSnap.child("fecha").getValue().toString().contains(fecha)){
+                        Evento evento = eventosSnap.getValue(Evento.class);
+                        myRef.child("usuarios").child(padre).child("hijos").child(key).child("historico").child(eventosSnap.getKey()).setValue(evento);
+                        myRef.child("usuarios").child(padre).child("hijos").child(key).child("eventos").child(eventosSnap.getKey()).removeValue();
+
+                    }
+                }
+                myRef.child("usuarios").child(padre).child("hijos").child(key).child("eventos").addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        int estres=0;
+                        for (DataSnapshot eventosSnap : snapshot.getChildren()) {
+                            Evento evento = eventosSnap.getValue(Evento.class);
+                            estres+=evento.getEstres();
+                        }
+                        myRef.child("usuarios").child(padre).child("hijos").child(key).child("estres").setValue(Math.min(Math.max(0,estres),100));
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+    }
+
     public void obtenerEventos(String alumnoID){
 
         myRef.child("usuarios").child(padre).child("hijos").child(alumnoID).child("eventos").addValueEventListener(new ValueEventListener() {
@@ -255,7 +304,7 @@ public class PadreController {
     }
 
     public void borrarEvento(String alumnoID,int estres,String idEvento){
-        updateEstres(estres*-1,alumnoID);
+        //updateEstres(estres*-1,alumnoID);
         myRef.child("usuarios").child(padre).child("hijos").child(alumnoID).child("eventos").child(idEvento).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
@@ -314,7 +363,7 @@ public class PadreController {
                                     String eventoID = snapshot.getRef().push().getKey();
                                     evento.setId(eventoID);
                                     snapshot.getRef().child(eventoID).setValue(evento);
-                                    updateEstres(estres, alumnoID);
+                                    //updateEstres(estres, alumnoID);
                                 }
 
                                 @Override
@@ -336,7 +385,7 @@ public class PadreController {
                                     String eventoID = snapshot.getRef().push().getKey();
                                     evento.setId(eventoID);
                                     snapshot.getRef().child(eventoID).setValue(evento);
-                                    updateEstres(estres, alumnoID);
+                                    //updateEstres(estres, alumnoID);
                                 }
 
                                 @Override
@@ -365,7 +414,7 @@ public class PadreController {
                         String eventoID = snapshot.getRef().push().getKey();
                         evento.setId(eventoID);
                         snapshot.getRef().child(eventoID).setValue(evento);
-                        updateEstres(estres, alumnoID);
+                        //updateEstres(estres, alumnoID);
                     }
 
                     @Override
@@ -398,7 +447,7 @@ public class PadreController {
                                     String eventoID = snapshot.getRef().push().getKey();
                                     evento.setId(eventoID);
                                     snapshot.getRef().child(eventoID).setValue(evento);
-                                    updateEstres(estres, alumnoID);
+                                    //updateEstres(estres, alumnoID);
                                 }
 
                                 @Override
@@ -418,7 +467,7 @@ public class PadreController {
                                     String eventoID = snapshot.getRef().push().getKey();
                                     evento.setId(eventoID);
                                     snapshot.getRef().child(eventoID).setValue(evento);
-                                    updateEstres(estres, alumnoID);
+                                    //updateEstres(estres, alumnoID);
                                 }
 
                                 @Override
@@ -446,7 +495,7 @@ public class PadreController {
                         String eventoID = snapshot.getRef().push().getKey();
                         evento.setId(eventoID);
                         snapshot.getRef().child(eventoID).setValue(evento);
-                        updateEstres(estres, alumnoID);
+                        //updateEstres(estres, alumnoID);
                     }
 
                     @Override
@@ -480,7 +529,7 @@ public class PadreController {
                 Alumno alumno=new Alumno();
                 alumno.setEstres(estresActual);
                 alumno.addEstres(estres);
-                snapshot.getRef().setValue(alumno.getEstres());
+                //snapshot.getRef().setValue(alumno.getEstres());
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {

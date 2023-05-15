@@ -67,7 +67,7 @@ public class AlumnoController {
                 String eventoID = snapshot.getRef().push().getKey();
                 evento.setId(eventoID);
                 snapshot.getRef().child(eventoID).setValue(evento);
-                updateEstres(user,estres);
+                //updateEstres(user,estres);
             }
 
             @Override
@@ -89,7 +89,7 @@ public class AlumnoController {
                 String eventoID = snapshot.getRef().push().getKey();
                 evento.setId(eventoID);
                 snapshot.getRef().child(eventoID).setValue(evento);
-                updateEstres(user,estres);
+                //updateEstres(user,estres);
             }
 
             @Override
@@ -119,11 +119,13 @@ public class AlumnoController {
         });
     }
     public void getEstres(FirebaseUser user){
-        myRef.child("usuarios").child(user.getUid()).child("hijos").child(alumnoID).child("estres").addListenerForSingleValueEvent(new ValueEventListener() {
+        myRef.child("usuarios").child(user.getUid()).child("hijos").child(alumnoID).child("estres").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 int estres=snapshot.getValue(Integer.class);
-                alumnoSimple.actualizarVaso(estres);
+                if(alumnoSimple.tipoVista==1) {
+                    alumnoSimple.actualizarVaso(estres);
+                }
 
             }
             @Override
