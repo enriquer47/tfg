@@ -1,5 +1,6 @@
 package com.example.tfg.Controller;
 
+import android.content.Context;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
@@ -7,12 +8,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 
+import com.example.tfg.AlumnoSimple;
 import com.example.tfg.ConfigSituacionesPredet;
 import com.example.tfg.Model.Alumno;
 import com.example.tfg.Model.Evento;
 import com.example.tfg.Model.Predet;
 import com.example.tfg.PrincipalPadre;
 import com.example.tfg.R;
+import com.example.tfg.SendNotification;
 import com.example.tfg.VisualizarAlumno;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -21,6 +24,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.messaging.FirebaseMessaging;
+import com.google.firebase.messaging.RemoteMessage;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
@@ -36,6 +41,7 @@ public class PadreController {
     final PrincipalPadre principalPadre;
     final VisualizarAlumno visualizarAlumno;
     final ConfigSituacionesPredet visualizarPredet;
+    final AlumnoSimple alumnoSimple;
 
     final StorageReference storageRef = FirebaseStorage.getInstance().getReference();
 
@@ -47,10 +53,12 @@ public class PadreController {
         this.padre=currentUser;
         this.visualizarAlumno=null;
         this.visualizarPredet=null;
+        this.alumnoSimple=null;
     }
-    public PadreController(String currentUser) {
+    public PadreController(String currentUser, AlumnoSimple alumnoSimple) {
         this.myRef= FirebaseDatabase.getInstance(linkDatabase).getReference();
         this.padre=currentUser;
+        this.alumnoSimple=alumnoSimple;
         this.principalPadre=null;
         this.visualizarAlumno=null;
         this.visualizarPredet=null;
@@ -61,6 +69,7 @@ public class PadreController {
         this.padre=currentUser;
         this.principalPadre=null;
         this.visualizarPredet=null;
+        this.alumnoSimple=null;
     }
     public PadreController(ConfigSituacionesPredet visualizarPredet, String currentUser) {
         this.myRef= FirebaseDatabase.getInstance(linkDatabase).getReference();
@@ -68,6 +77,7 @@ public class PadreController {
         this.padre=currentUser;
         this.principalPadre=null;
         this.visualizarAlumno=null;
+        this.alumnoSimple=null;
     }
 
     public void obtenerHijos(){
@@ -333,7 +343,6 @@ public class PadreController {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         String tipoCuenta = snapshot.getValue().toString();
-                        System.out.println(tipoCuenta);
                         if (tipoCuenta.equals("Profesor")) {
                             myRef.child("usuarios").child(padre).child("hijos").child(alumnoID).child("eventos").addListenerForSingleValueEvent(new ValueEventListener() {
                                 @Override
@@ -418,7 +427,6 @@ public class PadreController {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         String tipoCuenta = snapshot.getValue().toString();
-                        System.out.println(tipoCuenta);
                         if (tipoCuenta.equals("Profesor")) {
                             myRef.child("usuarios").child(padre).child("hijos").child(alumnoID).child("eventos").addListenerForSingleValueEvent(new ValueEventListener() {
                                 @Override
@@ -507,19 +515,66 @@ public class PadreController {
         });
     }
     private void updateEstres(int estres,String alumnoID){
-        myRef.child("usuarios").child(padre).child("hijos").child(alumnoID).child("estres").addListenerForSingleValueEvent(new ValueEventListener() {
+        myRef.child("usuarios").child(padre).child("hijos").child(alumnoID).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                Integer estresActual=snapshot.getValue(Integer.class);
-                Alumno alumno=new Alumno();
+                Integer estresActual=snapshot.child("estres").getValue(Integer.class);
+                Alumno alumno=new Alumno(snapshot.child("nombre").getValue(String.class));
                 alumno.setEstres(estresActual);
                 alumno.addEstres(estres);
-                snapshot.getRef().setValue(alumno.getEstres());
+                if (estresActual<50 && alumno.getEstres()>=50 && snapshot.child("profesores").exists()) {
+                    notifyPadre(padre, alumno);
+                    for (DataSnapshot dataSnapshot : snapshot.child("profesores").getChildren()) {
+                        String profesorID = dataSnapshot.child("referencia").getValue(String.class);
+                        notifyProfesor(profesorID, alumno);
+                    }
+                } else if(estresActual<75 && alumno.getEstres()>=75 && snapshot.child("profesores").exists()){
+                    notifyPadre(padre, alumno);
+                    for (DataSnapshot dataSnapshot : snapshot.child("profesores").getChildren()) {
+                        String profesorID = dataSnapshot.child("referencia").getValue(String.class);
+                        notifyProfesor(profesorID, alumno);
+                    }
+                }
+                snapshot.getRef().child("estres").setValue(alumno.getEstres());
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
             }
         });
+    }
+
+    private void notifyProfesor(String profesorID,Alumno alumno){
+        myRef.child("usuarios").child(profesorID).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                String token=snapshot.child("tokenNotification").getValue(String.class);
+                String umbral=alumno.getEstres()>75?"del 75 porciento":"del 50 porciento";
+                String mensaje="El alumno "+alumno.getNombre()+" ha superado el umbral de estres "+umbral+"";
+                sendNotification(token,mensaje);
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
+        });
+    }
+
+    private void notifyPadre(String padreID,Alumno alumno){
+        myRef.child("usuarios").child(padreID).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                String token=snapshot.child("tokenNotification").getValue(String.class);
+                String umbral=alumno.getEstres()>75?"del 75 porciento":"del 50 porciento";
+                String mensaje="Tu hijo "+alumno.getNombre()+" ha superado el umbral de estres "+umbral+"";
+                sendNotification(token,mensaje);
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
+        });
+    }
+
+    private void sendNotification(String token,String mensaje){
+        SendNotification.pushNotification(visualizarAlumno,token,"Estres",mensaje);
     }
 
     public void asignarProfesor(String profesorCorreo,ArrayList<String> alumnosID){
