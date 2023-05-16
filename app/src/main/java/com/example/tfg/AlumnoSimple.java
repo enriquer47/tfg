@@ -73,7 +73,7 @@ public class AlumnoSimple extends AppCompatActivity {
         alumnoController=new AlumnoController(this, alumnoID);
 
         getSupportActionBar().setTitle("Visualizar alumno");
-        padreController= new PadreController(user.getUid());
+        padreController= new PadreController(user.getUid(),this);
 
 
         if(user==null){

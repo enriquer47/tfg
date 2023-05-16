@@ -5,12 +5,15 @@ import com.example.tfg.AlumnoSimple;
 import com.example.tfg.Model.Alumno;
 import com.example.tfg.Model.Evento;
 import com.example.tfg.Model.Predet;
+import com.example.tfg.SendNotification;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.messaging.FirebaseMessaging;
+import com.google.firebase.messaging.RemoteMessage;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -100,15 +103,27 @@ public class AlumnoController {
 
 
     private void updateEstres(FirebaseUser user,int estres){
-        myRef.child("usuarios").child(user.getUid()).child("hijos").child(alumnoID).child("estres").addListenerForSingleValueEvent(new ValueEventListener() {
+        myRef.child("usuarios").child(user.getUid()).child("hijos").child(alumnoID).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                Integer estresActual=snapshot.getValue(Integer.class);
-                Alumno alumno=new Alumno();
-
+                Integer estresActual=snapshot.child("estres").getValue(Integer.class);
+                Alumno alumno=new Alumno(snapshot.child("nombre").getValue(String.class));
                 alumno.setEstres(estresActual);
                 alumno.addEstres(estres);
-                myRef.child("usuarios").child(user.getUid()).child("hijos").child(alumnoID).child("estres").setValue(alumno.getEstres());
+                if (estresActual<50 && alumno.getEstres()>=50 && snapshot.child("profesores").exists()) {
+                    notifyPadre(user.getUid(), alumno);
+                    for (DataSnapshot dataSnapshot : snapshot.child("profesores").getChildren()) {
+                        String profesorID = dataSnapshot.child("referencia").getValue(String.class);
+                        notifyProfesor(profesorID, alumno);
+                    }
+                } else if(estresActual<75 && alumno.getEstres()>=75 && snapshot.child("profesores").exists()){
+                    notifyPadre(user.getUid(), alumno);
+                    for (DataSnapshot dataSnapshot : snapshot.child("profesores").getChildren()) {
+                        String profesorID = dataSnapshot.child("referencia").getValue(String.class);
+                        notifyProfesor(profesorID, alumno);
+                    }
+                }
+                snapshot.getRef().child("estres").setValue(alumno.getEstres());
                 if (alumnoSimple.tipoVista == 1) {
                     alumnoSimple.actualizarVaso(alumno.getEstres());
                 }
@@ -118,15 +133,53 @@ public class AlumnoController {
             }
         });
     }
+
+    private void notifyProfesor(String profesorID,Alumno alumno){
+        myRef.child("usuarios").child(profesorID).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                String token=snapshot.child("tokenNotification").getValue(String.class);
+                String umbral=alumno.getEstres()>75?"del 75 porciento":"del 50 porciento";
+                String mensaje="El alumno "+alumno.getNombre()+" ha superado el umbral de estres "+umbral+"";
+                sendNotification(token,mensaje);
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
+        });
+    }
+
+    private void notifyPadre(String padreID,Alumno alumno){
+        myRef.child("usuarios").child(padreID).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                String token=snapshot.child("tokenNotification").getValue(String.class);
+                String umbral=alumno.getEstres()>75?"del 75 porciento":"del 50 porciento";
+                String mensaje="Tu hijo "+alumno.getNombre()+" ha superado el umbral de estres "+umbral+"";
+                sendNotification(token,mensaje);
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
+        });
+    }
+
+    private void sendNotification(String token,String mensaje){
+        SendNotification.pushNotification(alumnoSimple,token,"Estres",mensaje);
+    }
+
     public void getEstres(FirebaseUser user){
         myRef.child("usuarios").child(user.getUid()).child("hijos").child(alumnoID).child("estres").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                int estres=snapshot.getValue(Integer.class);
-                if(alumnoSimple.tipoVista==1) {
-                    alumnoSimple.actualizarVaso(estres);
+                //TODO
+                //Daba null pointer exception al crear un hijo con eventos y borrarlo
+                if(snapshot.exists()){
+                    Integer estres=snapshot.getValue(Integer.class);
+                    if(alumnoSimple.tipoVista==1) {
+                        alumnoSimple.actualizarVaso(estres);
+                    }
                 }
-
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
