@@ -15,6 +15,9 @@
         android:theme="@style/Theme.TFG"
         tools:targetApi="31">
         <activity
+            android:name=".Estadisticas"
+            android:exported="false" />
+        <activity
             android:name=".ConfigSituacionesPredet"
             android:exported="false" />
         <activity

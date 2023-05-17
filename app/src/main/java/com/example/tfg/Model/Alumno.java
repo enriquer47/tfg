@@ -9,7 +9,7 @@ public class Alumno {
     }
     public Alumno(String nombre) {
         this.nombre = nombre;
-        this.estres = 50;
+        this.estres = 0;
     }
     public int getEstres() {
         return estres;

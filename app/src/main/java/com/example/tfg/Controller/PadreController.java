@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 
 import com.example.tfg.AlumnoSimple;
 import com.example.tfg.ConfigSituacionesPredet;
+import com.example.tfg.Estadisticas;
 import com.example.tfg.Model.Alumno;
 import com.example.tfg.Model.Evento;
 import com.example.tfg.Model.Predet;
@@ -42,6 +43,8 @@ public class PadreController {
     final VisualizarAlumno visualizarAlumno;
     final ConfigSituacionesPredet visualizarPredet;
     final AlumnoSimple alumnoSimple;
+
+    private Estadisticas stats;
 
     final StorageReference storageRef = FirebaseStorage.getInstance().getReference();
 
@@ -78,6 +81,18 @@ public class PadreController {
         this.principalPadre=null;
         this.visualizarAlumno=null;
         this.alumnoSimple=null;
+    }
+
+    public PadreController(Estadisticas stats, String currentUser) {
+        this.myRef= FirebaseDatabase.getInstance(linkDatabase).getReference();
+        this.visualizarPredet=null;
+        this.padre=currentUser;
+        this.principalPadre=null;
+        this.visualizarAlumno=null;
+        this.alumnoSimple=null;
+        this.stats=stats;
+
+
     }
 
     public void obtenerHijos(){
@@ -134,7 +149,35 @@ public class PadreController {
         });
 
     }
+    public void obtenerStats(String alumnoID){
+        myRef.child("usuarios").child(padre).child("hijos").child(alumnoID).child("historico").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                stats.eventosLayout.removeAllViews();
+                ArrayList<Evento> eventos = new ArrayList<>();
+                ArrayList<String> nombres = new ArrayList<>();
+                ArrayList<Integer> contador = new ArrayList<>();
+                for (DataSnapshot eventosSnap : snapshot.getChildren()) {
+                    Evento evento = eventosSnap.getValue(Evento.class);
+                    String nombre = evento.getNombre();
+                    if(nombres.contains(nombre)) {
+                        int index = nombres.indexOf(nombre);
+                        contador.set(index, contador.get(index) + 1);
+                    }else{
+                        nombres.add(nombre);
+                        contador.add(1);
+                        eventos.add(evento);
+                    }
 
+                }
+                stats.mostrarStats(eventos,contador);
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
     public void obtenerEventos(String alumnoID){
 
         myRef.child("usuarios").child(padre).child("hijos").child(alumnoID).child("eventos").addValueEventListener(new ValueEventListener() {
@@ -507,7 +550,8 @@ public class PadreController {
         myRef.child("usuarios").child(padre).child("hijos").child(alumnoID).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                visualizarAlumno.detallesUsuario.setText(snapshot.child("nombre").getValue(String.class));
+                if(visualizarAlumno!=null)
+                    visualizarAlumno.detallesUsuario.setText(snapshot.child("nombre").getValue(String.class));
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
@@ -628,6 +672,8 @@ public class PadreController {
                         visualizarAlumno.userIntent(tipoCuenta);
                     else if(visualizarPredet!=null)
                         visualizarPredet.userIntent(tipoCuenta);
+                    else if(stats!=null)
+                        stats.userIntent(tipoCuenta);
                 }
             }
             @Override

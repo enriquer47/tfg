@@ -3,6 +3,7 @@ package com.example.tfg;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.media.Image;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -60,11 +61,21 @@ public class PrincipalProfesor extends AppCompatActivity {
         ImageButton borrarAlumnoDeMiLista=view.findViewById(R.id.borrarMostrarAlumno);
         ImageButton modoAlumno=view.findViewById(R.id.verMostrarAlumno);
         ImageButton editarAlumno=view.findViewById(R.id.editarMostrarAlumno);
+        ImageButton statsAlumno=view.findViewById(R.id.statsAlumno);
 
         profesorController.visualizarAlumno(view,alumnoID,padreID,modoAlumno);
         alumnosLayout.addView(view);
 
-
+        statsAlumno.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent= new Intent(getApplicationContext(), Estadisticas.class);
+                intent.putExtra("alumnoID",alumnoID);
+                intent.putExtra("padreID",padreID);
+                startActivity(intent);
+                finish();
+            }
+        });
         editarAlumno.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

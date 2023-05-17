@@ -137,7 +137,7 @@ public class PrincipalPadre extends AppCompatActivity {
     public void mostrarHijo(String alumnoID, Alumno hijo) {
         View view = getLayoutInflater().inflate(R.layout.tarjetamostraralumno, null);
 
-
+        ImageButton statsHijo=view.findViewById(R.id.statsAlumno);
         ImageButton borrarHijo=view.findViewById(R.id.borrarMostrarAlumno);
         ImageButton modoAlumno=view.findViewById(R.id.verMostrarAlumno);
         ImageButton editarAlumno=view.findViewById(R.id.editarMostrarAlumno);
@@ -146,6 +146,17 @@ public class PrincipalPadre extends AppCompatActivity {
         }
         padreController.visualizarHijos(view,modoAlumno,hijo);
         hijosLayout.addView(view);
+
+        statsHijo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent= new Intent(getApplicationContext(), Estadisticas.class);
+                intent.putExtra("alumnoID",alumnoID);
+                intent.putExtra("padreID",user.getUid());
+                startActivity(intent);
+                finish();
+            }
+        });
 
         modoAlumno.setOnClickListener(new View.OnClickListener() {
             @Override
