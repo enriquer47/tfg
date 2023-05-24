@@ -125,20 +125,25 @@ public class PadreController {
         myRef.child("usuarios").child(padre).child("hijos").child(key).child("eventos").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for (DataSnapshot eventosSnap : snapshot.getChildren()) {
-                    SimpleDateFormat today = new SimpleDateFormat("yyyy-MM-dd");
+                if(snapshot.exists()) {
+                    for (DataSnapshot eventosSnap : snapshot.getChildren()) {
+                        SimpleDateFormat today = new SimpleDateFormat("yyyy-MM-dd");
 
-                    String fecha = today.format(Calendar.getInstance().getTime());
-                    //fecha+="xd";//HAY QUE BORRAR ESTA LINEA: para que falle y los meta al historico
+                        String fecha = today.format(Calendar.getInstance().getTime());
+                        //fecha+="xd";//HAY QUE BORRAR ESTA LINEA: para que falle y los meta al historico
 
-                    if(!eventosSnap.child("fecha").getValue().toString().contains(fecha)){
+                        if (!eventosSnap.child("fecha").getValue().toString().contains(fecha)) {
 
-                        Evento evento = eventosSnap.getValue(Evento.class);
-                        myRef.child("usuarios").child(padre).child("hijos").child(key).child("historico").child(eventosSnap.getKey()).setValue(evento);
-                        myRef.child("usuarios").child(padre).child("hijos").child(key).child("eventos").child(eventosSnap.getKey()).removeValue();
-                        updateEstres(-100,key);
+                            Evento evento = eventosSnap.getValue(Evento.class);
+                            myRef.child("usuarios").child(padre).child("hijos").child(key).child("historico").child(eventosSnap.getKey()).setValue(evento);
+                            myRef.child("usuarios").child(padre).child("hijos").child(key).child("eventos").child(eventosSnap.getKey()).removeValue();
+                            updateEstres(-100, key);
 
+
+                        }
                     }
+                }else {
+                    updateEstres(-100, key);
                 }
             }
 
