@@ -24,8 +24,10 @@ public class Alumno {
         this.nombre = nombre;
     }
     public void addEstres(int estres){
+        this.estres=Math.max(0,Math.min(100,this.estres+estres));
+        /*
         if (this.estres+estres<=100 && this.estres+estres>=0) {
             this.estres += estres;
-        }
+        }*/
     }
 }
