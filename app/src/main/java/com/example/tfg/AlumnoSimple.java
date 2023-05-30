@@ -19,6 +19,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.NumberPicker;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import com.example.tfg.Controller.AlumnoController;
@@ -246,25 +247,27 @@ public class AlumnoSimple extends AppCompatActivity {
     }
     private void buildDialogTexto(){
             AlertDialog.Builder builder= new AlertDialog.Builder(this);
-            View view= getLayoutInflater().inflate(R.layout.nuevoevento, null);
+            View view= getLayoutInflater().inflate(R.layout.nuevoeventoswitch, null);
 
             EditText nombre= view.findViewById(R.id.nombreEvento);
-            NumberPicker nivelEstres= view.findViewById(R.id.nivelEstres);
+            Switch estresante= view.findViewById(R.id.estresSwitch);
 
             builder.setView(view);
-            iniciarNumberPicker(nivelEstres);
+
             builder.setTitle("Nuevo evento").setPositiveButton("Añadir", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
-                    padreController.aniadirEvento(nombre.getText().toString(), nivelEstres.getValue()-10, alumnoID, "Alumno" );
+                    int estres=-10;
+                    if (estresante.isChecked()){
+                        estres= 10;
+                    }
+                    padreController.aniadirEvento(nombre.getText().toString(), estres, alumnoID, "Alumno" );
                     nombre.setText("");
-                    nivelEstres.setValue(0);
                 }
             }).setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
                     nombre.setText("");
-                    nivelEstres.setValue(0);
                 }
             });
 
