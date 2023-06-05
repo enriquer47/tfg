@@ -10,6 +10,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.Layout;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
@@ -146,8 +147,15 @@ public class AlumnoSimple extends AppCompatActivity {
                         builder.setMessage("No hay situaciones predeterminadas relajantes");
                     }
                     for (Predet predetfeliz : predetsFelices) {
-
-                        ImageButton predet = new ImageButton(getApplicationContext());
+                        LinearLayout layout = new LinearLayout(getApplicationContext());
+                        layout.setOrientation(LinearLayout.VERTICAL);
+                        layout.setGravity(View.TEXT_ALIGNMENT_CENTER);
+                        ImageButton predet = new ImageButton(layout.getContext());
+                        TextView nombrePredet = new TextView(layout.getContext());
+                        nombrePredet.setText(predetfeliz.getNombre());
+                        nombrePredet.setTextColor(Color.BLACK);
+                        nombrePredet.setGravity(View.TEXT_ALIGNMENT_CENTER);
+                        nombrePredet.setTextSize(15);
 
 
 
@@ -156,6 +164,13 @@ public class AlumnoSimple extends AppCompatActivity {
                         } else {
                                 Glide.with(predet.getContext()).load(predetfeliz.getImagen()).into(predet);
                         }
+
+                        layout.addView(nombrePredet);
+                        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(widthInPixels, heightInPixels);
+                        predet.setLayoutParams(layoutParams);
+
+                        layout.addView(predet);
+
 
 
                         predet.setOnClickListener(new View.OnClickListener() {
@@ -166,11 +181,13 @@ public class AlumnoSimple extends AppCompatActivity {
                                 nuevoEventoDialogo.dismiss();
                             }
                         });
-                        predet.setLayoutParams(new ViewGroup.LayoutParams(widthInPixels, heightInPixels));
+
                         predet.setScaleType(ImageView.ScaleType.FIT_XY);
-                        //predet.setAdjustViewBounds(true);
+
+                        predet.setAdjustViewBounds(true);
+
                         predet.setBackgroundTintMode(null);
-                        predetsLayout.addView(predet);
+                        predetsLayout.addView(layout);
 
                     }
                 }else {
@@ -178,7 +195,15 @@ public class AlumnoSimple extends AppCompatActivity {
                         builder.setMessage("No hay situaciones predeterminadas estresantes");
                     }
                     for (Predet predettriste : predetsTristes) {
-                        ImageButton predet = new ImageButton(getApplicationContext());
+                        LinearLayout layout = new LinearLayout(getApplicationContext());
+                        layout.setOrientation(LinearLayout.VERTICAL);
+                        layout.setGravity(View.TEXT_ALIGNMENT_CENTER);
+                        ImageButton predet = new ImageButton(layout.getContext());
+                        TextView nombrePredet = new TextView(layout.getContext());
+                        nombrePredet.setText(predettriste.getNombre());
+                        nombrePredet.setTextColor(Color.BLACK);
+                        nombrePredet.setGravity(View.TEXT_ALIGNMENT_CENTER);
+                        nombrePredet.setTextSize(15);
 
                         if (predettriste.getImagen() == null) {
                             predet.setImageURI(Uri.parse("android.resource://com.example.tfg/drawable/ic_imagen_basica"));
@@ -187,6 +212,12 @@ public class AlumnoSimple extends AppCompatActivity {
                             Glide.with(predet.getContext()).load(predettriste.getImagen()).into(predet);
 
                         }
+                        layout.addView(nombrePredet);
+                        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(widthInPixels, heightInPixels);
+                        predet.setLayoutParams(layoutParams);
+
+                        layout.addView(predet);
+
 
                         predet.setOnClickListener(new View.OnClickListener() {
                             @Override
@@ -195,12 +226,12 @@ public class AlumnoSimple extends AppCompatActivity {
                                 nuevoEventoDialogo.dismiss();
                             }
                         });
-                        predet.setLayoutParams(new ViewGroup.LayoutParams(widthInPixels, heightInPixels));
                         predet.setScaleType(ImageView.ScaleType.FIT_XY);
-                        //predet.setAdjustViewBounds(true);
-                        predet.setBackgroundTintMode(null);
 
-                        predetsLayout.addView(predet);
+                        predet.setAdjustViewBounds(true);
+
+                        predet.setBackgroundTintMode(null);
+                        predetsLayout.addView(layout);
                     }
                 }
             }
