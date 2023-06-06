@@ -264,16 +264,10 @@ public class AlumnoSimple extends AppCompatActivity {
     }
     public void actualizarVaso(int estres){
         ImageView vaso = findViewById(R.id.vaso);
-        int imagenes[] = {R.drawable.ic_vaso0, R.drawable.ic_vaso1, R.drawable.ic_vaso2, R.drawable.ic_vaso3, R.drawable.ic_vaso4, R.drawable.ic_vaso5, R.drawable.ic_vaso6, R.drawable.ic_vaso7, R.drawable.ic_vaso8, R.drawable.ic_vaso9, R.drawable.ic_vaso10};
+        int imagenes[] = {R.drawable.ic_vaso0_testigo, R.drawable.ic_vaso1_testigo, R.drawable.ic_vaso2_testigo, R.drawable.ic_vaso3_testigo, R.drawable.ic_vaso4_testigo, R.drawable.ic_vaso5_testigo, R.drawable.ic_vaso6_testigo, R.drawable.ic_vaso7_testigo, R.drawable.ic_vaso8_testigo, R.drawable.ic_vaso9_testigo, R.drawable.ic_vaso10_testigo};
         int numeroImagen = (int) Math.floor(estres/9.1);
         vaso.setImageResource(imagenes[numeroImagen]);
-        if (estres>50 && estres<75){
 
-        }else if (estres>=75&&estres<100){
-
-        }else if (estres>=100){
-
-        }
 
     }
     private void buildDialogTexto(){
