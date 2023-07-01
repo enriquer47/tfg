@@ -6,6 +6,16 @@
     android:layout_height="match_parent"
     tools:context=".PrincipalProfesor">
 
+    <TextView
+        android:id="@+id/instrucciones_profesor"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Para agregar alumnos, un padre debe introducir tu correo electrónico en su cuenta."
+        app:layout_constraintBottom_toTopOf="@+id/alumnosProfesorLayout"
+        android:textAlignment="center"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"></TextView>
     <LinearLayout
         android:id="@+id/alumnosProfesorLayout"
         android:layout_width="match_parent"

@@ -9,10 +9,13 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.example.tfg.Controller.ProfesorController;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+
+import org.w3c.dom.Text;
 
 public class PrincipalProfesor extends AppCompatActivity {
 
@@ -22,6 +25,7 @@ public class PrincipalProfesor extends AppCompatActivity {
     ProfesorController profesorController;
     Button logout;
     public LinearLayout alumnosLayout;
+    TextView instrucciones;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,12 +38,15 @@ public class PrincipalProfesor extends AppCompatActivity {
         alumnosLayout =findViewById(R.id.alumnosProfesorLayout);
         getSupportActionBar().hide();
 
+
         if(user==null){
             Intent intent= new Intent(getApplicationContext(), LoginActivity.class);
             startActivity(intent);
             finish();
         } else {
             profesorController.obtenerAlumnos();
+            instrucciones=findViewById(R.id.instrucciones_profesor);
+            instrucciones.setText("Para agregar alumnos, un padre debe introducir tu correo electrónico en su cuenta: " + user.getEmail());
             logout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
