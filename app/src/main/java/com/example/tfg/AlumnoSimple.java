@@ -36,7 +36,7 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import com.bumptech.glide.Glide;
 public class AlumnoSimple extends AppCompatActivity {
-
+//
     FirebaseAuth auth;
     FirebaseUser user;
     public TextView detallesUsuario;
