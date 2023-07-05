@@ -1,6 +1,9 @@
 package com.example.tfg;
 
+import static android.content.pm.ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
+
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -27,6 +30,8 @@ public class SignUpActivity extends AppCompatActivity {
         buttonSoyprofesor=findViewById(R.id.profesorButton);
         getSupportActionBar().setTitle("Registro");
         loginController=new LoginController();
+        this.setRequestedOrientation(SCREEN_ORIENTATION_PORTRAIT);
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
 
         buttonSoyPadre.setOnClickListener(new View.OnClickListener(){
             @Override

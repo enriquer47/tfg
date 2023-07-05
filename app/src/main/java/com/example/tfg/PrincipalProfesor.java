@@ -1,6 +1,9 @@
 package com.example.tfg;
 
+import static android.content.pm.ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
+
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 
 import android.content.Intent;
 import android.media.Image;
@@ -33,6 +36,8 @@ public class PrincipalProfesor extends AppCompatActivity {
         profesorController=new ProfesorController(this,user);
         alumnosLayout =findViewById(R.id.alumnosProfesorLayout);
         getSupportActionBar().hide();
+        this.setRequestedOrientation(SCREEN_ORIENTATION_PORTRAIT);
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
 
         if(user==null){
             Intent intent= new Intent(getApplicationContext(), LoginActivity.class);

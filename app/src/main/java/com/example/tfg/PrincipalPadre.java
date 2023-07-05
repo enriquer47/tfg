@@ -1,7 +1,10 @@
 package com.example.tfg;
 
+import static android.content.pm.ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
+
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -49,6 +52,8 @@ public class PrincipalPadre extends AppCompatActivity {
         buildDialog();
         padreController=new PadreController(this,user.getUid());
         getSupportActionBar().hide();
+        this.setRequestedOrientation(SCREEN_ORIENTATION_PORTRAIT);
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
 
         if(user==null){
             Intent intent= new Intent(getApplicationContext(), LoginActivity.class);

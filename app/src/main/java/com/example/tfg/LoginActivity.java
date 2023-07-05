@@ -1,8 +1,11 @@
 package com.example.tfg;
 
+import static android.content.pm.ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
+
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -34,6 +37,9 @@ public class LoginActivity extends AppCompatActivity {
         mAuth= FirebaseAuth.getInstance();
         loginController=new LoginController(this);
         FirebaseUser currentUser = mAuth.getCurrentUser();
+        this.setRequestedOrientation(SCREEN_ORIENTATION_PORTRAIT);
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+
         if(currentUser != null){
             loginController.login(currentUser.getUid());
         }else{
@@ -58,6 +64,7 @@ public class LoginActivity extends AppCompatActivity {
                     .setTheme(R.style.LoginTheme)
                     .build();
             signInLauncher.launch(signInIntent);
+
         }
     }
 

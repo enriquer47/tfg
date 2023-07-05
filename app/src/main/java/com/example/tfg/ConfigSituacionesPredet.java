@@ -1,10 +1,13 @@
 package com.example.tfg;
 
+import static android.content.pm.ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
+
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -61,6 +64,8 @@ public class ConfigSituacionesPredet extends AppCompatActivity {
         auth = FirebaseAuth.getInstance();
         user=auth.getCurrentUser();
         padreController=new PadreController(this,padreID);
+        this.setRequestedOrientation(SCREEN_ORIENTATION_PORTRAIT);
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
 
         buildDialog();
 

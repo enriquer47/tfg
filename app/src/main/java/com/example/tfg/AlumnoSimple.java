@@ -1,7 +1,10 @@
 package com.example.tfg;
 
+import static android.content.pm.ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
+
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -69,6 +72,8 @@ public class AlumnoSimple extends AppCompatActivity {
         eventoFeliz=findViewById(R.id.eventoFeliz);
         eventoTriste=findViewById(R.id.eventoTriste);
         eventoTexto=findViewById(R.id.crearEventoTexto);
+        this.setRequestedOrientation(SCREEN_ORIENTATION_PORTRAIT);
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
 
         auth = FirebaseAuth.getInstance();
         user=auth.getCurrentUser();
