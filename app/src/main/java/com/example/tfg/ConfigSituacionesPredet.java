@@ -157,9 +157,12 @@ public class ConfigSituacionesPredet extends AppCompatActivity {
                     @Override
                     public void onActivityResult(Uri result) {
                         // Do something with the selected image URI
-
-                        imagenPredet.setImageURI(result);
-                        predet.setImagen(result.toString());
+                        if(result==null){
+                            imagenPredet.setImageURI(Uri.parse("android.resource://com.example.tfg/drawable/ic_imagen_basica"));
+                        }else {
+                            imagenPredet.setImageURI(result);
+                            predet.setImagen(result.toString());
+                        }
 
                     }
                 });
